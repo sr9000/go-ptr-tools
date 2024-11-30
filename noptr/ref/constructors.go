@@ -1,13 +1,19 @@
 package ref
 
-func Of[T any, PT interface{ *T }](val T) Ref[T, PT] {
-	return Ref[T, PT]{&val}
+func invalid[T any]() (invalid Ref[T]) {
+	return
 }
 
-func OfPtr[T any, PT interface{ *T }](val PT) (Ref[T, PT], error) {
-	if val == nil {
-		return Ref[T, PT]{val}, ErrPtrMustNotBeNil
+// Of returns a new Ref with the given value.
+func Of[T any](val T) Ref[T] {
+	return Ref[T]{&val}
+}
+
+// OfPtr returns a new Ref based on the given pointer.
+func OfPtr[T any](ptr *T) (Ref[T], error) {
+	if ptr == nil {
+		return invalid[T](), ErrPtrMustNotBeNil
 	}
 
-	return Ref[T, PT]{val}, nil
+	return Ref[T]{ptr}, nil
 }

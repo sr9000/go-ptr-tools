@@ -5,6 +5,7 @@ linters:
     - exportloopref
     - gosec
     - depguard
+    - nonamedreturns
 linters-settings:
   gci:
     # Section configuration to compare against.
