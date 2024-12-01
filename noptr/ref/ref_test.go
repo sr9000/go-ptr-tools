@@ -29,8 +29,9 @@ func TestCloningValue(t *testing.T) {
 
 	x := 42
 	rx := ref.Of(x)
-	require.Equal(t, x, *rx.Ptr())
+	require.NotNil(t, rx.Ptr())
 	require.NotSame(t, &x, rx.Ptr())
+	require.Equal(t, x, rx.Val())
 }
 
 func TestRefPtrStaysTheSame(t *testing.T) {
@@ -39,7 +40,9 @@ func TestRefPtrStaysTheSame(t *testing.T) {
 	x := 42
 	rx, err := ref.OfPtr(&x)
 	require.NoError(t, err)
+	require.NotNil(t, rx.Ptr())
 	require.Same(t, &x, rx.Ptr())
+	require.Equal(t, x, rx.Val())
 }
 
 func TestNilPtrIsNotAllowed(t *testing.T) {
