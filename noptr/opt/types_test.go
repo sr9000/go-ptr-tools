@@ -12,4 +12,4 @@ func (*testFoo) Foo() {}
 
 type testBar struct{}
 
-func (*testBar) Foo() {}
+func (testBar) Foo() {}
