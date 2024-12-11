@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sr9000/go-noptr/noptr/internal"
 	"github.com/sr9000/go-noptr/noptr/opt"
-	"github.com/sr9000/go-noptr/pkg"
 )
 
 func TestOfAny_Primitives(t *testing.T) {
@@ -46,7 +46,7 @@ func TestOfAny_Primitives(t *testing.T) {
 		{"ZeroStruct", zeroStruct,
 			false, false, false},
 
-		{"IntPointer", pkg.ToPtr(42),
+		{"IntPointer", internal.ToPtr(42),
 			true, true, false},
 
 		{"ZeroIntPointer", new(int),

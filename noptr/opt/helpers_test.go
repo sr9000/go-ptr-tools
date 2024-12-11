@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sr9000/go-noptr/noptr/internal"
 	"github.com/sr9000/go-noptr/noptr/opt"
-	"github.com/sr9000/go-noptr/pkg"
 )
 
 func testMapGetInline[K comparable, V any, M ~map[K]V](m M, k K) opt.Opt[V] {
@@ -105,7 +105,7 @@ func TestMapGet(t *testing.T) {
 		key      int
 		expected *string
 	}{
-		{"ExistingKey", map[int]string{1: "one", 2: "two"}, 1, pkg.ToPtr("one")},
+		{"ExistingKey", map[int]string{1: "one", 2: "two"}, 1, internal.ToPtr("one")},
 		{"NonExistingKey", map[int]string{1: "one", 2: "two"}, 3, nil},
 		{"NilMap", nil, 1, nil},
 		{"EmptyMap", map[int]string{}, 1, nil},
@@ -129,7 +129,7 @@ func TestCastTo_Int(t *testing.T) {
 		value    any
 		expected *int
 	}{
-		{"ValidCast", 42, pkg.ToPtr(42)},
+		{"ValidCast", 42, internal.ToPtr(42)},
 		{"InvalidCast", "string", nil},
 		{"NilValue", nil, nil},
 		{"NilPointer", (*int)(nil), nil},
@@ -153,11 +153,11 @@ func TestCastTo_SliceOfString(t *testing.T) {
 		value    any
 		expected *[]string
 	}{
-		{"ValidCast", []string{"foo", "bar"}, pkg.ToPtr([]string{"foo", "bar"})},
+		{"ValidCast", []string{"foo", "bar"}, internal.ToPtr([]string{"foo", "bar"})},
 		{"InvalidCast", "string", nil},
 		{"NilValue", nil, nil},
 		{"NilPointer", (*[]string)(nil), nil},
-		{"NilSlice", ([]string)(nil), pkg.ToPtr([]string(nil))},
+		{"NilSlice", ([]string)(nil), internal.ToPtr([]string(nil))},
 	}
 
 	for _, cs := range cases {
@@ -178,8 +178,8 @@ func TestValidateInterface(t *testing.T) {
 		value    any
 		expected *testFooer
 	}{
-		{"ValueReceiverInterface", testBar{}, pkg.ToPtr((testFooer)(testBar{}))},
-		{"PointerReceiverInterface", &testFoo{a: 1, b: 2}, pkg.ToPtr((testFooer)(&testFoo{a: 1, b: 2}))},
+		{"ValueReceiverInterface", testBar{}, internal.ToPtr((testFooer)(testBar{}))},
+		{"PointerReceiverInterface", &testFoo{a: 1, b: 2}, internal.ToPtr((testFooer)(&testFoo{a: 1, b: 2}))},
 		{"NilInterface", (testFooer)(nil), nil},
 		{"NilPointer", (*testBar)(nil), nil},
 		{"NonInterfaceType", "string", nil},
