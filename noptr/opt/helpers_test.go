@@ -12,33 +12,35 @@ import (
 func testMapGetInline[K comparable, V any, M ~map[K]V](m M, k K) opt.Opt[V] {
 	if v, ok := m[k]; ok {
 		return opt.Of(v)
-	} else {
-		return opt.Empty[V]()
 	}
+
+	return opt.Empty[V]()
 }
 
 func BenchmarkMapGet(b *testing.B) {
-	n := 100_000
-	m := make(map[int]int, n)
-	for i := 0; i < n; i++ {
-		m[i] = i
+	mapSize := 100_000
+	mapOfInts := make(map[int]int, mapSize)
+
+	for i := range mapSize {
+		mapOfInts[i] = i
 	}
 
 	b.Run("Bare", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			_, _ = m[i%(2*n)]
+		for i := range b.N {
+			_, ignored := mapOfInts[i%(2*mapSize)]
+			_ = ignored
 		}
 	})
 
 	b.Run("MapGet", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			_ = opt.MapGet(m, i%(2*n))
+		for i := range b.N {
+			_ = opt.MapGet(mapOfInts, i%(2*mapSize))
 		}
 	})
 
 	b.Run("Inline", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			_ = testMapGetInline(m, i%(2*n))
+		for i := range b.N {
+			_ = testMapGetInline(mapOfInts, i%(2*mapSize))
 		}
 	})
 }
@@ -47,7 +49,8 @@ func BenchmarkCastTo(b *testing.B) {
 	bar := &testBar{}
 	nul := (*testBar)(nil)
 	str := "string"
-	for i := 0; i < b.N/4; i++ {
+
+	for range b.N / 4 {
 		_ = opt.CastTo[testFooer](bar)
 		_ = opt.CastTo[testFooer](nul)
 		_ = opt.CastTo[testFooer](nil)
@@ -59,7 +62,8 @@ func BenchmarkValidateInterface(b *testing.B) {
 	bar := &testBar{}
 	nul := (*testBar)(nil)
 	str := "string"
-	for i := 0; i < b.N/4; i++ {
+
+	for range b.N / 4 {
 		_ = opt.ValidateInterface[testFooer](bar)
 		_ = opt.ValidateInterface[testFooer](nul)
 		_ = opt.ValidateInterface[testFooer](nil)
@@ -68,6 +72,8 @@ func BenchmarkValidateInterface(b *testing.B) {
 }
 
 func TestWrap(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name    string
 		value   int
@@ -91,6 +97,8 @@ func TestWrap(t *testing.T) {
 }
 
 func TestMapGet(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name     string
 		m        map[int]string
@@ -114,6 +122,8 @@ func TestMapGet(t *testing.T) {
 }
 
 func TestCastTo_Int(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name     string
 		value    any
@@ -136,6 +146,8 @@ func TestCastTo_Int(t *testing.T) {
 }
 
 func TestCastTo_SliceOfString(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name     string
 		value    any
@@ -159,6 +171,8 @@ func TestCastTo_SliceOfString(t *testing.T) {
 }
 
 func TestValidateInterface(t *testing.T) {
+	t.Parallel()
+
 	cases := []struct {
 		name     string
 		value    any

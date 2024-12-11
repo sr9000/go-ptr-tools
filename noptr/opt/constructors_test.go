@@ -9,6 +9,8 @@ import (
 )
 
 func TestEmpty(t *testing.T) {
+	t.Parallel()
+
 	t.Run("EmptyInt", func(t *testing.T) {
 		t.Parallel()
 
@@ -25,6 +27,8 @@ func TestEmpty(t *testing.T) {
 }
 
 func TestOf(t *testing.T) {
+	t.Parallel()
+
 	t.Run("Int", func(t *testing.T) {
 		t.Parallel()
 
@@ -45,6 +49,8 @@ func TestOf(t *testing.T) {
 }
 
 func TestOfPtr(t *testing.T) {
+	t.Parallel()
+
 	t.Run("Int", func(t *testing.T) {
 		t.Parallel()
 

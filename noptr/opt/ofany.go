@@ -4,31 +4,31 @@ import "reflect"
 
 type Filter func(reflect.Value) bool
 
-var (
-	NotZero Filter = func(rv reflect.Value) bool {
-		return !rv.IsZero()
+func NotZero(rv reflect.Value) bool {
+	return !rv.IsZero()
+}
+
+func NotNil(rval reflect.Value) bool {
+	switch rval.Kind() {
+	default:
+		return false
+	case reflect.Ptr, reflect.Interface,
+		reflect.Slice, reflect.Map,
+		reflect.Chan, reflect.Func:
+		return !rval.IsNil()
 	}
-	NotNil Filter = func(rv reflect.Value) bool {
-		switch rv.Kind() {
-		default:
-			return false
-		case reflect.Ptr, reflect.Interface,
-			reflect.Slice, reflect.Map,
-			reflect.Chan, reflect.Func:
-			return !rv.IsNil()
-		}
+}
+
+func NotEmpty(rval reflect.Value) bool {
+	switch rval.Kind() {
+	default:
+		return false
+	case reflect.String, reflect.Array,
+		reflect.Slice, reflect.Map,
+		reflect.Chan:
+		return rval.Len() > 0
 	}
-	NotEmpty Filter = func(rv reflect.Value) bool {
-		switch rv.Kind() {
-		default:
-			return false
-		case reflect.String, reflect.Array,
-			reflect.Slice, reflect.Map,
-			reflect.Chan:
-			return rv.Len() > 0
-		}
-	}
-)
+}
 
 // OfAny creates an optional value based on the given value and filter functions.
 // If any filter function returns false, it returns Empty.
