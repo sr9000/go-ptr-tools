@@ -15,9 +15,9 @@ func TestFilters_Empty(t *testing.T) {
 
 	x := opt.Empty[int]()
 	assert.Nil(t, x.Ptr(), "Ptr")
-	assert.False(t, nil != x.NotZero().Ptr(), "NotZero")
-	assert.False(t, nil != x.NotNil().Ptr(), "NotNil")
-	assert.False(t, nil != x.NotEmpty().Ptr(), "NotEmpty")
+	assert.Nil(t, x.NotZero().Ptr(), "NotZero")
+	assert.Nil(t, x.NotNil().Ptr(), "NotNil")
+	assert.Nil(t, x.NotEmpty().Ptr(), "NotEmpty")
 }
 
 func TestFilters_Primitives(t *testing.T) {
