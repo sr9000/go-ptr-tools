@@ -1,4 +1,5 @@
-// Package ptr is an imposter of the "go-noptr" library that provides a pointer factory function.
+// Package ptr is an imposter of the "go-noptr" library.
+// It provides a pointer factory functions.
 package ptr
 
 // Of is a helper routine that allocates a new any value

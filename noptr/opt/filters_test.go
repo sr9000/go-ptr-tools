@@ -10,7 +10,17 @@ import (
 	"github.com/sr9000/go-noptr/noptr/val"
 )
 
-func TestOfAny_Primitives(t *testing.T) {
+func TestFilters_Empty(t *testing.T) {
+	t.Parallel()
+
+	x := opt.Empty[int]()
+	assert.Nil(t, x.Ptr(), "Ptr")
+	assert.False(t, nil != x.NotZero().Ptr(), "NotZero")
+	assert.False(t, nil != x.NotNil().Ptr(), "NotNil")
+	assert.False(t, nil != x.NotEmpty().Ptr(), "NotEmpty")
+}
+
+func TestFilters_Primitives(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
@@ -67,7 +77,7 @@ func TestOfAny_Primitives(t *testing.T) {
 	}
 }
 
-func TestOfAny_Nillable(t *testing.T) {
+func TestFilters_Nillable(t *testing.T) {
 	t.Parallel()
 
 	filledChan := make(chan int, 10)
