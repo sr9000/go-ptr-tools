@@ -7,18 +7,11 @@ import (
 
 	"github.com/sr9000/go-noptr/noptr/opt"
 	"github.com/sr9000/go-noptr/noptr/ptr"
+	"github.com/sr9000/go-noptr/noptr/val"
 )
 
 func TestOfAny_Primitives(t *testing.T) {
 	t.Parallel()
-
-	var (
-		zeroInt          int
-		zeroString       string
-		zeroStruct       testFoo
-		nilIntPointer    *int
-		nilStructPointer *testFoo
-	)
 
 	cases := []struct {
 		name                      string
@@ -28,7 +21,7 @@ func TestOfAny_Primitives(t *testing.T) {
 		{"int", 42,
 			true, false, false},
 
-		{"zero int", zeroInt,
+		{"zero int", val.Zero[int](),
 			false, false, false},
 
 		{"string", "hello",
@@ -37,13 +30,13 @@ func TestOfAny_Primitives(t *testing.T) {
 		{"empty string", "",
 			false, false, false},
 
-		{"zero string", zeroString,
+		{"zero string", val.Zero[string](),
 			false, false, false},
 
 		{"struct", testFoo{a: 1, b: 2},
 			true, false, false},
 
-		{"zero struct", zeroStruct,
+		{"zero struct", val.Zero[testFoo](),
 			false, false, false},
 
 		{"int ptr", ptr.Of(42),
@@ -52,13 +45,13 @@ func TestOfAny_Primitives(t *testing.T) {
 		{"zero int ptr", new(int),
 			true, true, false}, // int is zero BUT pointer is not zero (not nil)
 
-		{"nil int ptr", nilIntPointer,
+		{"nil int ptr", ptr.Nil[int](),
 			false, false, false},
 
 		{"zero struct ptr", new(testFoo),
 			true, true, false}, // testFoo is zero BUT pointer is not zero (not nil)
 
-		{"nil struct ptr", nilStructPointer,
+		{"nil struct ptr", ptr.Nil[testFoo](),
 			false, false, false},
 	}
 
@@ -77,14 +70,6 @@ func TestOfAny_Primitives(t *testing.T) {
 func TestOfAny_Nillable(t *testing.T) {
 	t.Parallel()
 
-	var (
-		zeroSlice     []int
-		zeroMap       map[string]int
-		zeroInterface testFooer
-		zeroChan      chan int
-		zeroFunc      func()
-	)
-
 	filledChan := make(chan int, 10)
 	filledChan <- 42
 
@@ -99,7 +84,7 @@ func TestOfAny_Nillable(t *testing.T) {
 		{"empty slice", []int{},
 			true, true, false},
 
-		{"zero slice", zeroSlice,
+		{"zero slice", val.Zero[[]int](),
 			false, false, false},
 
 		{"map", map[string]int{"a": 1},
@@ -108,16 +93,16 @@ func TestOfAny_Nillable(t *testing.T) {
 		{"empty map", map[string]int{},
 			true, true, false},
 
-		{"zero map", zeroMap,
+		{"zero map", val.Zero[map[string]int](),
 			false, false, false},
 
-		{"interface", testFooer(&testBar{}),
+		{"interface", testFooer(new(testBar)),
 			true, true, false},
 
-		{"nil ptr interface", testFooer((*testBar)(nil)),
+		{"nil ptr interface", testFooer(ptr.Nil[testBar]()),
 			false, false, false},
 
-		{"zero interface", zeroInterface,
+		{"zero interface", val.Zero[testFooer](),
 			false, false, false},
 
 		{"empty chan", make(chan int),
@@ -129,13 +114,13 @@ func TestOfAny_Nillable(t *testing.T) {
 		{"filled chan", filledChan,
 			true, true, true},
 
-		{"zero chan", zeroChan,
+		{"zero chan", val.Zero[chan int](),
 			false, false, false},
 
 		{"func", func() {},
 			true, true, false},
 
-		{"zero func", zeroFunc,
+		{"zero func", val.Zero[func()](),
 			false, false, false},
 	}
 

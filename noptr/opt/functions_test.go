@@ -1,10 +1,13 @@
 package opt_test
 
 import (
+	"testing"
+
+	"github.com/stretchr/testify/require"
+
 	"github.com/sr9000/go-noptr/noptr/opt"
 	"github.com/sr9000/go-noptr/noptr/ptr"
-	"github.com/stretchr/testify/require"
-	"testing"
+	"github.com/sr9000/go-noptr/noptr/val"
 )
 
 func BenchmarkCastTo(b *testing.B) {
@@ -31,7 +34,7 @@ func TestCastTo_Int(t *testing.T) {
 		{"valid cast", 42, ptr.Of(42)},
 		{"invalid cast", "string", nil},
 		{"nil value", nil, nil},
-		{"nil pointer", (*int)(nil), nil},
+		{"nil pointer", ptr.Nil[int](), nil},
 	}
 
 	for _, cs := range cases {
@@ -55,8 +58,8 @@ func TestCastTo_SliceOfString(t *testing.T) {
 		{"valid cast", []string{"foo", "bar"}, ptr.Of([]string{"foo", "bar"})},
 		{"invalid cast", "string", nil},
 		{"nil value", nil, nil},
-		{"nil pointer", (*[]string)(nil), nil},
-		{"nil slice", ([]string)(nil), ptr.Of([]string(nil))},
+		{"nil slice ptr", ptr.Nil[[]string](), nil},
+		{"zero slice", val.Zero[[]string](), new([]string)},
 	}
 
 	for _, cs := range cases {

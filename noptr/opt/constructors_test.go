@@ -1,12 +1,12 @@
 package opt_test
 
 import (
-	"github.com/sr9000/go-noptr/noptr/ptr"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/sr9000/go-noptr/noptr/opt"
+	"github.com/sr9000/go-noptr/noptr/ptr"
 )
 
 func testOfMapInline[K comparable, V any, M ~map[K]V](m M, k K) opt.Opt[V] {

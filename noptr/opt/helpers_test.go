@@ -1,13 +1,13 @@
 package opt_test
 
 import (
-	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/sr9000/go-noptr/noptr/opt"
 	"github.com/sr9000/go-noptr/noptr/ptr"
+	"github.com/sr9000/go-noptr/noptr/val"
 )
 
 func BenchmarkValidateInterface(b *testing.B) {
@@ -35,8 +35,8 @@ func TestWrap(t *testing.T) {
 		{"true", 42, true, false},
 		{"false", 42, false, true},
 		{"nil", 42, nil, false},
-		{"not nil", 42, "non-nil", true},
-		{"error", 42, errors.New("error"), true}}
+		{"string", 42, "non-nil", true},
+		{"error", 42, errTest, true}}
 
 	for _, cs := range cases {
 		t.Run(cs.name, func(t *testing.T) {
@@ -57,10 +57,12 @@ func TestParseInterface(t *testing.T) {
 		expected *testFooer
 	}{
 		{"value receiver interface", testBar{}, ptr.Of((testFooer)(testBar{}))},
+		{"pointer to value receiver interface", new(testBar), ptr.Of((testFooer)(new(testBar)))},
 		{"pointer receiver interface", &testFoo{a: 1, b: 2}, ptr.Of((testFooer)(&testFoo{a: 1, b: 2}))},
-		{"nil interface", (testFooer)(nil), nil},
-		{"nil pointer", (*testBar)(nil), nil},
-		{"not interface type", "string", nil},
+		{"value of pointer receiver interface", testFoo{a: 1, b: 2}, nil},
+		{"zero interface", val.Zero[testFooer](), nil},
+		{"nil pointer", ptr.Nil[testBar](), nil},
+		{"not an interface", "string", nil},
 		{"nil value", nil, nil},
 	}
 
@@ -98,6 +100,7 @@ func TestUnwrap2(t *testing.T) {
 
 			v1, v2, ok := opt.Unwrap2(o1, o2)
 			require.Equal(t, cs.ok, ok)
+
 			if ok {
 				require.Equal(t, cs.v1, v1)
 				require.Equal(t, cs.v2, v2)
@@ -133,10 +136,11 @@ func TestUnwrap3(t *testing.T) {
 
 			v1, v2, v3, ok := opt.Unwrap3(o1, o2, o3)
 			require.Equal(t, cs.ok, ok)
+
 			if ok {
 				require.Equal(t, cs.v1, v1)
 				require.Equal(t, cs.v2, v2)
-				require.Equal(t, cs.v3, v3)
+				require.InEpsilon(t, cs.v3, v3, 1.0e-6)
 			}
 		})
 	}
