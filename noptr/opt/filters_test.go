@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/sr9000/go-noptr/noptr/internal"
 	"github.com/sr9000/go-noptr/noptr/opt"
+	"github.com/sr9000/go-noptr/noptr/ptr"
 )
 
 func TestOfAny_Primitives(t *testing.T) {
@@ -25,40 +25,40 @@ func TestOfAny_Primitives(t *testing.T) {
 		value                     any
 		notZero, notNil, notEmpty bool
 	}{
-		{"Int", 42,
+		{"int", 42,
 			true, false, false},
 
-		{"ZeroInt", zeroInt,
+		{"zero int", zeroInt,
 			false, false, false},
 
-		{"String", "hello",
+		{"string", "hello",
 			true, false, true},
 
-		{"EmptyString", "",
+		{"empty string", "",
 			false, false, false},
 
-		{"ZeroString", zeroString,
+		{"zero string", zeroString,
 			false, false, false},
 
-		{"Struct", testFoo{a: 1, b: 2},
+		{"struct", testFoo{a: 1, b: 2},
 			true, false, false},
 
-		{"ZeroStruct", zeroStruct,
+		{"zero struct", zeroStruct,
 			false, false, false},
 
-		{"IntPointer", internal.ToPtr(42),
+		{"int ptr", ptr.Of(42),
 			true, true, false},
 
-		{"ZeroIntPointer", new(int),
+		{"zero int ptr", new(int),
 			true, true, false}, // int is zero BUT pointer is not zero (not nil)
 
-		{"NilIntPointer", nilIntPointer,
+		{"nil int ptr", nilIntPointer,
 			false, false, false},
 
-		{"ZeroStructPointer", new(testFoo),
+		{"zero struct ptr", new(testFoo),
 			true, true, false}, // testFoo is zero BUT pointer is not zero (not nil)
 
-		{"NilStructPointer", nilStructPointer,
+		{"nil struct ptr", nilStructPointer,
 			false, false, false},
 	}
 
@@ -66,9 +66,10 @@ func TestOfAny_Primitives(t *testing.T) {
 		t.Run(cs.name, func(t *testing.T) {
 			t.Parallel()
 
-			assert.Equal(t, cs.notZero, nil != opt.OfAny(cs.value, opt.NotZero).Ptr(), "NotZero")
-			assert.Equal(t, cs.notNil, nil != opt.OfAny(cs.value, opt.NotNil).Ptr(), "NotNil")
-			assert.Equal(t, cs.notEmpty, nil != opt.OfAny(cs.value, opt.NotEmpty).Ptr(), "NotEmpty")
+			x := opt.Of(cs.value)
+			assert.Equal(t, cs.notZero, nil != x.NotZero().Ptr(), "NotZero")
+			assert.Equal(t, cs.notNil, nil != x.NotNil().Ptr(), "NotNil")
+			assert.Equal(t, cs.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
 		})
 	}
 }
@@ -92,49 +93,49 @@ func TestOfAny_Nillable(t *testing.T) {
 		value                     any
 		notZero, notNil, notEmpty bool
 	}{
-		{"Slice", []int{1, 2, 3},
+		{"slice", []int{1, 2, 3},
 			true, true, true},
 
-		{"EmptySlice", []int{},
+		{"empty slice", []int{},
 			true, true, false},
 
-		{"ZeroSlice", zeroSlice,
+		{"zero slice", zeroSlice,
 			false, false, false},
 
-		{"Map", map[string]int{"a": 1},
+		{"map", map[string]int{"a": 1},
 			true, true, true},
 
-		{"EmptyMap", map[string]int{},
+		{"empty map", map[string]int{},
 			true, true, false},
 
-		{"ZeroMap", zeroMap,
+		{"zero map", zeroMap,
 			false, false, false},
 
-		{"Interface", testFooer(&testBar{}),
+		{"interface", testFooer(&testBar{}),
 			true, true, false},
 
-		{"Interface of nil ptr", testFooer((*testBar)(nil)),
+		{"nil ptr interface", testFooer((*testBar)(nil)),
 			false, false, false},
 
-		{"ZeroInterface", zeroInterface,
+		{"zero interface", zeroInterface,
 			false, false, false},
 
-		{"EmptyChan", make(chan int),
+		{"empty chan", make(chan int),
 			true, true, false},
 
-		{"EmptyBuffChan", make(chan int, 10),
+		{"empty buff chan", make(chan int, 10),
 			true, true, false},
 
-		{"FilledChan", filledChan,
+		{"filled chan", filledChan,
 			true, true, true},
 
-		{"ZeroChan", zeroChan,
+		{"zero chan", zeroChan,
 			false, false, false},
 
-		{"Func", func() {},
+		{"func", func() {},
 			true, true, false},
 
-		{"ZeroFunc", zeroFunc,
+		{"zero func", zeroFunc,
 			false, false, false},
 	}
 
@@ -142,9 +143,10 @@ func TestOfAny_Nillable(t *testing.T) {
 		t.Run(cs.name, func(t *testing.T) {
 			t.Parallel()
 
-			assert.Equal(t, cs.notZero, nil != opt.OfAny(cs.value, opt.NotZero).Ptr(), "NotZero")
-			assert.Equal(t, cs.notNil, nil != opt.OfAny(cs.value, opt.NotNil).Ptr(), "NotNil")
-			assert.Equal(t, cs.notEmpty, nil != opt.OfAny(cs.value, opt.NotEmpty).Ptr(), "NotEmpty")
+			x := opt.Of(cs.value)
+			assert.Equal(t, cs.notZero, nil != x.NotZero().Ptr(), "NotZero")
+			assert.Equal(t, cs.notNil, nil != x.NotNil().Ptr(), "NotNil")
+			assert.Equal(t, cs.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
 		})
 	}
 }

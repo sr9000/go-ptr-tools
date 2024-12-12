@@ -35,3 +35,19 @@ func (o Opt[T]) Else(val T) T {
 
 	return val
 }
+
+func (o Opt[T]) ElseGet(f func() T) T {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+
+	return f()
+}
+
+func (o Opt[T]) ElseGetEx(f func() (T, error)) (T, error) {
+	if v, ok := o.Get(); ok {
+		return v, nil
+	}
+
+	return f()
+}

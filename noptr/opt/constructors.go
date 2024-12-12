@@ -18,3 +18,11 @@ func OfPtr[T any](ptr *T) Opt[T] {
 
 	return Opt[T]{ptr: ptr}
 }
+
+// OfMap takes a value from a map by key.
+// If the key is not found, it returns Empty.
+func OfMap[K comparable, V any, M ~map[K]V](m M, k K) Opt[V] {
+	v, ok := m[k]
+
+	return Wrap(v, ok)
+}

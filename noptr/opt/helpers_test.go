@@ -1,62 +1,14 @@
 package opt_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/sr9000/go-noptr/noptr/internal"
 	"github.com/sr9000/go-noptr/noptr/opt"
+	"github.com/sr9000/go-noptr/noptr/ptr"
 )
-
-func testMapGetInline[K comparable, V any, M ~map[K]V](m M, k K) opt.Opt[V] {
-	if v, ok := m[k]; ok {
-		return opt.Of(v)
-	}
-
-	return opt.Empty[V]()
-}
-
-func BenchmarkMapGet(b *testing.B) {
-	mapSize := 100_000
-	mapOfInts := make(map[int]int, mapSize)
-
-	for i := range mapSize {
-		mapOfInts[i] = i
-	}
-
-	b.Run("Bare", func(b *testing.B) {
-		for i := range b.N {
-			_, ignored := mapOfInts[i%(2*mapSize)]
-			_ = ignored
-		}
-	})
-
-	b.Run("MapGet", func(b *testing.B) {
-		for i := range b.N {
-			_ = opt.MapGet(mapOfInts, i%(2*mapSize))
-		}
-	})
-
-	b.Run("Inline", func(b *testing.B) {
-		for i := range b.N {
-			_ = testMapGetInline(mapOfInts, i%(2*mapSize))
-		}
-	})
-}
-
-func BenchmarkCastTo(b *testing.B) {
-	bar := &testBar{}
-	nul := (*testBar)(nil)
-	str := "string"
-
-	for range b.N / 4 {
-		_ = opt.CastTo[testFooer](bar)
-		_ = opt.CastTo[testFooer](nul)
-		_ = opt.CastTo[testFooer](nil)
-		_ = opt.CastTo[testFooer](str)
-	}
-}
 
 func BenchmarkValidateInterface(b *testing.B) {
 	bar := &testBar{}
@@ -64,10 +16,10 @@ func BenchmarkValidateInterface(b *testing.B) {
 	str := "string"
 
 	for range b.N / 4 {
-		_ = opt.ValidateInterface[testFooer](bar)
-		_ = opt.ValidateInterface[testFooer](nul)
-		_ = opt.ValidateInterface[testFooer](nil)
-		_ = opt.ValidateInterface[testFooer](str)
+		_ = opt.ParseInterface[testFooer](bar)
+		_ = opt.ParseInterface[testFooer](nul)
+		_ = opt.ParseInterface[testFooer](nil)
+		_ = opt.ParseInterface[testFooer](str)
 	}
 }
 
@@ -80,11 +32,11 @@ func TestWrap(t *testing.T) {
 		cond    any
 		isEmpty bool
 	}{
-		{"TrueCondition", 42, true, false},
-		{"FalseCondition", 42, false, true},
-		{"NilCondition", 42, nil, false},
-		{"NonNilCondition", 42, "non-nil", true},
-	}
+		{"true", 42, true, false},
+		{"false", 42, false, true},
+		{"nil", 42, nil, false},
+		{"not nil", 42, "non-nil", true},
+		{"error", 42, errors.New("error"), true}}
 
 	for _, cs := range cases {
 		t.Run(cs.name, func(t *testing.T) {
@@ -96,81 +48,7 @@ func TestWrap(t *testing.T) {
 	}
 }
 
-func TestMapGet(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name     string
-		m        map[int]string
-		key      int
-		expected *string
-	}{
-		{"ExistingKey", map[int]string{1: "one", 2: "two"}, 1, internal.ToPtr("one")},
-		{"NonExistingKey", map[int]string{1: "one", 2: "two"}, 3, nil},
-		{"NilMap", nil, 1, nil},
-		{"EmptyMap", map[int]string{}, 1, nil},
-	}
-
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
-			t.Parallel()
-
-			result := opt.MapGet(cs.m, cs.key)
-			require.Equal(t, cs.expected, result.Ptr())
-		})
-	}
-}
-
-func TestCastTo_Int(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name     string
-		value    any
-		expected *int
-	}{
-		{"ValidCast", 42, internal.ToPtr(42)},
-		{"InvalidCast", "string", nil},
-		{"NilValue", nil, nil},
-		{"NilPointer", (*int)(nil), nil},
-	}
-
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
-			t.Parallel()
-
-			result := opt.CastTo[int](cs.value)
-			require.Equal(t, cs.expected, result.Ptr())
-		})
-	}
-}
-
-func TestCastTo_SliceOfString(t *testing.T) {
-	t.Parallel()
-
-	cases := []struct {
-		name     string
-		value    any
-		expected *[]string
-	}{
-		{"ValidCast", []string{"foo", "bar"}, internal.ToPtr([]string{"foo", "bar"})},
-		{"InvalidCast", "string", nil},
-		{"NilValue", nil, nil},
-		{"NilPointer", (*[]string)(nil), nil},
-		{"NilSlice", ([]string)(nil), internal.ToPtr([]string(nil))},
-	}
-
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
-			t.Parallel()
-
-			result := opt.CastTo[[]string](cs.value)
-			require.Equal(t, cs.expected, result.Ptr())
-		})
-	}
-}
-
-func TestValidateInterface(t *testing.T) {
+func TestParseInterface(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
@@ -178,20 +56,88 @@ func TestValidateInterface(t *testing.T) {
 		value    any
 		expected *testFooer
 	}{
-		{"ValueReceiverInterface", testBar{}, internal.ToPtr((testFooer)(testBar{}))},
-		{"PointerReceiverInterface", &testFoo{a: 1, b: 2}, internal.ToPtr((testFooer)(&testFoo{a: 1, b: 2}))},
-		{"NilInterface", (testFooer)(nil), nil},
-		{"NilPointer", (*testBar)(nil), nil},
-		{"NonInterfaceType", "string", nil},
-		{"NilValue", nil, nil},
+		{"value receiver interface", testBar{}, ptr.Of((testFooer)(testBar{}))},
+		{"pointer receiver interface", &testFoo{a: 1, b: 2}, ptr.Of((testFooer)(&testFoo{a: 1, b: 2}))},
+		{"nil interface", (testFooer)(nil), nil},
+		{"nil pointer", (*testBar)(nil), nil},
+		{"not interface type", "string", nil},
+		{"nil value", nil, nil},
 	}
 
 	for _, cs := range cases {
 		t.Run(cs.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.ValidateInterface[testFooer](cs.value)
+			result := opt.ParseInterface[testFooer](cs.value)
 			require.Equal(t, cs.expected, result.Ptr())
+		})
+	}
+}
+
+func TestUnwrap2(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name string
+		v1   int
+		v2   string
+		ok   bool
+	}{
+		{"ok", 42, "hello", true},
+		{"first empty", 0, "hello", false},
+		{"second empty", 42, "", false},
+		{"both empty", 0, "", false},
+	}
+
+	for _, cs := range cases {
+		t.Run(cs.name, func(t *testing.T) {
+			t.Parallel()
+
+			o1 := opt.Of(cs.v1).NotZero()
+			o2 := opt.Of(cs.v2).NotZero()
+
+			v1, v2, ok := opt.Unwrap2(o1, o2)
+			require.Equal(t, cs.ok, ok)
+			if ok {
+				require.Equal(t, cs.v1, v1)
+				require.Equal(t, cs.v2, v2)
+			}
+		})
+	}
+}
+
+func TestUnwrap3(t *testing.T) {
+	t.Parallel()
+
+	cases := []struct {
+		name string
+		v1   int
+		v2   string
+		v3   float64
+		ok   bool
+	}{
+		{"ok", 42, "hello", 3.14, true},
+		{"first empty", 0, "hello", 3.14, false},
+		{"second empty", 42, "", 3.14, false},
+		{"third empty", 42, "hello", 0, false},
+		{"all empty", 0, "", 0, false},
+	}
+
+	for _, cs := range cases {
+		t.Run(cs.name, func(t *testing.T) {
+			t.Parallel()
+
+			o1 := opt.Of(cs.v1).NotZero()
+			o2 := opt.Of(cs.v2).NotZero()
+			o3 := opt.Of(cs.v3).NotZero()
+
+			v1, v2, v3, ok := opt.Unwrap3(o1, o2, o3)
+			require.Equal(t, cs.ok, ok)
+			if ok {
+				require.Equal(t, cs.v1, v1)
+				require.Equal(t, cs.v2, v2)
+				require.Equal(t, cs.v3, v3)
+			}
 		})
 	}
 }
