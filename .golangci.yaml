@@ -7,6 +7,11 @@ linters:
     - depguard
     - nonamedreturns
 linters-settings:
+  nlreturn:
+    # Size of the block (including return statement that is still "OK")
+    # so no return split required.
+    # Default: 1
+    block-size: 2
   varnamelen:
     # Optional list of variable names that should be ignored completely.
     # Default: []
