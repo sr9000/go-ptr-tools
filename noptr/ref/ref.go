@@ -1,7 +1,7 @@
 // Package ref provides a reference type Ref that can be used to store an "always valid pointer".
 package ref
 
-// Ref must be used as metal anchor for "always valid pointer" guarantees.
+// Ref must be used as mental anchor for "always valid pointer" guarantees.
 type Ref[T any] struct {
 	ptr *T
 }
@@ -12,4 +12,9 @@ type Ref[T any] struct {
 // Use this kind of hack only with a to-do promise to fix this technical debt in the near future.
 func (r Ref[T]) Ptr() *T {
 	return r.ptr
+}
+
+// Val returns the value itself.
+func (r Ref[T]) Val() T {
+	return *r.ptr
 }
