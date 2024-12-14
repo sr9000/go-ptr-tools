@@ -7,6 +7,40 @@ linters:
     - depguard
     - nonamedreturns
 linters-settings:
+  nlreturn:
+    # Size of the block (including return statement that is still "OK")
+    # so no return split required.
+    # Default: 1
+    block-size: 2
+  varnamelen:
+    # Optional list of variable names that should be ignored completely.
+    # Default: []
+    ignore-names:
+      - cs # cs is shortname for case in table test cases
+    # The longest distance, in source lines, that is being considered a "small scope".
+    # Variables used in at most this many lines will be ignored.
+    # Default: 5
+    max-distance: 6
+  ireturn:
+    allow:
+      - empty
+      - error
+      - stdlib
+      - anon
+      - generic
+  funlen:
+    # Checks the number of lines in a function.
+    # If lower than 0, disable the check.
+    # Default: 60
+    lines: 100
+    # Ignore comments when counting lines.
+    # Default false
+    ignore-comments: true
+  exhaustive:
+    # Presence of "default" case in switch statements satisfies exhaustiveness,
+    # even if all enum members are not listed.
+    # Default: false
+    default-signifies-exhaustive: true
   gci:
     # Section configuration to compare against.
     # Section names are case-insensitive and may contain parameters in ().
