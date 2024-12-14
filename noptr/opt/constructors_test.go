@@ -128,14 +128,14 @@ func TestOfMap(t *testing.T) {
 
 	cases := []struct {
 		name     string
-		m        map[int]string
 		key      int
 		expected *string
+		m        map[int]string
 	}{
-		{"existing key", map[int]string{1: "one", 2: "two"}, 1, ptr.Of("one")},
-		{"non existing key", map[int]string{1: "one", 2: "two"}, 3, nil},
-		{"nil map", nil, 1, nil},
-		{"empty map", map[int]string{}, 1, nil},
+		{"existing key", 1, ptr.Of("one"), map[int]string{1: "one", 2: "two"}},
+		{"not existing key", 3, nil, map[int]string{1: "one", 2: "two"}},
+		{"nil map", 1, nil, nil},
+		{"empty map", 1, nil, map[int]string{}},
 	}
 
 	for _, cs := range cases {

@@ -110,9 +110,9 @@ func TestCoalesce(t *testing.T) {
 			opt.Of(1),
 		},
 		{
-			"single not empty",
-			[]opt.Opt[int]{opt.Of(1)},
-			opt.Of(1),
+			"single value 42",
+			[]opt.Opt[int]{opt.Of(42)},
+			opt.Of(42),
 		},
 		{
 			"single empty",

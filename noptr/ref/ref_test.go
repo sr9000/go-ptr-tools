@@ -24,7 +24,7 @@ func BenchmarkToFromPtr(b *testing.B) {
 	})
 }
 
-func TestCloningValue(t *testing.T) {
+func TestOf(t *testing.T) {
 	t.Parallel()
 
 	x := 42
@@ -34,7 +34,7 @@ func TestCloningValue(t *testing.T) {
 	require.Equal(t, x, rx.Val())
 }
 
-func TestRefPtrStaysTheSame(t *testing.T) {
+func TestOfPtr_NotNil(t *testing.T) {
 	t.Parallel()
 
 	x := 42
@@ -45,7 +45,7 @@ func TestRefPtrStaysTheSame(t *testing.T) {
 	require.Equal(t, x, rx.Val())
 }
 
-func TestNilPtrIsNotAllowed(t *testing.T) {
+func TestOfPtr_NilCauseError(t *testing.T) {
 	t.Parallel()
 
 	_, err := ref.OfPtr((*int)(nil))

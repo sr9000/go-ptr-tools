@@ -35,7 +35,7 @@ func TestWrap(t *testing.T) {
 		{"true", 42, true, false},
 		{"false", 42, false, true},
 		{"nil", 42, nil, false},
-		{"string", 42, "non-nil", true},
+		{"string", 42, "hello", true},
 		{"error", 42, errTest, true}}
 
 	for _, cs := range cases {
@@ -56,10 +56,10 @@ func TestParseInterface(t *testing.T) {
 		value    any
 		expected *testFooer
 	}{
-		{"value receiver interface", testBar{}, ptr.Of((testFooer)(testBar{}))},
-		{"pointer to value receiver interface", new(testBar), ptr.Of((testFooer)(new(testBar)))},
-		{"pointer receiver interface", &testFoo{a: 1, b: 2}, ptr.Of((testFooer)(&testFoo{a: 1, b: 2}))},
-		{"value of pointer receiver interface", testFoo{a: 1, b: 2}, nil},
+		{"value receiver", testBar{}, ptr.Of((testFooer)(testBar{}))},
+		{"pointer to value receiver", new(testBar), ptr.Of((testFooer)(new(testBar)))},
+		{"pointer receiver", &testFoo{a: 1, b: 2}, ptr.Of((testFooer)(&testFoo{a: 1, b: 2}))},
+		{"value of pointer receiver", testFoo{a: 1, b: 2}, nil},
 		{"zero interface", val.Zero[testFooer](), nil},
 		{"nil pointer", ptr.Nil[testBar](), nil},
 		{"not an interface", "string", nil},
