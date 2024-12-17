@@ -6,6 +6,23 @@ linters:
     - gosec
     - depguard
     - nonamedreturns
+
+issues:
+  # Enables exclude of directories:
+  # - vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  # Default: true
+  exclude-dirs-use-default: false
+  # Which dirs to exclude: issues from them won't be reported.
+  # Can use regexp here: `generated.*`, regexp is applied on full path,
+  # including the path prefix if one is set.
+  # Default dirs are skipped independently of this option's value (see exclude-dirs-use-default).
+  # "/" will be replaced by current OS file path separator to properly work on Windows.
+  # Default: []
+  exclude-dirs:
+    - "vendor"
+    - "third_party"
+    - "testdata"
+
 linters-settings:
   nlreturn:
     # Size of the block (including return statement that is still "OK")

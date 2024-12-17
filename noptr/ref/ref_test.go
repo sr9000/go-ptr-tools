@@ -51,3 +51,26 @@ func TestOfPtr_NilCauseError(t *testing.T) {
 	_, err := ref.OfPtr((*int)(nil))
 	require.ErrorIs(t, err, ref.ErrPtrMustNotBeNil)
 }
+
+func TestMust(t *testing.T) {
+	t.Parallel()
+
+	t.Run("valid", func(t *testing.T) {
+		t.Parallel()
+
+		x := 42
+		rx := ref.Must(&x)
+		require.NotNil(t, rx.Ptr())
+		require.Same(t, &x, rx.Ptr())
+		require.Equal(t, x, rx.Val())
+	})
+
+	t.Run("nil ptr", func(t *testing.T) {
+		t.Parallel()
+
+		require.PanicsWithError(t, ref.ErrPtrMustNotBeNil.Error(),
+			func() {
+				ref.Must[int](nil)
+			})
+	})
+}

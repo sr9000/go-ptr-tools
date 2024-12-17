@@ -3,7 +3,7 @@ package opt
 import "reflect"
 
 // Wrap creates an optional value based on the given value and condition.
-// Returns Opt is `cond` is true or a nil interface (supposed to be nil-error).
+// Returns Opt if `cond` is true or a nil interface (supposed to be nil-error).
 func Wrap[T any](v T, cond any) Opt[T] {
 	if cond == nil || cond == true {
 		return Of(v)
