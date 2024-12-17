@@ -1,4 +1,4 @@
-// Package ptr is an imposter of the "go-noptr" library.
+// Package ptr is an impostor of the "go-noptr" library :P
 // It provides a pointer factory functions.
 package ptr
 
