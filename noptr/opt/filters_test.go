@@ -23,7 +23,7 @@ func TestFilters_Empty(t *testing.T) {
 func TestFilters_Primitives(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name                      string
 		value                     any
 		notZero, notNil, notEmpty bool
@@ -65,14 +65,14 @@ func TestFilters_Primitives(t *testing.T) {
 			false, false, false},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			x := opt.Of(cs.value)
-			assert.Equal(t, cs.notZero, nil != x.NotZero().Ptr(), "NotZero")
-			assert.Equal(t, cs.notNil, nil != x.NotNil().Ptr(), "NotNil")
-			assert.Equal(t, cs.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
+			x := opt.Of(tt.value)
+			assert.Equal(t, tt.notZero, nil != x.NotZero().Ptr(), "NotZero")
+			assert.Equal(t, tt.notNil, nil != x.NotNil().Ptr(), "NotNil")
+			assert.Equal(t, tt.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
 		})
 	}
 }
@@ -83,7 +83,7 @@ func TestFilters_Nillable(t *testing.T) {
 	filledChan := make(chan int, 10)
 	filledChan <- 42
 
-	cases := []struct {
+	tests := []struct {
 		name                      string
 		value                     any
 		notZero, notNil, notEmpty bool
@@ -134,14 +134,14 @@ func TestFilters_Nillable(t *testing.T) {
 			false, false, false},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			x := opt.Of(cs.value)
-			assert.Equal(t, cs.notZero, nil != x.NotZero().Ptr(), "NotZero")
-			assert.Equal(t, cs.notNil, nil != x.NotNil().Ptr(), "NotNil")
-			assert.Equal(t, cs.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
+			x := opt.Of(tt.value)
+			assert.Equal(t, tt.notZero, nil != x.NotZero().Ptr(), "NotZero")
+			assert.Equal(t, tt.notNil, nil != x.NotNil().Ptr(), "NotNil")
+			assert.Equal(t, tt.notEmpty, nil != x.NotEmpty().Ptr(), "NotEmpty")
 		})
 	}
 }

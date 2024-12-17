@@ -26,7 +26,7 @@ func BenchmarkValidateInterface(b *testing.B) {
 func TestWrap(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name    string
 		value   int
 		cond    any
@@ -38,12 +38,12 @@ func TestWrap(t *testing.T) {
 		{"string", 42, "hello", true},
 		{"error", 42, errTest, true}}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.Wrap(cs.value, cs.cond)
-			require.Equal(t, cs.isEmpty, result.Ptr() == nil)
+			result := opt.Wrap(tt.value, tt.cond)
+			require.Equal(t, tt.isEmpty, result.Ptr() == nil)
 		})
 	}
 }
@@ -51,7 +51,7 @@ func TestWrap(t *testing.T) {
 func TestParseInterface(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		value    any
 		expected *testFooer
@@ -66,12 +66,12 @@ func TestParseInterface(t *testing.T) {
 		{"nil value", nil, nil},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.ParseInterface[testFooer](cs.value)
-			require.Equal(t, cs.expected, result.Ptr())
+			result := opt.ParseInterface[testFooer](tt.value)
+			require.Equal(t, tt.expected, result.Ptr())
 		})
 	}
 }
@@ -79,7 +79,7 @@ func TestParseInterface(t *testing.T) {
 func TestUnwrap2(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name string
 		v1   int
 		v2   string
@@ -91,19 +91,19 @@ func TestUnwrap2(t *testing.T) {
 		{"both empty", 0, "", false},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			o1 := opt.Of(cs.v1).NotZero()
-			o2 := opt.Of(cs.v2).NotZero()
+			o1 := opt.Of(tt.v1).NotZero()
+			o2 := opt.Of(tt.v2).NotZero()
 
 			v1, v2, ok := opt.Unwrap2(o1, o2)
-			require.Equal(t, cs.ok, ok)
+			require.Equal(t, tt.ok, ok)
 
 			if ok {
-				require.Equal(t, cs.v1, v1)
-				require.Equal(t, cs.v2, v2)
+				require.Equal(t, tt.v1, v1)
+				require.Equal(t, tt.v2, v2)
 			}
 		})
 	}
@@ -112,7 +112,7 @@ func TestUnwrap2(t *testing.T) {
 func TestUnwrap3(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name string
 		v1   int
 		v2   string
@@ -126,21 +126,21 @@ func TestUnwrap3(t *testing.T) {
 		{"all empty", 0, "", 0, false},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			o1 := opt.Of(cs.v1).NotZero()
-			o2 := opt.Of(cs.v2).NotZero()
-			o3 := opt.Of(cs.v3).NotZero()
+			o1 := opt.Of(tt.v1).NotZero()
+			o2 := opt.Of(tt.v2).NotZero()
+			o3 := opt.Of(tt.v3).NotZero()
 
 			v1, v2, v3, ok := opt.Unwrap3(o1, o2, o3)
-			require.Equal(t, cs.ok, ok)
+			require.Equal(t, tt.ok, ok)
 
 			if ok {
-				require.Equal(t, cs.v1, v1)
-				require.Equal(t, cs.v2, v2)
-				require.InEpsilon(t, cs.v3, v3, 1.0e-6)
+				require.Equal(t, tt.v1, v1)
+				require.Equal(t, tt.v2, v2)
+				require.InEpsilon(t, tt.v3, v3, 1.0e-6)
 			}
 		})
 	}

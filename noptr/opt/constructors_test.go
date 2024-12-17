@@ -126,7 +126,7 @@ func TestOfPtr(t *testing.T) {
 func TestOfMap(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		key      int
 		expected *string
@@ -138,12 +138,12 @@ func TestOfMap(t *testing.T) {
 		{"empty map", 1, nil, map[int]string{}},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.OfMap(cs.m, cs.key)
-			require.Equal(t, cs.expected, result.Ptr())
+			result := opt.OfMap(tt.m, tt.key)
+			require.Equal(t, tt.expected, result.Ptr())
 		})
 	}
 }

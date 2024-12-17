@@ -30,7 +30,7 @@ func BenchmarkCastTo(b *testing.B) {
 func TestCastTo_Int(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		value    any
 		expected *int
@@ -41,12 +41,12 @@ func TestCastTo_Int(t *testing.T) {
 		{"nil pointer", ptr.Nil[int](), nil},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.CastTo[int](cs.value)
-			require.Equal(t, cs.expected, result.Ptr())
+			result := opt.CastTo[int](tt.value)
+			require.Equal(t, tt.expected, result.Ptr())
 		})
 	}
 }
@@ -54,7 +54,7 @@ func TestCastTo_Int(t *testing.T) {
 func TestCastTo_SliceOfString(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		value    any
 		expected *[]string
@@ -66,12 +66,12 @@ func TestCastTo_SliceOfString(t *testing.T) {
 		{"zero slice", val.Zero[[]string](), new([]string)},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.CastTo[[]string](cs.value)
-			require.Equal(t, cs.expected, result.Ptr())
+			result := opt.CastTo[[]string](tt.value)
+			require.Equal(t, tt.expected, result.Ptr())
 		})
 	}
 }
@@ -79,7 +79,7 @@ func TestCastTo_SliceOfString(t *testing.T) {
 func TestCoalesce(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		opts     []opt.Opt[int]
 		expected opt.Opt[int]
@@ -126,12 +126,12 @@ func TestCoalesce(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.Coalesce(cs.opts...)
-			require.Equal(t, cs.expected, result)
+			result := opt.Coalesce(tt.opts...)
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -139,7 +139,7 @@ func TestCoalesce(t *testing.T) {
 func TestFMap_SingleTransform(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		opt      opt.Opt[int]
 		f        func(t *testing.T, i int) string
@@ -164,12 +164,12 @@ func TestFMap_SingleTransform(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.FMap(cs.opt, func(i int) string { return cs.f(t, i) })
-			require.Equal(t, cs.expected, result)
+			result := opt.FMap(tt.opt, func(i int) string { return tt.f(t, i) })
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -193,7 +193,7 @@ func TestFMap_ChainOfTransforms(t *testing.T) {
 func TestFMapEx_SingleTransform(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		opt      opt.Opt[int]
 		f        func(t *testing.T, i int) (string, error)
@@ -233,13 +233,13 @@ func TestFMapEx_SingleTransform(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result, err := opt.FMapEx(cs.opt, func(i int) (string, error) { return cs.f(t, i) })
-			require.ErrorIs(t, err, cs.err)
-			require.Equal(t, cs.expected, result)
+			result, err := opt.FMapEx(tt.opt, func(i int) (string, error) { return tt.f(t, i) })
+			require.ErrorIs(t, err, tt.err)
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -268,7 +268,7 @@ func testGetSecond(arr []string) (string, error) {
 func TestFMapEx_ChainOfTransforms(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		err      error
 		phase    int
@@ -288,13 +288,13 @@ func TestFMapEx_ChainOfTransforms(t *testing.T) {
 			opt.Of("value:42:extra"), opt.Empty[int]()},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			optSplit, err := opt.FMapEx(cs.opt, testSplitByColon)
-			if cs.phase == 1 {
-				require.ErrorIs(t, err, cs.err)
+			optSplit, err := opt.FMapEx(tt.opt, testSplitByColon)
+			if tt.phase == 1 {
+				require.ErrorIs(t, err, tt.err)
 				require.Nil(t, optSplit.Ptr())
 
 				return
@@ -304,8 +304,8 @@ func TestFMapEx_ChainOfTransforms(t *testing.T) {
 			require.NotNil(t, optSplit.Ptr())
 
 			optIndex, err := opt.FMapEx(optSplit, testGetSecond)
-			if cs.phase == 2 {
-				require.ErrorIs(t, err, cs.err)
+			if tt.phase == 2 {
+				require.ErrorIs(t, err, tt.err)
 				require.Nil(t, optIndex.Ptr())
 
 				return
@@ -324,7 +324,7 @@ func TestFMapEx_ChainOfTransforms(t *testing.T) {
 			optInt, err := opt.FMapEx(optTrim, strconv.Atoi)
 			require.NoError(t, err)
 			require.NotNil(t, optInt.Ptr())
-			require.Equal(t, cs.expected, optInt)
+			require.Equal(t, tt.expected, optInt)
 		})
 	}
 }

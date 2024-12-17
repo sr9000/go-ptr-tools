@@ -39,7 +39,7 @@ func testMakeSliceHelper(exp, signal int) func(*testing.T, int, *[]int) {
 func TestTrigger(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		funcs    []func(*testing.T, int, *[]int)
@@ -74,8 +74,8 @@ func TestTrigger(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
 			var (
@@ -83,12 +83,12 @@ func TestTrigger(t *testing.T) {
 				funcs  []func(int)
 			)
 
-			for _, f := range cs.funcs {
+			for _, f := range tt.funcs {
 				funcs = append(funcs, func(v int) { f(t, v, &result) })
 			}
 
-			cs.optional.Trigger(funcs...)
-			require.ElementsMatch(t, cs.expected, result)
+			tt.optional.Trigger(funcs...)
+			require.ElementsMatch(t, tt.expected, result)
 		})
 	}
 }
@@ -96,7 +96,7 @@ func TestTrigger(t *testing.T) {
 func TestApply(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		funcs    []func(*testing.T, *int)
@@ -131,17 +131,17 @@ func TestApply(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
 			var funcs []func(*int)
-			for _, f := range cs.funcs {
+			for _, f := range tt.funcs {
 				funcs = append(funcs, func(v *int) { f(t, v) })
 			}
 
-			cs.optional.Apply(funcs...)
-			require.Equal(t, cs.expected, cs.optional.Ptr())
+			tt.optional.Apply(funcs...)
+			require.Equal(t, tt.expected, tt.optional.Ptr())
 		})
 	}
 }
@@ -149,7 +149,7 @@ func TestApply(t *testing.T) {
 func TestApplyEx(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		funcs    []func(*testing.T, *int) error
@@ -202,20 +202,20 @@ func TestApplyEx(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
 			var funcs []func(*int) error
-			for _, f := range cs.funcs {
+			for _, f := range tt.funcs {
 				funcs = append(funcs, func(v *int) error { return f(t, v) })
 			}
 
-			err := cs.optional.ApplyEx(funcs...)
-			require.ErrorIs(t, err, cs.err)
+			err := tt.optional.ApplyEx(funcs...)
+			require.ErrorIs(t, err, tt.err)
 
-			if err == nil && cs.err == nil {
-				require.Equal(t, cs.expected, cs.optional.Ptr())
+			if err == nil && tt.err == nil {
+				require.Equal(t, tt.expected, tt.optional.Ptr())
 			}
 		})
 	}
@@ -224,7 +224,7 @@ func TestApplyEx(t *testing.T) {
 func TestElse(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		val      int
@@ -244,12 +244,12 @@ func TestElse(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := cs.optional.Else(cs.val)
-			require.Equal(t, cs.expected, result)
+			result := tt.optional.Else(tt.val)
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -257,7 +257,7 @@ func TestElse(t *testing.T) {
 func TestElseGet(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		f        func(*testing.T) int
@@ -277,12 +277,12 @@ func TestElseGet(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := cs.optional.ElseGet(func() int { return cs.f(t) })
-			require.Equal(t, cs.expected, result)
+			result := tt.optional.ElseGet(func() int { return tt.f(t) })
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -290,7 +290,7 @@ func TestElseGet(t *testing.T) {
 func TestElseGetEx(t *testing.T) {
 	t.Parallel()
 
-	cases := []struct {
+	tests := []struct {
 		name     string
 		optional opt.Opt[int]
 		f        func(*testing.T) (int, error)
@@ -320,15 +320,15 @@ func TestElseGetEx(t *testing.T) {
 		},
 	}
 
-	for _, cs := range cases {
-		t.Run(cs.name, func(t *testing.T) {
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result, err := cs.optional.ElseGetEx(func() (int, error) { return cs.f(t) })
-			require.ErrorIs(t, err, cs.err)
+			result, err := tt.optional.ElseGetEx(func() (int, error) { return tt.f(t) })
+			require.ErrorIs(t, err, tt.err)
 
-			if err == nil && cs.err == nil {
-				require.Equal(t, cs.expected, result)
+			if err == nil && tt.err == nil {
+				require.Equal(t, tt.expected, result)
 			}
 		})
 	}
