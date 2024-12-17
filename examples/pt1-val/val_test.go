@@ -25,7 +25,4 @@ func Example() {
 	// {0 0}
 }
 
-var (
-	_ = val.Zero[Point]().x // suppress unused
-	_ = val.Zero[Point]().y // suppress unused
-)
+var _ = Point{x: 1, y: 2} // suppress unused
