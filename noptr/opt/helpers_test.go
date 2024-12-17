@@ -12,12 +12,12 @@ import (
 
 func BenchmarkValidateInterface(b *testing.B) {
 	bar := &testBar{}
-	nul := (*testBar)(nil)
+	nilPtr := ptr.Nil[testBar]()
 	str := "string"
 
 	for range b.N / 4 {
 		_ = opt.ParseInterface[testFooer](bar)
-		_ = opt.ParseInterface[testFooer](nul)
+		_ = opt.ParseInterface[testFooer](nilPtr)
 		_ = opt.ParseInterface[testFooer](nil)
 		_ = opt.ParseInterface[testFooer](str)
 	}
