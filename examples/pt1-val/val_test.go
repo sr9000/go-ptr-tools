@@ -2,8 +2,7 @@ package pt1val_test
 
 import (
 	"fmt"
-
-	"github.com/sr9000/go-noptr/noptr/val"
+	"github.com/sr9000/go-noptr/val"
 )
 
 type Point struct {

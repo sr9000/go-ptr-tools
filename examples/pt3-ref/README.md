@@ -9,7 +9,7 @@ Summarizing the above, the type `ref.Ref[T]` plays a role of a contract for both
 ## Advantages
 
 - The reference is always safe to use as a function argument.
-- The reference preserves the pointer (`ref.OfPtr(ptr)`), so you can modify the original pointer value through the
+- The reference preserves the pointer (`ref.From(ptr)`), so you can modify the original pointer value through the
   reference.
 
 ## Usage

@@ -2,17 +2,16 @@ package pt3ref_test
 
 import (
 	"fmt"
-
-	"github.com/sr9000/go-noptr/noptr/ref"
+	ref2 "github.com/sr9000/go-noptr/ref"
 )
 
-func NewSegment(a, b ref.Ref[Point]) Segment {
+func NewSegment(a, b ref2.Ref[Point]) Segment {
 	return Segment{isValid: true, a: a, b: b}
 }
 
 type Segment struct {
-	isValid bool           // best practice to force using NewSegment
-	a, b    ref.Ref[Point] // replacement for *Point
+	isValid bool            // best practice to force using NewSegment
+	a, b    ref2.Ref[Point] // replacement for *Point
 }
 
 func (s Segment) String() string {
@@ -37,7 +36,7 @@ func ExampleDefaultSegment() {
 func ExampleNewSegment() {
 	a := Point{x: 1, y: 2}
 	b := Point{x: 3, y: 4}
-	segment := NewSegment(ref.Of(a), ref.Of(b)) // but ok if explicitly created
+	segment := NewSegment(ref2.New(a), ref2.New(b)) // but ok if explicitly created
 	fmt.Println(segment)
 	// Output: {{1 2} {3 4}}
 }

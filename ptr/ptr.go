@@ -1,10 +1,10 @@
-// Package ptr is an impostor of the "go-noptr" library :P
+// Package ptr is an impostor of the "go-ptr-tools" library :P
 // It provides a pointer factory functions.
 package ptr
 
-// Of is a helper routine that allocates a new any value
+// New is a helper routine that allocates a new any value
 // to store v and returns a pointer to it.
-func Of[T any](v T) *T {
+func New[T any](v T) *T {
 	return &v
 }
 

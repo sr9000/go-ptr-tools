@@ -2,13 +2,12 @@ package pt2ptr_test
 
 import (
 	"fmt"
-
-	"github.com/sr9000/go-noptr/noptr/ptr"
+	"github.com/sr9000/go-noptr/ptr"
 )
 
-func ExamplePtrOf() {
-	fmt.Println(*ptr.Of(42))
-	fmt.Println(*ptr.Of("hello"))
+func ExamplePtrNew() {
+	fmt.Println(*ptr.New(42))
+	fmt.Println(*ptr.New("hello"))
 
 	// Output:
 	// 42
@@ -26,5 +25,5 @@ func ExamplePtrNil() {
 	// (*[]int)(nil)
 }
 
-func PtrOf()  {} // suppress govet
+func PtrNew() {} // suppress govet
 func PtrNil() {} // suppress govet

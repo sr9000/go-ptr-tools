@@ -1,21 +1,20 @@
 package ref_test
 
 import (
+	"github.com/sr9000/go-noptr/ref"
 	"testing"
 
 	"github.com/stretchr/testify/require"
-
-	"github.com/sr9000/go-noptr/noptr/ref"
 )
 
 func BenchmarkToFromPtr(b *testing.B) {
-	b.Run("Ref", func(b *testing.B) {
+	b.Run("ref", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
-			_ = *ref.Of(42).Ptr()
+			_ = *ref.New(42).Ptr()
 		}
 	})
 
-	b.Run("Bare Ptr", func(b *testing.B) {
+	b.Run("bare ptr", func(b *testing.B) {
 		for i := 0; i < b.N; i++ {
 			x := 42
 			ptr := &x
@@ -24,24 +23,24 @@ func BenchmarkToFromPtr(b *testing.B) {
 	})
 }
 
-func TestOf(t *testing.T) {
+func TestNew(t *testing.T) {
 	t.Parallel()
 
 	x := 42
-	rx := ref.Of(x)
+	rx := ref.New(x)
 	require.NotNil(t, rx.Ptr())
 	require.NotSame(t, &x, rx.Ptr())
 	require.Equal(t, x, rx.Val())
 }
 
-func TestOfPtr_NotNil(t *testing.T) {
+func TestFrom(t *testing.T) {
 	t.Parallel()
 
 	t.Run("valid", func(t *testing.T) {
 		t.Parallel()
 
 		x := 42
-		rx, err := ref.OfPtr(&x)
+		rx, err := ref.From(&x)
 		require.NoError(t, err)
 		require.NotNil(t, rx.Ptr())
 		require.Same(t, &x, rx.Ptr())
@@ -51,7 +50,7 @@ func TestOfPtr_NotNil(t *testing.T) {
 	t.Run("nil cause err", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := ref.OfPtr((*int)(nil))
+		_, err := ref.From[int](nil)
 		require.ErrorIs(t, err, ref.ErrPtrMustNotBeNil)
 	})
 }
@@ -76,5 +75,28 @@ func TestMust(t *testing.T) {
 			func() {
 				ref.Must[int](nil)
 			})
+	})
+}
+
+func TestGuaranteed(t *testing.T) {
+	t.Parallel()
+
+	t.Run("valid", func(t *testing.T) {
+		t.Parallel()
+
+		x := 42
+		rx := ref.Guaranteed(&x)
+		require.NotNil(t, rx.Ptr())
+		require.Same(t, &x, rx.Ptr())
+		require.Equal(t, x, rx.Val())
+	})
+
+	t.Run("nil ptr", func(t *testing.T) {
+		t.Parallel()
+
+		require.NotPanics(t, func() {
+			rnil := ref.Guaranteed[int](nil)
+			require.Nil(t, rnil.Ptr())
+		})
 	})
 }
