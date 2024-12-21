@@ -1,10 +1,12 @@
 package ptr_test
 
 import (
-	"github.com/sr9000/go-noptr/ptr"
-	"github.com/sr9000/go-noptr/ref"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/sr9000/go-ptr-tools/ptr"
+	"github.com/sr9000/go-ptr-tools/ref"
 )
 
 func TestCoalesce(t *testing.T) {
@@ -54,7 +56,6 @@ func TestCoalesce(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -113,7 +114,6 @@ func TestFinalize(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 

@@ -1,10 +1,11 @@
 package ref_test
 
 import (
-	"github.com/sr9000/go-noptr/ref"
 	"testing"
 
 	"github.com/stretchr/testify/require"
+
+	"github.com/sr9000/go-ptr-tools/ref"
 )
 
 func BenchmarkToFromPtr(b *testing.B) {

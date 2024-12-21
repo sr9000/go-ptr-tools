@@ -1,12 +1,7 @@
-// Package ptr is an impostor of the "go-ptr-tools" library :P
-// It provides a pointer factory functions.
+// Package ptr provides several helper routines for working with pointers.
 package ptr
 
-// New is a helper routine that allocates a new any value
-// to store v and returns a pointer to it.
+// New returns pointer onto a value, works with primitive types (int, string, etc.).
 func New[T any](v T) *T {
 	return &v
 }
-
-// Nil is a helper routine that returns a nil pointer of any type.
-func Nil[T any]() (nilPtr *T) { return }

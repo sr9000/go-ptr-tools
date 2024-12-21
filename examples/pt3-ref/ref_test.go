@@ -2,7 +2,8 @@ package pt3ref_test
 
 import (
 	"fmt"
-	ref2 "github.com/sr9000/go-noptr/ref"
+
+	"github.com/sr9000/go-ptr-tools/ref"
 )
 
 type Point struct {
@@ -10,9 +11,9 @@ type Point struct {
 }
 
 func ExampleRefNew() {
-	func(r ref2.Ref[int]) {
+	func(r ref.Ref[int]) {
 		fmt.Println(r.Val()) // no need to check for the nil
-	}(ref2.New(42))
+	}(ref.New(42))
 	// Output: 42
 }
 
@@ -21,14 +22,14 @@ func ExampleRefFrom() {
 
 	value := 42
 
-	valid, err := ref2.From(&value)
+	valid, err := ref.From(&value)
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Println(valid.Val(), err)
 
-	_, err = ref2.From[int](nil)
+	_, err = ref.From[int](nil)
 	fmt.Println(err)
 
 	// Output:
@@ -39,10 +40,10 @@ func ExampleRefFrom() {
 func ExampleModifyingValue() {
 	point := Point{x: 1, y: 2}
 
-	func(r ref2.Ref[Point]) {
+	func(r ref.Ref[Point]) {
 		r.Ptr().x = 10
 		r.Ptr().y = 20
-	}(ref2.Must(&point))
+	}(ref.Must(&point))
 
 	fmt.Println(point)
 	// Output: {10 20}

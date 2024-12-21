@@ -1,6 +1,6 @@
 package ptr
 
-import "github.com/sr9000/go-noptr/ref"
+import "github.com/sr9000/go-ptr-tools/ref"
 
 // Coalesce returns the first not nil pointer.
 func Coalesce[T any](pointers ...*T) *T {

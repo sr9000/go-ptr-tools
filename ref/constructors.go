@@ -1,7 +1,7 @@
 package ref
 
 import (
-	"github.com/sr9000/go-noptr/val"
+	"github.com/sr9000/go-ptr-tools/val"
 )
 
 // New returns a new Ref with the given value.
