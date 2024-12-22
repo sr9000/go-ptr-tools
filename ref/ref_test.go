@@ -10,38 +10,30 @@ import (
 
 func BenchmarkToFromPtr(b *testing.B) {
 	b.Run("ref", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			_ = *ref.New(42).Ptr()
+		for i := range b.N / 2 {
+			r := ref.Guaranteed(&i)
+			*r.Ptr()++
+			*r.Ptr()--
 		}
 	})
 
 	b.Run("bare ptr", func(b *testing.B) {
-		for i := 0; i < b.N; i++ {
-			x := 42
-			ptr := &x
-			_ = *ptr
+		for i := range b.N / 2 {
+			ptr := &i
+			*ptr++
+			*ptr--
 		}
 	})
 }
 
-func TestNew(t *testing.T) {
-	t.Parallel()
-
-	x := 42
-	rx := ref.New(x)
-	require.NotNil(t, rx.Ptr())
-	require.NotSame(t, &x, rx.Ptr())
-	require.Equal(t, x, rx.Val())
-}
-
-func TestFrom(t *testing.T) {
+func TestFromPtr(t *testing.T) {
 	t.Parallel()
 
 	t.Run("valid", func(t *testing.T) {
 		t.Parallel()
 
 		x := 42
-		rx, err := ref.From(&x)
+		rx, err := ref.New(&x)
 		require.NoError(t, err)
 		require.NotNil(t, rx.Ptr())
 		require.Same(t, &x, rx.Ptr())
@@ -51,31 +43,8 @@ func TestFrom(t *testing.T) {
 	t.Run("nil cause err", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := ref.From[int](nil)
-		require.ErrorIs(t, err, ref.ErrPtrMustNotBeNil)
-	})
-}
-
-func TestMust(t *testing.T) {
-	t.Parallel()
-
-	t.Run("valid", func(t *testing.T) {
-		t.Parallel()
-
-		x := 42
-		rx := ref.Must(&x)
-		require.NotNil(t, rx.Ptr())
-		require.Same(t, &x, rx.Ptr())
-		require.Equal(t, x, rx.Val())
-	})
-
-	t.Run("nil ptr", func(t *testing.T) {
-		t.Parallel()
-
-		require.PanicsWithError(t, ref.ErrPtrMustNotBeNil.Error(),
-			func() {
-				ref.Must[int](nil)
-			})
+		_, err := ref.New[int](nil)
+		require.ErrorIs(t, err, ref.ErrPtrMustBeNotNil)
 	})
 }
 

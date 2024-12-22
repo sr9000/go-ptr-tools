@@ -6,6 +6,7 @@ linters:
     - gosec
     - depguard
     - nonamedreturns
+    - tagliatelle
 
 issues:
   # Enables exclude of directories:
@@ -24,6 +25,9 @@ issues:
     - "testdata"
 
 linters-settings:
+  gocritic:
+    disabled-checks:
+      - newDeref # *new(T) is not a mistake
   nlreturn:
     # Size of the block (including return statement that is still "OK")
     # so no return split required.

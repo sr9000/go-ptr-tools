@@ -71,7 +71,7 @@ func TestFinalize(t *testing.T) {
 	one := ptr.New(1)
 	two := ptr.New(2)
 	three := ptr.New(3)
-	final := ref.New(42)
+	final := ref.Guaranteed(ptr.New(42))
 
 	tests := []struct {
 		name     string
