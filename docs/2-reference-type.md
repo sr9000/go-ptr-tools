@@ -8,16 +8,16 @@ and this is very annoying even only valid pointers are passed into a function.
 
 ```go
 func plusOne(n *int) {
-if n != nil { // checks happend ...
-*n++
-}
+    if n != nil { // checks happend ...
+        *n++
+    }
 }
 
 func main() {
-var n int
-plusOne(&n) // every
-plusOne(&n) // signle
-plusOne(&n) // time
+    var n int
+    plusOne(&n) // every
+    plusOne(&n) // signle
+    plusOne(&n) // time
 }
 ```
 
@@ -37,14 +37,14 @@ If an address of an actual variable is passed then it's a case for `ref.Guarante
 
 ```go
 func plusOne(r ref.Ref[int]) {
-*r.Ptr()++ // no more checks
+    *r.Ptr()++ // no more checks
 }
 
 func main() {
-var n int
-plusOne(ref.Guaranteed(&n))
-plusOne(ref.Guaranteed(&n))
-plusOne(ref.Guaranteed(&n))
+    var n int
+    plusOne(ref.Guaranteed(&n))
+    plusOne(ref.Guaranteed(&n))
+    plusOne(ref.Guaranteed(&n))
 }
 ```
 
@@ -52,13 +52,13 @@ If an optional value must be passed as reference then it's a case for `ref.New` 
 
 ```go
 func tryPlusOne(n *int) error {
-r, err := ref.New(n)
-if err != nil {
-return err
-}
+    r, err := ref.New(n)
+    if err != nil {
+        return err
+    }
 
-plusOne(r)
+    plusOne(r)
 
-return nil
+    return nil
 }
 ```

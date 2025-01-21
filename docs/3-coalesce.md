@@ -11,7 +11,7 @@ func sourceA() *int { ... }
 func sourceB() *int { ... }
 
 func main() {
-res := ref.Coalesce(sourceA(), sourceB())
+    res := ref.Coalesce(sourceA(), sourceB())
 }
 ```
 
@@ -19,8 +19,8 @@ Also it is possible to provide default value so function `Else` should be used.
 
 ```go
 func main() {
-fallback := 5
-res := ptr.Else(ref.Guaranteed(&fallback), sourceA(), sourceB())
+    fallback := 5
+    res := ptr.Else(ref.Guaranteed(&fallback), sourceA(), sourceB())
 }
 ```
 
@@ -34,22 +34,22 @@ implementation provided in the following snippet of code.
 
 ```go
 func CoalesceGetters[T any](getters ...func () *T) *T {
-var wg sync.WaitGroup
+    var wg sync.WaitGroup
+    
+    wg.Add(len(getters))
+    results := make([]*T, len(getters))
+    
+    for i, g := range getters {
+        go func () {
+            defer wg.Done()
+            
+            results[i] = g()
+        }()
+    }
+    
+    wg.Wait()
 
-wg.Add(len(getters))
-results := make([]*T, len(getters))
-
-for i, g := range getters {
-go func () {
-defer wg.Done()
-
-results[i] = g()
-}()
-}
-
-wg.Wait()
-
-return ptr.Coalesce(results...)
+    return ptr.Coalesce(results...)
 }
 ```
 

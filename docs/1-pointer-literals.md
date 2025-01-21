@@ -9,7 +9,7 @@ when filling a struct or passing argument to a function.
 
 // struct with pointers
 type Bounds struct {
-Lower, Upper *float64
+    Lower, Upper *float64
 }
 
 // func with pointers
@@ -21,8 +21,8 @@ in&#8209;place:
 
 ```go
 bounds := Bounds{
-Lower: ptr.New(42.0), // provides &42.0
-Upper: nil,
+    Lower: ptr.New(42.0), // provides &42.0
+    Upper: nil,
 }
 
 // passing &3
