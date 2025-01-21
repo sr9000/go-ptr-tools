@@ -15,7 +15,7 @@ func bar[T any, PT *T](msg string, x PT) {
 }
 
 func Example_tPtDifference() {
-	x := 42
+	x := 42 //nolint
 	foo("pointer", &x)
 	bar("pointer", &x)
 
