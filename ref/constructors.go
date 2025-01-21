@@ -15,3 +15,8 @@ func New[T any](ptr *T) (Ref[T], error) {
 func Guaranteed[T any](notNilPtr *T) Ref[T] {
 	return Ref[T]{notNilPtr}
 }
+
+// Literal returns a new Ref based on the given value.
+func Literal[T any](v T) Ref[T] {
+	return Ref[T]{&v}
+}

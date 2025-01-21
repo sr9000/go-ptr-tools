@@ -70,3 +70,25 @@ func TestGuaranteed(t *testing.T) {
 		})
 	})
 }
+
+func TestLiteral(t *testing.T) {
+	t.Parallel()
+
+	t.Run("literal", func(t *testing.T) {
+		t.Parallel()
+
+		rx := ref.Literal(42)
+		require.NotNil(t, rx.Ptr())
+		require.Equal(t, 42, rx.Val())
+	})
+
+	t.Run("value", func(t *testing.T) {
+		t.Parallel()
+
+		x := 42
+		rx := ref.Literal(x)
+		require.NotNil(t, rx.Ptr())
+		require.NotSame(t, &x, rx.Ptr())
+		require.Equal(t, x, rx.Val())
+	})
+}
