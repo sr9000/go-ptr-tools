@@ -2,6 +2,9 @@
 
 > Fully working code example provided at [optional_recipes_test.go](../examples/optional_recipes_test.go).
 
+Pointer is a new optional. It can be used to represent a value that can be absent. The following recipes can be used to
+work with optional values.
+
 ## Construct Optional
 
 **1. Optional.Of() value from a variable**
