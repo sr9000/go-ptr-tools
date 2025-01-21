@@ -38,6 +38,7 @@ linters-settings:
     # Default: []
     ignore-names:
       - tt # tt is shortname for testCase in table driven tests
+      - wg # wg is shortname for WaitGroup
     # The longest distance, in source lines, that is being considered a "small scope".
     # Variables used in at most this many lines will be ignored.
     # Default: 5
