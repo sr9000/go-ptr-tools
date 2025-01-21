@@ -7,6 +7,7 @@ type Ref[T any] struct {
 }
 
 // Ptr returns the pointer to the value.
+// There is no need to check for nil, because the pointer is guaranteed to be not nil.
 func (r Ref[T]) Ptr() *T {
 	return r.ptr
 }

@@ -1,3 +1,3 @@
-# go-noptr
+# go-ptr-tools
 
-never ever ever use go ptr
+> Pointer is a new optional.

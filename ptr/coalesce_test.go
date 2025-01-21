@@ -117,7 +117,7 @@ func TestFinalize(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := ptr.Finalize(tt.final, tt.pointers...)
+			result := ptr.Else(tt.final, tt.pointers...)
 			require.Same(t, tt.expected.Ptr(), result.Ptr())
 		})
 	}
