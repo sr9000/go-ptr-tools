@@ -1,0 +1,22 @@
+name: coverage
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v4
+        with:
+          go-version: '1.23'
+
+      - name: Test
+        run: go test -v ./...
+
+      - name: Update coverage report
+        uses: crowdriff/go-coverage-gha@v0.0.4
