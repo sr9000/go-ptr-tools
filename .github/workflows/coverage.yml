@@ -1,4 +1,4 @@
-name: test
+name: coverage
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: test
+    name: coverage
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,5 +17,8 @@ jobs:
         with:
           go-version: '1.23'
 
-      - name: Go Test
-        run: make test
+      - name: Test
+        run: go test -v ./...
+
+      - name: Update coverage report
+        uses: crowdriff/go-coverage-gha@v0
