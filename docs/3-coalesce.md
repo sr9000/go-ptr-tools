@@ -19,8 +19,7 @@ Also it is possible to provide default value so function `Else` should be used.
 
 ```go
 func main() {
-    fallback := 5
-    res := ptr.Else(ref.Guaranteed(&fallback), sourceA(), sourceB())
+    res := ptr.Else(ref.Literal(5), sourceA(), sourceB())
 }
 ```
 

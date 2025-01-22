@@ -27,8 +27,8 @@ func Example_wrong_usingBoolToCheckValidity() {
 	}
 
 	xs := []int{1, 2, 3}
-	if idx, found := find(xs, 2); found {
-		fmt.Println("Found at index", idx)
+	if i, ok := find(xs, 2); ok {
+		fmt.Println("Found at index", i)
 	} else {
 		fmt.Println("Not found")
 	}
@@ -48,8 +48,8 @@ func Example_good_usingPointerToCheckValidity() {
 	}
 
 	xs := []int{1, 2, 3}
-	if idx := find(xs, 2); idx != nil {
-		fmt.Println("Found at index", *idx)
+	if index := find(xs, 2); index != nil {
+		fmt.Println("Found at index", *index)
 	} else {
 		fmt.Println("Not found")
 	}
@@ -67,9 +67,7 @@ func Example_wrong_missingPointerChecks() {
 		}
 	}()
 
-	plusOneToPtr := func(n *int) {
-		*n++
-	}
+	plusOneToPtr := func(n *int) { *n++ }
 
 	var n *int
 
@@ -79,9 +77,7 @@ func Example_wrong_missingPointerChecks() {
 }
 
 func Example_good_usingRefArgs() {
-	plusOne := func(r ref.Ref[int]) {
-		*r.Ptr()++
-	}
+	plusOne := func(r ref.Ref[int]) { *r.Ptr()++ }
 
 	var n int
 
@@ -109,7 +105,7 @@ func Example_good_withPointerChecks() {
 // -----------------------------------------------------------------------------
 // 3. ref declarations.
 
-func Example_wrong_refRefDeclarations() {
+func Example_wrong_refDeclarations() {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered from panic")
@@ -125,6 +121,7 @@ func Example_wrong_refRefDeclarations() {
 
 func Example_good_usingInitialization() {
 	n := ref.Literal(42)
+
 	fmt.Println(n.Val())
 	// Output: 42
 }
@@ -132,7 +129,7 @@ func Example_good_usingInitialization() {
 // -----------------------------------------------------------------------------
 // 4. ref struct fields.
 
-func Example_wrong_refRefStructFields() {
+func Example_wrong_refStructFields() {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("Recovered from panic")
@@ -167,9 +164,9 @@ func Example_good_usingBuilderWithFunctionalOptions() {
 		isValidN bool
 	}
 
-	withN := func(n int) func(s ref.Ref[S]) {
+	withN := func(n ref.Ref[int]) func(s ref.Ref[S]) {
 		return func(s ref.Ref[S]) {
-			s.Ptr().N = ref.Literal(n)
+			s.Ptr().N = n
 			s.Ptr().isValidN = true
 		}
 	}
@@ -188,13 +185,19 @@ func Example_good_usingBuilderWithFunctionalOptions() {
 		return s, nil
 	}
 
-	s, err := builer(withN(42))
+	// init value
+	n := 42 //nolint
+
+	// pass by ref
+	s, err := builer(withN(ref.Guaranteed(&n))) //nolint
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	n = 1337 // change value after struct initialization
+
 	fmt.Println(s.N.Val())
-	// Output: 42
+	// Output: 1337
 }
 
 func Example_good_usingPointers() {
@@ -234,9 +237,7 @@ func Example_wrong_usingPointerOrAny() {
 
 func Example_good_usingRef() {
 	n := ref.Literal(42)
-	foobar := func(n ref.Ref[int]) {
-		fmt.Println(n.Val())
-	}
+	foobar := func(n ref.Ref[int]) { fmt.Println(n.Val()) }
 	foobar(n)
 	// Output: 42
 }
@@ -244,21 +245,17 @@ func Example_good_usingRef() {
 // -----------------------------------------------------------------------------
 // 6. wrap any value or pointer with ref.
 
-func Example_wrong_wrapAnyValueOrPointerWithRefRef() {
-	var x any //nolint
+func Example_wrong_wrapAnyValueOrPointerWithRef() {
+	var x any
 
-	foo := func(n ref.Ref[any]) {
-		*n.Ptr() = 100
-	}
+	foo := func(n ref.Ref[any]) { *n.Ptr() = 100 }
 
 	foo(ref.Guaranteed(&x))
 	fmt.Println(x)
 
-	var n int //nolint
+	var n int
 
-	bar := func(n ref.Ref[*int]) {
-		**n.Ptr() = 500
-	}
+	bar := func(n ref.Ref[*int]) { **n.Ptr() = 500 }
 
 	bar(ref.Literal(&n))
 	fmt.Println(n)
@@ -268,11 +265,9 @@ func Example_wrong_wrapAnyValueOrPointerWithRefRef() {
 }
 
 func Example_good_usingRefAgain() {
-	var n int //nolint
+	var n int
 
-	foobar := func(n ref.Ref[int]) {
-		*n.Ptr() = 42
-	}
+	foobar := func(n ref.Ref[int]) { *n.Ptr() = 42 }
 
 	foobar(ref.Guaranteed(&n))
 	fmt.Println(n)

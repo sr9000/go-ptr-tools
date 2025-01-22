@@ -60,8 +60,7 @@ func Example_noXCoord() {
 
 	var p Point
 
-	fallback := 5
-	x := ptr.Else(ref.Guaranteed(&fallback), XCoordFromArray(coords), XCoordFromStruct(p))
+	x := ptr.Else(ref.Literal(5), XCoordFromArray(coords), XCoordFromStruct(p))
 
 	PrintPointer("x1", XCoordFromArray(coords))
 	PrintPointer("x2", XCoordFromStruct(p))
