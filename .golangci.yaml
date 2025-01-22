@@ -6,7 +6,28 @@ linters:
     - gosec
     - depguard
     - nonamedreturns
+    - tagliatelle
+
+issues:
+  # Enables exclude of directories:
+  # - vendor$, third_party$, testdata$, examples$, Godeps$, builtin$
+  # Default: true
+  exclude-dirs-use-default: false
+  # Which dirs to exclude: issues from them won't be reported.
+  # Can use regexp here: `generated.*`, regexp is applied on full path,
+  # including the path prefix if one is set.
+  # Default dirs are skipped independently of this option's value (see exclude-dirs-use-default).
+  # "/" will be replaced by current OS file path separator to properly work on Windows.
+  # Default: []
+  exclude-dirs:
+    - "vendor"
+    - "third_party"
+    - "testdata"
+
 linters-settings:
+  gocritic:
+    disabled-checks:
+      - newDeref # *new(T) is not a mistake
   nlreturn:
     # Size of the block (including return statement that is still "OK")
     # so no return split required.
@@ -16,7 +37,17 @@ linters-settings:
     # Optional list of variable names that should be ignored completely.
     # Default: []
     ignore-names:
-      - cs # cs is shortname for case in table test cases
+      - tt # tt is shortname for testCase in table driven tests
+      - wg # wg is shortname for WaitGroup
+      - mu # mu is shortname for Mutex
+      - xs # xs is shortname for []X
+      - ys # ys is shortname for []Y
+      - zs # zs is shortname for []Z
+      - ch # ch is shortname for channel
+      - i # i is shortname for index
+      - j # j is shortname for index
+      - k # k is shortname for index
+      - it # it is shortname for item or iterator
     # The longest distance, in source lines, that is being considered a "small scope".
     # Variables used in at most this many lines will be ignored.
     # Default: 5

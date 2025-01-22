@@ -1,4 +1,4 @@
-module github.com/sr9000/go-noptr
+module github.com/sr9000/go-ptr-tools
 
 go 1.23
 
