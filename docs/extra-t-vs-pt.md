@@ -64,7 +64,7 @@ func bar[T any, PT *T](msg string, x PT) {
 }
 ```
 
-- `bar` introduces a second type parameter `PT` that must explicitly be a pointer to `T` (`PT *T`).
+- `bar` introduces a second type parameter `PT` that must explicitly be a pointer to `T`.
 - This makes `bar` more restrictive:
     - `PT` must exactly match `*T`.
     - If you use a distinct type like `Pint`, explicit conversion to `*T` is required.
