@@ -2,7 +2,7 @@
 
 > Fully working code example provided at [anti_patterns_test.go](../examples/anti_patterns_test.go).
 
-## Using `bool` To Check Validity
+## 1. Using `bool` To Check Validity
 
 **Problem**: `bool` used to check validity of a function result.
 
@@ -48,7 +48,7 @@ func find(xs []int, x int) (*int, error) {
 }
 ```
 
-## Missing Pointer Checks
+## 2. Missing Pointer Checks
 
 **Problem**: Missing `nil` pointer checks.
 
@@ -81,7 +81,7 @@ func plusOneToPtr(n *int) {
 }
 ```
 
-## `ref.Ref` Declarations
+## 3. `ref.Ref` Declarations
 
 **Problem**: `ref.Ref` used for a variable declaration.
 
@@ -101,7 +101,7 @@ Or from any other function that returns a reference.
 n := ref.Literal(42)
 ```
 
-## `ref.Ref` Struct Fields
+## 4. `ref.Ref` Struct Fields
 
 **Problem**: `ref.Ref` used for a struct field.
 
@@ -181,7 +181,7 @@ func Producer2(n ref.Ref[int]) {
 }
 ```
 
-## Using Pointer To `ref.Ref` (Or Store `ref.Ref` As `any`)
+## 5. Using Pointer To `ref.Ref` (Or Store `ref.Ref` As `any`)
 
 **Problem**: `ref.Ref` stored as `any` value or pointer to `ref.Ref`.
 
@@ -207,7 +207,7 @@ func foobar(r ref.Ref[int]) {
 }
 ```
 
-## Wrap `any` Value Or A Pointer With `ref.Ref`
+## 6. Wrap `any` Value Or A Pointer With `ref.Ref`
 
 **Problem**: `any` type or pointer used in `ref.Ref`.
 
@@ -217,7 +217,7 @@ func foo(r ref.Ref[any]) {
 }
 
 func bar(r ref.Ref[*int]) {
-    *r.Ptr() = ptr.New(42)
+    **r.Ptr() = 42
 }
 ```
 
@@ -247,7 +247,7 @@ func bar(s ref.Ref[S]) {
 }
 ```
 
-## Using `ref.Ref` For Optional Results
+## 7. Using `ref.Ref` For Optional Results
 
 **Problem**: `ref.Ref` used to wrap optional results.
 
@@ -291,7 +291,7 @@ func minimum(xs []*int) **int {
 }
 ```
 
-## Extra Actions To Make A Copy
+## 8. Extra Actions To Make A Copy
 
 **Problem**: Extra actions to make a copy of a `ref.Ref` value.
 
@@ -321,22 +321,29 @@ func foobar() {
 }
 ```
 
-## Unprotected Concurrent Access
+## 9. Unprotected Concurrent Access
 
 **Problem**: `ref.Ref` used in concurrent access.
 
 ```go
 func foobar() {
     var n int
+	var wg sync.WaitGroup
+	
+	wg.Add(2)
     r := ref.Guaranteed(&n)
     
     go func() {
+		defer wg.Done()
         *r.Ptr()++
     }()
     
     go func() {
+		defer wg.Done()
         *r.Ptr()++
     }()
+	
+	wg.Wait()
 }
 ```
 
@@ -350,22 +357,29 @@ func foobar() {
     r := ref.Guaranteed(&n)
     
     var mu sync.Mutex
+	var wg sync.WaitGroup
+	
+	wg.Add(2)
     
     go func() {
+		defer wg.Done()
         mu.Lock()
 		defer mu.Unlock()
         *r.Ptr()++
     }()
     
     go func() {
+		defer wg.Done()
         mu.Lock()
 		defer mu.Unlock()
         *r.Ptr()++
     }()
+	
+	wg.Wait()
 }
 ```
 
-## Marshaling `ref.Ref` Values
+## 10. Marshaling `ref.Ref` Values
 
 **Problem**: `ref.Ref` values are marshaled as a part of a struct.
 
@@ -382,7 +396,7 @@ func saveJSON(s S) {
 
 The `ref.Ref` type is a struct and not suitable for marshaling.
 
-**Solution**: Use a pointer to a value.
+**Solution**: Use a value directly.
 
 ```go
 type S struct {
@@ -392,10 +406,10 @@ type S struct {
 
 func saveJSON(s S) {
     x := struct {
-        N *int
+        N int
 		// lots of other fields
     }{
-        N: s.N.Ptr(),
+        N: s.N.Val(),
 		// lots of other fields
     }
 
