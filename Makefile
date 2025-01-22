@@ -11,6 +11,10 @@ test:
 	go test -race -run=Example_wrong_unprotectedConcurrentAccess_rc ./... >/dev/null 2>&1; \
 		test $$? -eq 1 || echo "expected race condition to happen"
 
+cover:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out
+
 bench: # includes tests
 	go test -bench=. ./... -run=^$$
 

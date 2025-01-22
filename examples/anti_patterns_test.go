@@ -362,7 +362,7 @@ func Example_good_usingAssignment() {
 
 func Example_wrong_unprotectedConcurrentAccess_rc() {
 	var (
-		n  int //nolint
+		n  int
 		wg sync.WaitGroup
 	)
 
@@ -374,13 +374,12 @@ func Example_wrong_unprotectedConcurrentAccess_rc() {
 		go func() {
 			defer wg.Done()
 
-			*r.Ptr()++
+			*r.Ptr()++ // race condition
 		}()
 	}
 
 	wg.Wait()
-	fmt.Println(n < 10000)
-	// Output: true
+	// Output:
 }
 
 func Example_good_usingMutex() {

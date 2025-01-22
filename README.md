@@ -1,5 +1,9 @@
 # go-ptr-tools
 
+[![Go Lint](https://github.com/sr9000/go-ptr-tools/actions/workflows/lint.yml/badge.svg)](https://github.com/sr9000/go-ptr-tools/actions/workflows/lint.yml)
+[![Go Test](https://github.com/sr9000/go-ptr-tools/actions/workflows/test.yml/badge.svg)](https://github.com/sr9000/go-ptr-tools/actions/workflows/test.yml)
+[![Go Coverage](https://github.com/sr9000/go-ptr-tools/wiki/coverage.svg)](https://raw.githack.com/wiki/sr9000/go-ptr-tools/coverage.html)
+
 > Pointer is a new optional.
 
 There are a lot of implementations of optional types in Golang like https://github.com/moznion/go-optional
@@ -22,6 +26,7 @@ Bunch of Makefile commands are provided to run tests, benchmarks, and lint the c
 
 - `lint`: Runs `golangci-lint` to lint the code and automatically fix issues.
 - `test`: Runs all tests in the project using `go test`.
+- `cover`: Runs tests and generates a coverage report.
 - `bench`: Runs benchmarks in the project using `go test -bench`.
 - `clean`: Cleans the test cache using `go clean -testcache`.
 - `all`: Cleans the test cache, lints the code, and runs all tests and benchmarks.
