@@ -1,4 +1,4 @@
-# Ptr-Tools: Anti Patterns
+# Ptr-Tools: Antipatterns
 
 > Fully working code example provided at [anti_patterns_test.go](../examples/anti_patterns_test.go).
 
