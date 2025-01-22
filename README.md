@@ -4,8 +4,6 @@
 [![Go Test](https://github.com/sr9000/go-ptr-tools/actions/workflows/test.yml/badge.svg)](https://github.com/sr9000/go-ptr-tools/actions/workflows/test.yml)
 [![Go Coverage](https://github.com/sr9000/go-ptr-tools/wiki/coverage.svg)](https://raw.githack.com/wiki/sr9000/go-ptr-tools/coverage.html)
 
-SUP1
-
 > Pointer is a new optional.
 
 There are a lot of implementations of optional types in Golang like https://github.com/moznion/go-optional
