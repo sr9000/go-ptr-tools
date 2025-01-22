@@ -39,6 +39,15 @@ linters-settings:
     ignore-names:
       - tt # tt is shortname for testCase in table driven tests
       - wg # wg is shortname for WaitGroup
+      - mu # mu is shortname for Mutex
+      - xs # xs is shortname for []X
+      - ys # ys is shortname for []Y
+      - zs # zs is shortname for []Z
+      - ch # ch is shortname for channel
+      - i # i is shortname for index
+      - j # j is shortname for index
+      - k # k is shortname for index
+      - it # it is shortname for item or iterator
     # The longest distance, in source lines, that is being considered a "small scope".
     # Variables used in at most this many lines will be ignored.
     # Default: 5

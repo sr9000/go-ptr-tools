@@ -2,11 +2,15 @@ package examples_test
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"sync"
+
 	"github.com/sr9000/go-ptr-tools/ptr"
 	"github.com/sr9000/go-ptr-tools/ref"
-	"sync"
 )
+
+var errMissingN = errors.New("missing N")
 
 // -----------------------------------------------------------------------------
 // 1. Using bool to check validity.
@@ -18,6 +22,7 @@ func Example_wrong_usingBoolToCheckValidity() {
 				return i, true
 			}
 		}
+
 		return 0, false
 	}
 
@@ -38,6 +43,7 @@ func Example_good_usingPointerToCheckValidity() {
 				return &i
 			}
 		}
+
 		return nil
 	}
 
@@ -60,11 +66,13 @@ func Example_wrong_missingPointerChecks() {
 			fmt.Println("Recovered from panic")
 		}
 	}()
+
 	plusOneToPtr := func(n *int) {
 		*n++
 	}
 
 	var n *int
+
 	plusOneToPtr(n)
 	// Output:
 	// Recovered from panic
@@ -76,7 +84,9 @@ func Example_good_usingRefArgs() {
 	}
 
 	var n int
+
 	plusOne(ref.Guaranteed(&n))
+
 	fmt.Println(n)
 	// Output: 1
 }
@@ -86,10 +96,12 @@ func Example_good_withPointerChecks() {
 		if n == nil {
 			return
 		}
+
 		*n++
 	}
 
 	var n *int
+
 	plusOne(n)
 	// Output:
 }
@@ -103,7 +115,9 @@ func Example_wrong_refRefDeclarations() {
 			fmt.Println("Recovered from panic")
 		}
 	}()
+
 	var n ref.Ref[int]
+
 	fmt.Println(n.Val())
 	// Output:
 	// Recovered from panic
@@ -124,10 +138,13 @@ func Example_wrong_refRefStructFields() {
 			fmt.Println("Recovered from panic")
 		}
 	}()
+
 	type S struct {
 		N ref.Ref[int]
 	}
-	s := S{}
+
+	var s S
+
 	fmt.Println(s.N.Val())
 	// Output:
 	// Recovered from panic
@@ -137,7 +154,9 @@ func Example_good_usingDirectTypes() {
 	type S struct {
 		N int
 	}
-	s := S{}
+
+	var s S
+
 	fmt.Println(s.N)
 	// Output: 0
 }
@@ -147,6 +166,7 @@ func Example_good_usingBuilderWithFunctionalOptions() {
 		N        ref.Ref[int]
 		isValidN bool
 	}
+
 	withN := func(n int) func(s ref.Ref[S]) {
 		return func(s ref.Ref[S]) {
 			s.Ptr().N = ref.Literal(n)
@@ -155,13 +175,16 @@ func Example_good_usingBuilderWithFunctionalOptions() {
 	}
 
 	builer := func(opts ...func(ref.Ref[S])) (S, error) {
-		s := S{}
+		var s S //nolint
+
 		for _, opt := range opts {
 			opt(ref.Guaranteed(&s))
 		}
+
 		if !s.isValidN {
-			return S{}, fmt.Errorf("missing N")
+			return S{}, errMissingN
 		}
+
 		return s, nil
 	}
 
@@ -169,6 +192,7 @@ func Example_good_usingBuilderWithFunctionalOptions() {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	fmt.Println(s.N.Val())
 	// Output: 42
 }
@@ -177,7 +201,9 @@ func Example_good_usingPointers() {
 	type S struct {
 		N *int
 	}
-	s := S{}
+
+	var s S
+
 	fmt.Println(s.N)
 	// Output: <nil>
 }
@@ -186,7 +212,8 @@ func Example_good_usingPointers() {
 // 5. using pointer to ref (or storing ref as any).
 
 func Example_wrong_usingPointerOrAny() {
-	n := ref.Literal(42)
+	n := ref.Literal(42) //nolint
+
 	foo := func(n *ref.Ref[int]) {
 		if n != nil {
 			fmt.Println(n.Val())
@@ -218,17 +245,21 @@ func Example_good_usingRef() {
 // 6. wrap any value or pointer with ref.
 
 func Example_wrong_wrapAnyValueOrPointerWithRefRef() {
-	var x any
+	var x any //nolint
+
 	foo := func(n ref.Ref[any]) {
 		*n.Ptr() = 100
 	}
+
 	foo(ref.Guaranteed(&x))
 	fmt.Println(x)
 
-	var n int
+	var n int //nolint
+
 	bar := func(n ref.Ref[*int]) {
 		**n.Ptr() = 500
 	}
+
 	bar(ref.Literal(&n))
 	fmt.Println(n)
 	// Output:
@@ -237,10 +268,12 @@ func Example_wrong_wrapAnyValueOrPointerWithRefRef() {
 }
 
 func Example_good_usingRefAgain() {
-	var n int
+	var n int //nolint
+
 	foobar := func(n ref.Ref[int]) {
 		*n.Ptr() = 42
 	}
+
 	foobar(ref.Guaranteed(&n))
 	fmt.Println(n)
 	// Output: 42
@@ -256,18 +289,19 @@ func Example_wrong_usingRefForOptionalResults() {
 		}
 
 		// assume that all pointers are valid
-		mn := &xs[0]
+		res := &xs[0]
 		for i := range xs {
-			if *xs[i] < **mn {
-				mn = &xs[i]
+			if *xs[i] < **res {
+				res = &xs[i]
 			}
 		}
 
-		return ref.Guaranteed(mn) // reference to slice element itself
+		return ref.Guaranteed(res) // reference to slice element itself
 	}
 
 	xs := []*int{ptr.New(1), ptr.New(2), ptr.New(3)}
 	res := minimum(xs)
+
 	if res.Ptr() != nil {
 		fmt.Println("Minimum is", **res.Ptr())
 	} else {
@@ -283,17 +317,18 @@ func Example_good_usingPointerForOptionalResults() {
 		}
 
 		// assume that all pointers are valid
-		mn := &xs[0]
+		res := &xs[0]
 		for i := range xs {
-			if *xs[i] < **mn {
-				mn = &xs[i]
+			if *xs[i] < **res {
+				res = &xs[i]
 			}
 		}
 
-		return mn
+		return res
 	}
 
 	xs := []*int{ptr.New(1), ptr.New(2), ptr.New(3)}
+
 	if res := minimum(xs); res != nil {
 		fmt.Println("Minimum is", **res)
 	} else {
@@ -331,14 +366,19 @@ func Example_good_usingAssignment() {
 // 9. unprotected concurrent access.
 
 func Example_wrong_unprotectedConcurrentAccess() {
-	var n int
-	var wg sync.WaitGroup
+	var (
+		n  int //nolint
+		wg sync.WaitGroup
+	)
 
-	r := ref.Guaranteed(&n)
+	r := ref.Guaranteed(&n) //nolint
+
 	for range 1000 {
 		wg.Add(1)
+
 		go func() {
 			defer wg.Done()
+
 			*r.Ptr()++
 		}()
 	}
@@ -349,17 +389,22 @@ func Example_wrong_unprotectedConcurrentAccess() {
 }
 
 func Example_good_usingMutex() {
-	var n int
-	var mu sync.Mutex
-	var wg sync.WaitGroup
-	r := ref.Guaranteed(&n)
+	var (
+		n  int //nolint
+		mu sync.Mutex
+		wg sync.WaitGroup
+	)
+
+	r := ref.Guaranteed(&n) //nolint
 
 	for range 1000 {
 		wg.Add(1)
+
 		go func() {
 			defer wg.Done()
 			mu.Lock()
 			defer mu.Unlock()
+
 			*r.Ptr()++
 		}()
 	}
@@ -374,29 +419,44 @@ func Example_good_usingMutex() {
 
 func Example_wrong_marshalingRefValues() {
 	type S struct {
-		N ref.Ref[int]
+		N ref.Ref[int] `json:"N"`
 	}
+
 	saveJSON := func(s S) {
-		data, _ := json.Marshal(s)
+		data, err := json.Marshal(s)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		fmt.Println(string(data))
 	}
+
 	saveJSON(S{N: ref.Literal(42)})
 	// Output: {"N":{}}
 }
 
 func Example_good_usingValueDirectly() {
 	type S struct {
-		N ref.Ref[int]
+		N ref.Ref[int] `json:"N"`
 	}
+
 	saveJSON := func(s S) {
 		x := struct {
-			N int
+			N int `json:"N"`
 		}{
 			N: s.N.Val(),
 		}
-		data, _ := json.Marshal(x)
+
+		data, err := json.Marshal(x)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
 		fmt.Println(string(data))
 	}
+
 	saveJSON(S{N: ref.Literal(42)})
 	// Output: {"N":42}
 }
