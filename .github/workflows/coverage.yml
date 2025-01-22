@@ -21,4 +21,4 @@ jobs:
         run: go test -v ./...
 
       - name: Update coverage report
-        uses: crowdriff/go-coverage-gha@v0
+        uses: crowdriff/go-coverage-gha@v1.0.1
