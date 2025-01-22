@@ -2,6 +2,52 @@
 
 > Fully working code example provided at [anti_patterns_test.go](../examples/anti_patterns_test.go).
 
+## Using `bool` To Check Validity
+
+**Problem**: `bool` used to check validity of a function result.
+
+```go
+func find(xs []int, x int) (int, bool) {
+    for i, v := range xs {
+        if v == x {
+            return i, true
+        }
+    }
+    
+    return 0, false
+}
+```
+
+The `bool` type is not a good way to check validity. It is possible to forget to check the result.
+
+**Solution**: Use a pointer to indicate the absence of a result.
+
+```go
+func find(xs []int, x int) *int {
+    for i, v := range xs {
+        if v == x {
+            return &i
+        }
+    }
+    
+    return nil
+}
+```
+
+As an alternative, it is possible to use `error` type to indicate the invalid result.
+
+```go
+func find(xs []int, x int) (*int, error) {
+    for i, v := range xs {
+        if v == x {
+            return &i, nil
+        }
+    }
+    
+    return nil, errors.New("not found")
+}
+```
+
 ## Missing Pointer Checks
 
 **Problem**: Missing `nil` pointer checks.
@@ -118,7 +164,7 @@ type S struct {
 }
 
 func Consumer(s S) error {
-    n, err := ref.New(s.N)
+    n, err := ref.New(s.N)  // convert pointer back to ref
     if err != nil {
         return err
     }
@@ -126,7 +172,234 @@ func Consumer(s S) error {
     // use n and other fields
 }
 
-func main() {
+func Producer1() {
 	err := Consumer(S{})  // safe to pass zero value
+}
+
+func Producer2(n ref.Ref[int]) {
+    err := Consumer(S{N: n.Ptr()})  // safe to pass pointer
+}
+```
+
+## Using Pointer To `ref.Ref` (Or Store `ref.Ref` As `any`)
+
+**Problem**: `ref.Ref` stored as `any` value or pointer to `ref.Ref`.
+
+```go
+func foo(r *ref.Ref[int]) {
+    *r.Ptr()++
+}
+
+func bar(r any) {
+    if n, ok := r.(ref.Ref[int]); ok {
+        *n.Ptr()++
+    }
+}
+```
+
+The `ref.Ref` type is a reference type and not required to be wrapped in another reference type.
+
+**Solution**: Use `ref.Ref` directly.
+
+```go
+func foobar(r ref.Ref[int]) {
+    *r.Ptr()++
+}
+```
+
+## Wrap `any` Value Or A Pointer With `ref.Ref`
+
+**Problem**: `any` type or pointer used in `ref.Ref`.
+
+```go
+func foo(r ref.Ref[any]) {
+    *r.Ptr() = 42
+}
+
+func bar(r ref.Ref[*int]) {
+    *r.Ptr() = ptr.New(42)
+}
+```
+
+The `ref.Ref` type is a reference type itself and should not be used to wrap other reference types.
+
+**Solution**: Use `ref.Ref` directly.
+
+```go
+func foobar(r ref.Ref[int]) {
+    *r.Ptr() = 42
+}
+```
+
+Even when it's needed to wrap a field or variable to change it.
+
+```go
+type S struct {
+	n int
+}
+
+func foo(n ref.Ref[int]) {
+    *n.Ptr()++
+}
+
+func bar(s ref.Ref[S]) {
+    foo(ref.Guaranteed(&s.Ptr().n))
+}
+```
+
+## Using `ref.Ref` For Optional Results
+
+**Problem**: `ref.Ref` used to wrap optional results.
+
+```go
+func minimum(xs []*int) ref.Ref[*int] {
+    if len(xs) == 0 {
+        return ref.Literal(nil) // no minimum for empty list
+    }
+
+	// assume that all pointers are valid
+    min := &xs[0]
+    for i := range xs {
+        if *xs[i] < **min {
+            min = &xs[i]
+        }
+    }
+	
+    return ref.Guaranteed(min) // reference to slice element itself
+}
+```
+
+The `ref.Ref` type represents a valid pointer. This type must be treated like a value (e.g. `int`).
+Thus, it is not suitable for optional results.
+
+**Solution**: Use pointers directly.
+
+```go
+func minimum(xs []*int) **int {
+    if len(xs) == 0 {
+        return nil
+    }
+
+    min := &xs[0]
+    for i := range xs {
+        if *xs[i] < **min {
+            min = &xs[i]
+        }
+    }
+
+    return min
+}
+```
+
+## Extra Actions To Make A Copy
+
+**Problem**: Extra actions to make a copy of a `ref.Ref` value.
+
+```go
+func foobar() {
+	var n, m int
+	// ...
+	r1 := ref.Guaranteed(&n)
+	// ...
+	r2 := ref.Guaranteed(r1.Ptr())  // extra actions to make a copy
+	r1 = ref.Guaranteed(&m)         // change r1
+}
+```
+
+The `ref.Ref` is safe to copy. It is basically a pointer inside a struct.
+
+**Solution**: Use an assignment operator.
+
+```go
+func foobar() {
+    var n, m int
+    // ...
+    r1 := ref.Guaranteed(&n)
+    // ...
+    r2 := r1                 // safe to copy
+    r1 = ref.Guaranteed(&m)  // reassignment doesn't affect r2
+}
+```
+
+## Unprotected Concurrent Access
+
+**Problem**: `ref.Ref` used in concurrent access.
+
+```go
+func foobar() {
+    var n int
+    r := ref.Guaranteed(&n)
+    
+    go func() {
+        *r.Ptr()++
+    }()
+    
+    go func() {
+        *r.Ptr()++
+    }()
+}
+```
+
+The `ref.Ref` is not safe to concurrent access by default.
+
+**Solution**: Use synchronization primitives as usual.
+
+```go
+func foobar() {
+    var n int
+    r := ref.Guaranteed(&n)
+    
+    var mu sync.Mutex
+    
+    go func() {
+        mu.Lock()
+		defer mu.Unlock()
+        *r.Ptr()++
+    }()
+    
+    go func() {
+        mu.Lock()
+		defer mu.Unlock()
+        *r.Ptr()++
+    }()
+}
+```
+
+## Marshaling `ref.Ref` Values
+
+**Problem**: `ref.Ref` values are marshaled as a part of a struct.
+
+```go
+type S struct {
+    N ref.Ref[int]
+}
+
+func saveJSON(s S) {
+    data, _ := json.Marshal(s)
+    // save data
+}
+```
+
+The `ref.Ref` type is a struct and not suitable for marshaling.
+
+**Solution**: Use a pointer to a value.
+
+```go
+type S struct {
+    N ref.Ref[int]
+	// lots of other fields
+}
+
+func saveJSON(s S) {
+    x := struct {
+        N *int
+		// lots of other fields
+    }{
+        N: s.N.Ptr(),
+		// lots of other fields
+    }
+
+    data, _ := json.Marshal(x)
+    // save data
 }
 ```
