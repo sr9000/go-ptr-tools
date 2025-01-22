@@ -366,20 +366,24 @@ func Example_wrong_unprotectedConcurrentAccess() {
 		wg sync.WaitGroup
 	)
 
+	const Outer, Inner = 100, 10000
+
 	r := ref.Guaranteed(&n) //nolint
 
-	for range 1000 {
+	for range Outer {
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
-			*r.Ptr()++
+			for range Inner {
+				*r.Ptr()++
+			}
 		}()
 	}
 
 	wg.Wait()
-	fmt.Println(n < 1000)
+	fmt.Println(n < Outer*Inner)
 	// Output: true
 }
 
