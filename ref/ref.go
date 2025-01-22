@@ -7,9 +7,7 @@ type Ref[T any] struct {
 }
 
 // Ptr returns the pointer to the value.
-//
-// PLEASE don't write `ref.Ptr() == nil` checks because it's against the purpose of this type.
-// Use this kind of hack only with a to-do promise to fix this technical debt in the near future.
+// There is no need to check for nil, because the pointer is guaranteed to be not nil.
 func (r Ref[T]) Ptr() *T {
 	return r.ptr
 }
