@@ -360,7 +360,7 @@ func Example_good_usingAssignment() {
 // -----------------------------------------------------------------------------
 // 9. unprotected concurrent access.
 
-func Example_wrong_unprotectedConcurrentAccess() {
+func Example_wrong_unprotectedConcurrentAccess_rc() {
 	var (
 		n  int //nolint
 		wg sync.WaitGroup

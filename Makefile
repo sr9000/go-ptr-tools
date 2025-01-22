@@ -5,12 +5,16 @@ lint:
 	golangci-lint run --fix
 
 test:
-	go test ./...
+	go test -race ./... -skip="^.+_rc$$"
+
+	# race condition test
+	go test -race -run=Example_wrong_unprotectedConcurrentAccess_rc ./... >/dev/null 2>&1; \
+		test $$? -eq 1 || echo "expected race condition to happen"
 
 bench: # includes tests
-	go test -bench=. ./...
+	go test -bench=. ./... -run=^$$
 
 clean:
 	go clean -testcache
 
-all: clean lint bench
+all: clean lint test bench
