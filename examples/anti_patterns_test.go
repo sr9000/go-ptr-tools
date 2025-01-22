@@ -368,7 +368,7 @@ func Example_wrong_unprotectedConcurrentAccess() {
 
 	r := ref.Guaranteed(&n) //nolint
 
-	for range 1000 {
+	for range 10000 {
 		wg.Add(1)
 
 		go func() {
@@ -379,7 +379,7 @@ func Example_wrong_unprotectedConcurrentAccess() {
 	}
 
 	wg.Wait()
-	fmt.Println(n < 1000)
+	fmt.Println(n < 10000)
 	// Output: true
 }
 
@@ -392,7 +392,7 @@ func Example_good_usingMutex() {
 
 	r := ref.Guaranteed(&n) //nolint
 
-	for range 1000 {
+	for range 10000 {
 		wg.Add(1)
 
 		go func() {
@@ -406,7 +406,7 @@ func Example_good_usingMutex() {
 
 	wg.Wait()
 	fmt.Println(n)
-	// Output: 1000
+	// Output: 10000
 }
 
 // -----------------------------------------------------------------------------
