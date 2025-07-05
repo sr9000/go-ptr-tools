@@ -73,48 +73,54 @@ func TestFinalize(t *testing.T) {
 	one := opt.Literal(1)
 	two := opt.Literal(2)
 	three := opt.Literal(3)
-	final := opt.Literal(42)
+	final := 42
 
 	tests := []struct {
 		name     string
-		expected opt.Opt[int]
-		final    opt.Opt[int]
+		expected int
+		final    int
 		opts     []opt.Opt[int]
 	}{
-		{"single valid", one, final,
+		{"single valid", 1, final,
 			[]opt.Opt[int]{one}},
+
 		{"single nil", final, final,
 			[]opt.Opt[int]{{}}},
-		{"two valid", one, final,
+
+		{"two valid", 1, final,
 			[]opt.Opt[int]{one, two}},
-		{"three valid", one, final,
+
+		{"three valid", 1, final,
 			[]opt.Opt[int]{one, two, three}},
-		{"first nil two valid", two, final,
+
+		{"first nil two valid", 2, final,
 			[]opt.Opt[int]{{}, two, three}},
-		{"second nil two valid", one, final,
+
+		{"second nil two valid", 1, final,
 			[]opt.Opt[int]{one, {}, three}},
-		{"third nil two valid", one, final,
+
+		{"third nil two valid", 1, final,
 			[]opt.Opt[int]{one, two, {}}},
-		{"first valid two nil", one, final,
+
+		{"first valid two nil", 1, final,
 			[]opt.Opt[int]{one, {}, {}}},
-		{"last valid two nil", three, final,
+
+		{"last valid two nil", 3, final,
 			[]opt.Opt[int]{{}, {}, three}},
+
 		{"three nil", final, final,
 			[]opt.Opt[int]{{}, {}, {}}},
+
 		{"no opts", final, final,
 			[]opt.Opt[int]{}},
 	}
 
 	for _, tt := range tests {
-
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
-			result := opt.Coalesce(append(tt.opts, tt.final)...)
-			expVal, expOk := tt.expected.Get()
-			resVal, resOk := result.Get()
-			require.Equal(t, expOk, resOk)
-			require.Equal(t, expVal, resVal)
+			result := opt.Else(tt.final, tt.opts...)
+			require.Equal(t, tt.expected, result)
 		})
 	}
 }
