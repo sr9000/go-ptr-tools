@@ -1,4 +1,4 @@
-// Package ptr provides several helper routines for working with pointers.
+// Package ptrfunc provides several helper routines for working with pointers.
 package ptr
 
 // New returns pointer onto a value, works with primitive types (int, string, etc.).
