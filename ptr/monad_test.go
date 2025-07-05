@@ -48,6 +48,16 @@ func addCtxErr(ctx context.Context, number int) (int, error) {
 	return number + 1, nil
 }
 
+// Helper function to create cancelled context.
+func cancelledCtx(t *testing.T) context.Context {
+	t.Helper()
+
+	ctx, cancel := context.WithCancel(t.Context())
+	cancel()
+
+	return ctx
+}
+
 func TestApply(t *testing.T) {
 	t.Parallel()
 
@@ -81,27 +91,40 @@ func TestApply(t *testing.T) {
 func TestApplyCtx(t *testing.T) {
 	t.Parallel()
 
-	ctx := t.Context()
 	tests := []struct {
-		name     string
-		input    *int
-		expected *int
+		name         string
+		ctxCancelled bool
+		input        *int
+		expected     *int
 	}{
 		{
-			name:     "normal case",
-			input:    ptr.New(5),
-			expected: ptr.New(6),
+			name:         "normal case",
+			ctxCancelled: false,
+			input:        ptr.New(5),
+			expected:     ptr.New(6),
 		},
 		{
-			name:     "nil input",
-			input:    nil,
-			expected: nil,
+			name:         "cancelled context",
+			ctxCancelled: true,
+			input:        ptr.New(5),
+			expected:     ptr.New(0), // zero value when context cancelled
+		},
+		{
+			name:         "nil input",
+			ctxCancelled: false,
+			input:        nil,
+			expected:     nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
+			ctx := t.Context()
+			if tt.ctxCancelled {
+				ctx = cancelledCtx(t)
+			}
 
 			result := ptr.ApplyCtx(ctx, tt.input, addCtx)
 			require.Equal(t, tt.expected, result)
@@ -156,30 +179,40 @@ func TestApplyErr(t *testing.T) {
 func TestApplyCtxErr(t *testing.T) {
 	t.Parallel()
 
-	ctx := t.Context()
 	tests := []struct {
-		name        string
-		input       *int
-		expected    *int
-		expectError error
+		name         string
+		ctxCancelled bool
+		input        *int
+		expected     *int
+		expectError  error
 	}{
 		{
-			name:        "normal case",
-			input:       ptr.New(5),
-			expected:    ptr.New(6),
-			expectError: nil,
+			name:         "normal case",
+			ctxCancelled: false,
+			input:        ptr.New(5),
+			expected:     ptr.New(6),
+			expectError:  nil,
 		},
 		{
-			name:        "error case",
-			input:       ptr.New(-1),
-			expected:    nil,
-			expectError: errNegativeNumber,
+			name:         "cancelled context",
+			ctxCancelled: true,
+			input:        ptr.New(5),
+			expected:     nil,
+			expectError:  context.Canceled,
 		},
 		{
-			name:        "nil input",
-			input:       nil,
-			expected:    nil,
-			expectError: nil,
+			name:         "error case",
+			ctxCancelled: false,
+			input:        ptr.New(-1),
+			expected:     nil,
+			expectError:  errNegativeNumber,
+		},
+		{
+			name:         "nil input",
+			ctxCancelled: false,
+			input:        nil,
+			expected:     nil,
+			expectError:  nil,
 		},
 	}
 
@@ -187,7 +220,13 @@ func TestApplyCtxErr(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
+			ctx := t.Context()
+			if tt.ctxCancelled {
+				ctx = cancelledCtx(t)
+			}
+
 			result, err := ptr.ApplyCtxErr(ctx, tt.input, addCtxErr)
+
 			if tt.expectError != nil {
 				require.ErrorIs(t, err, tt.expectError)
 			} else {
