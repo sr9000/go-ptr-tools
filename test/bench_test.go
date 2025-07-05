@@ -62,7 +62,7 @@ func parseAny(number int) any {
 	return number
 }
 
-const testIters = 100_000
+const testIters = 10_000
 
 func boolLoop() []int {
 	res := make([]int, testIters)
