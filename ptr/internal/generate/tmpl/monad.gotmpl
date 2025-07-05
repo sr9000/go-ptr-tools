@@ -1,0 +1,79 @@
+{{- define "decl-args" }}{{ $N := .N }}
+	{{- if .Ctx }}ctx context.Context, {{ end -}}
+	{{- range $i := .N }}t{{ add $i 1 }} T{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "decl-opt-args" }}{{ $N := .N }}
+	{{- if .Ctx }}ctx context.Context, {{ end -}}
+	{{- range $i := .N }}t{{ add $i 1 }} *T{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "decl-res" }}{{ $M := .M }}
+	{{- range $i := .M }}r{{ add $i 1 }} R{{ add $i 1 }}{{ if ne $M (add $i 1) }}, {{ end }}{{ end -}}
+	{{- if and .M .Err}}, {{ end -}}
+	{{- if .Err }}err error{{ end -}}
+{{ end -}}
+{{- define "decl-opt-res" }}{{ $M := .M }}
+	{{- range $i := .M }}r{{ add $i 1 }} *R{{ add $i 1 }}{{ if ne $M (add $i 1) }}, {{ end }}{{ end -}}
+	{{- if and .M .Err}}, {{ end -}}
+	{{- if .Err }}err error{{ end -}}
+{{ end -}}
+{{- define "name-suffix" }}
+	{{- if and (eq 1 .N) (eq 1 .M) }}
+	{{- else if eq 1 .M }}{{ .N }}
+	{{- else if eq 0 .M }}{{ if gt .N 1 }}{{ .N }}{{ end }}Void
+	{{- else }}{{ .N }}{{ .M }}
+	{{- end -}}
+	{{- if .Ctx }}Ctx{{ end -}}
+	{{- if .Err }}Err{{ end -}}
+{{ end -}}
+{{- define "types" }}{{ $N := .N }}
+	{{- range $i := .M }}R{{ add $i 1 }}, {{ end -}}
+	{{- range $i := .N }}T{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "call-res" }}{{ $M := .M }}
+		{{ range $i := .M }}x{{ add $i 1 }}{{ if ne $M (add $i 1) }}, {{ end }}{{ end -}}
+		{{ if .Err }}{{ if .M }}, {{ end }}err{{ end -}}
+		{{ if .M }} := {{ else if .Err }} = {{ end -}}
+{{ end -}}
+{{- define "call-args-t" }}{{ $N := .N }}
+	{{- if .Ctx }}ctx{{ if .N }}, {{ end }}{{ end -}}
+	{{- range $i := .N }}*t{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "call-args-ptr" }}{{ $N := .N }}
+{{- if .Ctx }}ctx{{ if .N }}, {{ end }}{{ end -}}
+{{- range $i := .N }}t{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "ret-vals" }}{{ $N := .N }}
+	{{- range $i := .N }}T{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+	{{- range $i := .M }}, R{{ add $i 1 }}{{ end -}}
+{{ end -}}
+
+{{- $N := .N }}{{ $M := .M }}
+func Apply{{ template "name-suffix" . }}[{{ template "types" . }} any](
+	{{ template "decl-opt-args" . }},
+	fn func({{ template "decl-args" . }}){{ if or .M .Err }} ({{ template "decl-res" . }}){{ end }},
+){{ if or .M .Err}} ({{ template "decl-opt-res" . }}){{ end }} {
+	if {{ range $i := .N }}t{{ add $i 1 }} != nil{{ if ne $N (add $i 1) }} && {{ end }}{{ end }} {
+		{{- if .M }}
+		{{- template "call-res" . }}fn({{ template "call-args-t" . }})
+
+		return
+			{{- range $i := .M }} &x{{ add $i 1 }}{{ if ne $M (add $i 1) }},{{ end }}{{ end -}}
+			{{- if .Err }}{{ if .M }}, {{ end }}err{{ end }}
+		{{- else if .Err }}
+		return fn({{ template "call-args-t" . -}})
+		{{- else }}
+		fn({{ template "call-args-t" . -}})
+		{{- end }}
+	}
+
+	return
+}
+
+func Monad{{ template "name-suffix" . }}[{{ template "types" . }} any](
+	fn func({{ template "decl-args" . }}){{ if or .M .Err }} ({{ template "decl-res" . }}){{ end }},
+) func({{ template "decl-opt-args" . }}){{ if or .M .Err}} ({{ template "decl-opt-res" . }}){{ end }} {
+	return func({{ template "decl-opt-args" . }}){{ if or .M .Err}} ({{ template "decl-opt-res" . }}){{ end }} {
+		{{ if or .M .Err}}return {{ end -}}
+		Apply{{ template "name-suffix" . }}({{ template "call-args-ptr" . }}, fn)
+	}
+}
