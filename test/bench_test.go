@@ -1,8 +1,9 @@
 package test_test
 
 import (
-	"github.com/sr9000/go-ptr-tools/opt"
 	"testing"
+
+	"github.com/sr9000/go-ptr-tools/opt"
 )
 
 func parsePrimeBool(number int) (int, bool) {
@@ -100,6 +101,7 @@ func anyLoop() []any {
 	for i := range testIters {
 		res[i] = parseAny(i)
 	}
+
 	return res
 }
 
@@ -130,7 +132,7 @@ func BenchmarkPtr(b *testing.B) {
 }
 
 func BenchmarkOpt(b *testing.B) {
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		arr := optLoop()
 		s := 0
 
@@ -143,7 +145,7 @@ func BenchmarkOpt(b *testing.B) {
 }
 
 func BenchmarkAny(b *testing.B) {
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		arr := anyLoop()
 		s := 0
 

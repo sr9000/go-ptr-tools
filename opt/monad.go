@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-func ApplyOn1[T1 any](
+func ApplyVoid[T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1),
 ) {
@@ -19,7 +19,7 @@ func ApplyOn1[T1 any](
 	return
 }
 
-func ApplyCtxOn1[T1 any](
+func ApplyVoidCtx[T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1),
 ) {
@@ -32,7 +32,7 @@ func ApplyCtxOn1[T1 any](
 	return
 }
 
-func ApplyErrOn1[T1 any](
+func ApplyVoidErr[T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1) (err error),
 ) (err error) {
@@ -45,7 +45,7 @@ func ApplyErrOn1[T1 any](
 	return
 }
 
-func ApplyCtxErrOn1[T1 any](
+func ApplyVoidCtxErr[T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (err error),
 ) (err error) {
@@ -58,7 +58,7 @@ func ApplyCtxErrOn1[T1 any](
 	return
 }
 
-func Apply[T1, R1 any](
+func Apply[R1, T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -73,7 +73,7 @@ func Apply[T1, R1 any](
 	return
 }
 
-func ApplyCtx[T1, R1 any](
+func ApplyCtx[R1, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -88,7 +88,7 @@ func ApplyCtx[T1, R1 any](
 	return
 }
 
-func ApplyErr[T1, R1 any](
+func ApplyErr[R1, T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -103,7 +103,7 @@ func ApplyErr[T1, R1 any](
 	return
 }
 
-func ApplyCtxErr[T1, R1 any](
+func ApplyCtxErr[R1, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -118,7 +118,7 @@ func ApplyCtxErr[T1, R1 any](
 	return
 }
 
-func Apply12[T1, R1, R2 any](
+func Apply12[R1, R2, T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -133,7 +133,7 @@ func Apply12[T1, R1, R2 any](
 	return
 }
 
-func ApplyCtx12[T1, R1, R2 any](
+func Apply12Ctx[R1, R2, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -148,7 +148,7 @@ func ApplyCtx12[T1, R1, R2 any](
 	return
 }
 
-func ApplyErr12[T1, R1, R2 any](
+func Apply12Err[R1, R2, T1 any](
 	t1 Opt[T1],
 	fn func(t1 T1) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -163,7 +163,7 @@ func ApplyErr12[T1, R1, R2 any](
 	return
 }
 
-func ApplyCtxErr12[T1, R1, R2 any](
+func Apply12CtxErr[R1, R2, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -178,7 +178,187 @@ func ApplyCtxErr12[T1, R1, R2 any](
 	return
 }
 
-func ApplyOn2[T1, T2 any](
+func Apply13[R1, R2, R3, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3 := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply13Ctx[R1, R2, R3, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3 := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply13Err[R1, R2, R3, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, err := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply13CtxErr[R1, R2, R3, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, err := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply14[R1, R2, R3, R4, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4 := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply14Ctx[R1, R2, R3, R4, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4 := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply14Err[R1, R2, R3, R4, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, err := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply14CtxErr[R1, R2, R3, R4, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, err := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply15[R1, R2, R3, R4, R5, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, x5 := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply15Ctx[R1, R2, R3, R4, R5, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply15Err[R1, R2, R3, R4, R5, T1 any](
+	t1 Opt[T1],
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, x5, err := fn(v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply15CtxErr[R1, R2, R3, R4, R5, T1 any](
+	ctx context.Context, t1 Opt[T1],
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+
+	if ok1 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply2Void[T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2),
 ) {
@@ -192,7 +372,7 @@ func ApplyOn2[T1, T2 any](
 	return
 }
 
-func ApplyCtxOn2[T1, T2 any](
+func Apply2VoidCtx[T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2),
 ) {
@@ -206,7 +386,7 @@ func ApplyCtxOn2[T1, T2 any](
 	return
 }
 
-func ApplyErrOn2[T1, T2 any](
+func Apply2VoidErr[T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2) (err error),
 ) (err error) {
@@ -220,7 +400,7 @@ func ApplyErrOn2[T1, T2 any](
 	return
 }
 
-func ApplyCtxErrOn2[T1, T2 any](
+func Apply2VoidCtxErr[T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (err error),
 ) (err error) {
@@ -234,7 +414,7 @@ func ApplyCtxErrOn2[T1, T2 any](
 	return
 }
 
-func Apply2[T1, T2, R1 any](
+func Apply2[R1, T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -250,7 +430,7 @@ func Apply2[T1, T2, R1 any](
 	return
 }
 
-func ApplyCtx2[T1, T2, R1 any](
+func Apply2Ctx[R1, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -266,7 +446,7 @@ func ApplyCtx2[T1, T2, R1 any](
 	return
 }
 
-func ApplyErr2[T1, T2, R1 any](
+func Apply2Err[R1, T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -282,7 +462,7 @@ func ApplyErr2[T1, T2, R1 any](
 	return
 }
 
-func ApplyCtxErr2[T1, T2, R1 any](
+func Apply2CtxErr[R1, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -298,7 +478,7 @@ func ApplyCtxErr2[T1, T2, R1 any](
 	return
 }
 
-func Apply22[T1, T2, R1, R2 any](
+func Apply22[R1, R2, T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -314,7 +494,7 @@ func Apply22[T1, T2, R1, R2 any](
 	return
 }
 
-func ApplyCtx22[T1, T2, R1, R2 any](
+func Apply22Ctx[R1, R2, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -330,7 +510,7 @@ func ApplyCtx22[T1, T2, R1, R2 any](
 	return
 }
 
-func ApplyErr22[T1, T2, R1, R2 any](
+func Apply22Err[R1, R2, T1, T2 any](
 	t1 Opt[T1], t2 Opt[T2],
 	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -346,7 +526,7 @@ func ApplyErr22[T1, T2, R1, R2 any](
 	return
 }
 
-func ApplyCtxErr22[T1, T2, R1, R2 any](
+func Apply22CtxErr[R1, R2, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -362,7 +542,199 @@ func ApplyCtxErr22[T1, T2, R1, R2 any](
 	return
 }
 
-func ApplyOn3[T1, T2, T3 any](
+func Apply23[R1, R2, R3, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3 := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply23Ctx[R1, R2, R3, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3 := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply23Err[R1, R2, R3, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, err := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply23CtxErr[R1, R2, R3, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, err := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply24[R1, R2, R3, R4, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4 := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply24Ctx[R1, R2, R3, R4, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply24Err[R1, R2, R3, R4, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, err := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply24CtxErr[R1, R2, R3, R4, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply25[R1, R2, R3, R4, R5, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, x5 := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply25Ctx[R1, R2, R3, R4, R5, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply25Err[R1, R2, R3, R4, R5, T1, T2 any](
+	t1 Opt[T1], t2 Opt[T2],
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply25CtxErr[R1, R2, R3, R4, R5, T1, T2 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+
+	if ok1 && ok2 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply3Void[T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3),
 ) {
@@ -377,7 +749,7 @@ func ApplyOn3[T1, T2, T3 any](
 	return
 }
 
-func ApplyCtxOn3[T1, T2, T3 any](
+func Apply3VoidCtx[T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3),
 ) {
@@ -392,7 +764,7 @@ func ApplyCtxOn3[T1, T2, T3 any](
 	return
 }
 
-func ApplyErrOn3[T1, T2, T3 any](
+func Apply3VoidErr[T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3) (err error),
 ) (err error) {
@@ -407,7 +779,7 @@ func ApplyErrOn3[T1, T2, T3 any](
 	return
 }
 
-func ApplyCtxErrOn3[T1, T2, T3 any](
+func Apply3VoidCtxErr[T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (err error),
 ) (err error) {
@@ -422,7 +794,7 @@ func ApplyCtxErrOn3[T1, T2, T3 any](
 	return
 }
 
-func Apply3[T1, T2, T3, R1 any](
+func Apply3[R1, T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -439,7 +811,7 @@ func Apply3[T1, T2, T3, R1 any](
 	return
 }
 
-func ApplyCtx3[T1, T2, T3, R1 any](
+func Apply3Ctx[R1, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1),
 ) (r1 Opt[R1]) {
@@ -456,7 +828,7 @@ func ApplyCtx3[T1, T2, T3, R1 any](
 	return
 }
 
-func ApplyErr3[T1, T2, T3, R1 any](
+func Apply3Err[R1, T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -473,7 +845,7 @@ func ApplyErr3[T1, T2, T3, R1 any](
 	return
 }
 
-func ApplyCtxErr3[T1, T2, T3, R1 any](
+func Apply3CtxErr[R1, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, err error),
 ) (r1 Opt[R1], err error) {
@@ -490,7 +862,7 @@ func ApplyCtxErr3[T1, T2, T3, R1 any](
 	return
 }
 
-func Apply32[T1, T2, T3, R1, R2 any](
+func Apply32[R1, R2, T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -507,7 +879,7 @@ func Apply32[T1, T2, T3, R1, R2 any](
 	return
 }
 
-func ApplyCtx32[T1, T2, T3, R1, R2 any](
+func Apply32Ctx[R1, R2, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2),
 ) (r1 Opt[R1], r2 Opt[R2]) {
@@ -524,7 +896,7 @@ func ApplyCtx32[T1, T2, T3, R1, R2 any](
 	return
 }
 
-func ApplyErr32[T1, T2, T3, R1, R2 any](
+func Apply32Err[R1, R2, T1, T2, T3 any](
 	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -541,7 +913,7 @@ func ApplyErr32[T1, T2, T3, R1, R2 any](
 	return
 }
 
-func ApplyCtxErr32[T1, T2, T3, R1, R2 any](
+func Apply32CtxErr[R1, R2, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, err error),
 ) (r1 Opt[R1], r2 Opt[R2], err error) {
@@ -553,6 +925,3114 @@ func ApplyCtxErr32[T1, T2, T3, R1, R2 any](
 		x1, x2, err := fn(ctx, v1, v2, v3)
 
 		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply33[R1, R2, R3, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3 := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply33Ctx[R1, R2, R3, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply33Err[R1, R2, R3, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, err := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply33CtxErr[R1, R2, R3, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply34[R1, R2, R3, R4, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4 := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply34Ctx[R1, R2, R3, R4, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply34Err[R1, R2, R3, R4, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply34CtxErr[R1, R2, R3, R4, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply35[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply35Ctx[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply35Err[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply35CtxErr[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+
+	if ok1 && ok2 && ok3 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply4Void[T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		fn(v1, v2, v3, v4)
+	}
+
+	return
+}
+
+func Apply4VoidCtx[T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		fn(ctx, v1, v2, v3, v4)
+	}
+
+	return
+}
+
+func Apply4VoidErr[T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		return fn(v1, v2, v3, v4)
+	}
+
+	return
+}
+
+func Apply4VoidCtxErr[T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		return fn(ctx, v1, v2, v3, v4)
+	}
+
+	return
+}
+
+func Apply4[R1, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1 := fn(v1, v2, v3, v4)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply4Ctx[R1, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1 := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply4Err[R1, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, err := fn(v1, v2, v3, v4)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply4CtxErr[R1, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, err := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply42[R1, R2, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2 := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply42Ctx[R1, R2, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply42Err[R1, R2, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, err := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply42CtxErr[R1, R2, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply43[R1, R2, R3, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3 := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply43Ctx[R1, R2, R3, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply43Err[R1, R2, R3, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply43CtxErr[R1, R2, R3, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply44[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply44Ctx[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply44Err[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply44CtxErr[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply45[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply45Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply45Err[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply45CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+
+	if ok1 && ok2 && ok3 && ok4 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply5Void[T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		fn(v1, v2, v3, v4, v5)
+	}
+
+	return
+}
+
+func Apply5VoidCtx[T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		fn(ctx, v1, v2, v3, v4, v5)
+	}
+
+	return
+}
+
+func Apply5VoidErr[T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		return fn(v1, v2, v3, v4, v5)
+	}
+
+	return
+}
+
+func Apply5VoidCtxErr[T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		return fn(ctx, v1, v2, v3, v4, v5)
+	}
+
+	return
+}
+
+func Apply5[R1, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1 := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply5Ctx[R1, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1 := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply5Err[R1, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, err := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply5CtxErr[R1, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, err := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply52[R1, R2, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2 := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply52Ctx[R1, R2, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply52Err[R1, R2, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, err := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply52CtxErr[R1, R2, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply53[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3 := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply53Ctx[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply53Err[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply53CtxErr[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply54[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply54Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply54Err[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply54CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply55[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply55Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply55Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply55CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4, v5)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply6Void[T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		fn(v1, v2, v3, v4, v5, v6)
+	}
+
+	return
+}
+
+func Apply6VoidCtx[T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		fn(ctx, v1, v2, v3, v4, v5, v6)
+	}
+
+	return
+}
+
+func Apply6VoidErr[T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		return fn(v1, v2, v3, v4, v5, v6)
+	}
+
+	return
+}
+
+func Apply6VoidCtxErr[T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		return fn(ctx, v1, v2, v3, v4, v5, v6)
+	}
+
+	return
+}
+
+func Apply6[R1, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1 := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply6Ctx[R1, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1 := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply6Err[R1, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, err := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply6CtxErr[R1, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, err := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply62[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2 := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply62Ctx[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply62Err[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, err := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply62CtxErr[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply63[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3 := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply63Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply63Err[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply63CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply64[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply64Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply64Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply64CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply65[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply65Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply65Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply65CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4, v5, v6)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply7Void[T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		fn(v1, v2, v3, v4, v5, v6, v7)
+	}
+
+	return
+}
+
+func Apply7VoidCtx[T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+	}
+
+	return
+}
+
+func Apply7VoidErr[T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		return fn(v1, v2, v3, v4, v5, v6, v7)
+	}
+
+	return
+}
+
+func Apply7VoidCtxErr[T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		return fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+	}
+
+	return
+}
+
+func Apply7[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1 := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply7Ctx[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1 := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply7Err[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, err := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply7CtxErr[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply72[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2 := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply72Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply72Err[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, err := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply72CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply73[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3 := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply73Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply73Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply73CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply74[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply74Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply74Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply74CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply75[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply75Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply75Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply75CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply8Void[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		fn(v1, v2, v3, v4, v5, v6, v7, v8)
+	}
+
+	return
+}
+
+func Apply8VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+	}
+
+	return
+}
+
+func Apply8VoidErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		return fn(v1, v2, v3, v4, v5, v6, v7, v8)
+	}
+
+	return
+}
+
+func Apply8VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		return fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+	}
+
+	return
+}
+
+func Apply8[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1 := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply8Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply8Err[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, err := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply8CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply82[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2 := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply82Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply82Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, err := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply82CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply83[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3 := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply83Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply83Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply83CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply84[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply84Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply84Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply84CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply85[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply85Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply85Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply85CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply9Void[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+	}
+
+	return
+}
+
+func Apply9VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9),
+) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+	}
+
+	return
+}
+
+func Apply9VoidErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		return fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+	}
+
+	return
+}
+
+func Apply9VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (err error),
+) (err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		return fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+	}
+
+	return
+}
+
+func Apply9[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1 := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply9Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1),
+) (r1 Opt[R1]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1)
+	}
+
+	return
+}
+
+func Apply9Err[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, err := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply9CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, err error),
+) (r1 Opt[R1], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), err
+	}
+
+	return
+}
+
+func Apply92[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2 := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply92Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2),
+) (r1 Opt[R1], r2 Opt[R2]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2)
+	}
+
+	return
+}
+
+func Apply92Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, err := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply92CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, err error),
+) (r1 Opt[R1], r2 Opt[R2], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), err
+	}
+
+	return
+}
+
+func Apply93[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3 := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply93Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3)
+	}
+
+	return
+}
+
+func Apply93Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, err := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply93CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), err
+	}
+
+	return
+}
+
+func Apply94[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4 := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply94Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4)
+	}
+
+	return
+}
+
+func Apply94Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, err := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply94CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), err
+	}
+
+	return
+}
+
+func Apply95[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, x5 := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply95Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, x5 := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5)
+	}
+
+	return
+}
+
+func Apply95Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, x5, err := fn(v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
+	}
+
+	return
+}
+
+func Apply95CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	v1, ok1 := t1.Get()
+	v2, ok2 := t2.Get()
+	v3, ok3 := t3.Get()
+	v4, ok4 := t4.Get()
+	v5, ok5 := t5.Get()
+	v6, ok6 := t6.Get()
+	v7, ok7 := t7.Get()
+	v8, ok8 := t8.Get()
+	v9, ok9 := t9.Get()
+
+	if ok1 && ok2 && ok3 && ok4 && ok5 && ok6 && ok7 && ok8 && ok9 {
+		x1, x2, x3, x4, x5, err := fn(ctx, v1, v2, v3, v4, v5, v6, v7, v8, v9)
+
+		return Literal(x1), Literal(x2), Literal(x3), Literal(x4), Literal(x5), err
 	}
 
 	return
