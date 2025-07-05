@@ -26,8 +26,8 @@ const (
 )
 
 var (
-	//go:embed tmpl/apply.gotmpl
-	applyRaw string
+	//go:embed tmpl/monad.gotmpl
+	monadRaw string
 )
 
 type Variant struct {
@@ -40,7 +40,7 @@ func main() {
 	funcMap := template.FuncMap{
 		"add": func(x, y int) int { return x + y },
 	}
-	applyTmpl := template.Must(template.New("apply").Funcs(funcMap).Parse(applyRaw))
+	monadTmpl := template.Must(template.New("apply").Funcs(funcMap).Parse(monadRaw))
 
 	pkg := detectPackageName()
 
@@ -59,11 +59,10 @@ func main() {
 				{n, m, false, true},
 				{n, m, true, true},
 			} {
-				err := applyTmpl.Execute(&buf, args)
+				err := monadTmpl.Execute(&buf, args)
 				if err != nil {
 					panic(err)
 				}
-				// execTemplate(monadTmpl, "Monad", args, &buf)
 			}
 		}
 	}
@@ -75,24 +74,6 @@ func main() {
 
 	slog.Info("done")
 }
-
-// —————————————————————————————————————————————————————————————
-// Templates
-// —————————————————————————————————————————————————————————————
-
-var monadTmpl = `
-func Monad{{.N}}{{.Suffix}}{{.TypeArgs}}(fn func({{if .Ctx}}context.Context, {{end}}{{range $i, $n := .TypeNames}}{{$n}}{{if ne $n (index $.TypeNames | last)}}, {{end}}{{end}}) {{if .Err}}(R, error){{else}}R{{end}}) {{if .Ctx}}func(context.Context) func({{range $i, $n := .ArgNums}}Opt[T{{$n}}]{{if ne $n $.N}}, {{end}}{{end}}) {{.RetType}} {{else}}func({{range $i, $n := .ArgNums}}Opt[T{{$n}}]{{if ne $n $.N}}, {{end}}{{end}}) {{.RetType}} {{end}}{
-	{{if .Ctx}}return func(ctx context.Context) func({{range $i, $n := .ArgNums}}Opt[T{{$n}}]{{if ne $n $.N}}, {{end}}{{end}}) {{.RetType}} {
-		return func({{range $i, $n := .ArgNums}}a{{$n}} Opt[T{{$n}}]{{if ne $n $.N}}, {{end}}{{end}}) {{.RetType}} {
-			return Apply{{.N}}{{.Suffix}}({{.CtxArg}}{{range $i, $n := .ArgNums}}a{{$n}}{{if ne $n $.N}}, {{end}}{{end}}, fn)
-		}
-	}
-	{{else}}return func({{range $i, $n := .ArgNums}}a{{$n}} Opt[T{{$n}}]{{if ne $n $.N}}, {{end}}{{end}}) {{.RetType}} {
-		return Apply{{.N}}{{.Suffix}}({{range $i, $n := .ArgNums}}a{{$n}}{{if ne $n $.N}}, {{end}}{{end}}, fn)
-	}
-	{{end}}
-}
-`
 
 func detectPackageName() string {
 	out, err := exec.Command("go", "list", "-f", "{{.Name}}").Output()

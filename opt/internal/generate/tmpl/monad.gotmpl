@@ -34,9 +34,13 @@
 		{{ if .Err }}{{ if .M }}, {{ end }}err{{ end -}}
 		{{ if .M }} := {{ else if .Err }} = {{ end -}}
 {{ end -}}
-{{- define "call-args" }}{{ $N := .N }}
+{{- define "call-args-v" }}{{ $N := .N }}
 		{{- if .Ctx }}ctx{{ if .N }}, {{ end }}{{ end -}}
 		{{- range $i := .N }}v{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
+{{ end -}}
+{{- define "call-args-t" }}{{ $N := .N }}
+	{{- if .Ctx }}ctx{{ if .N }}, {{ end }}{{ end -}}
+	{{- range $i := .N }}t{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
 {{ end -}}
 {{- define "ret-vals" }}{{ $N := .N }}
 	{{- range $i := .N }}T{{ add $i 1 }}{{ if ne $N (add $i 1) }}, {{ end }}{{ end -}}
@@ -54,17 +58,26 @@ func Apply{{ template "name-suffix" . }}[{{ template "types" . }} any](
 
 	if {{ range $i := .N }}ok{{ add $i 1 }}{{ if ne $N (add $i 1) }} && {{ end }}{{ end }} {
 		{{- if .M }}
-		{{- template "call-res" . }}fn({{ template "call-args" . }})
+		{{- template "call-res" . }}fn({{ template "call-args-v" . }})
 
 		return
 			{{- range $i := .M }} Literal(x{{ add $i 1 }}){{ if ne $M (add $i 1) }},{{ end }}{{ end -}}
 			{{- if .Err }}{{ if .M }}, {{ end }}err{{ end }}
 		{{- else if .Err }}
-		return fn({{ template "call-args" . -}})
+		return fn({{ template "call-args-v" . -}})
 		{{- else }}
-		fn({{ template "call-args" . -}})
+		fn({{ template "call-args-v" . -}})
 		{{- end }}
 	}
 
 	return
+}
+
+func Monad{{ template "name-suffix" . }}[{{ template "types" . }} any](
+	fn func({{ template "decl-args" . }}){{ if or .M .Err }} ({{ template "decl-res" . }}){{ end }},
+) func({{ template "decl-opt-args" . }}){{ if or .M .Err}} ({{ template "decl-opt-res" . }}){{ end }} {
+	return func({{ template "decl-opt-args" . }}){{ if or .M .Err}} ({{ template "decl-opt-res" . }}){{ end }} {
+		{{ if or .M .Err}}return {{ end -}}
+		Apply{{ template "name-suffix" . }}({{ template "call-args-t" . }}, fn)
+	}
 }

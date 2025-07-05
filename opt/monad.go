@@ -19,6 +19,14 @@ func ApplyVoid[T1 any](
 	return
 }
 
+func MonadVoid[T1 any](
+	fn func(t1 T1),
+) func(t1 Opt[T1]) {
+	return func(t1 Opt[T1]) {
+		ApplyVoid(t1, fn)
+	}
+}
+
 func ApplyVoidCtx[T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1),
@@ -30,6 +38,14 @@ func ApplyVoidCtx[T1 any](
 	}
 
 	return
+}
+
+func MonadVoidCtx[T1 any](
+	fn func(ctx context.Context, t1 T1),
+) func(ctx context.Context, t1 Opt[T1]) {
+	return func(ctx context.Context, t1 Opt[T1]) {
+		ApplyVoidCtx(ctx, t1, fn)
+	}
 }
 
 func ApplyVoidErr[T1 any](
@@ -45,6 +61,14 @@ func ApplyVoidErr[T1 any](
 	return
 }
 
+func MonadVoidErr[T1 any](
+	fn func(t1 T1) (err error),
+) func(t1 Opt[T1]) (err error) {
+	return func(t1 Opt[T1]) (err error) {
+		return ApplyVoidErr(t1, fn)
+	}
+}
+
 func ApplyVoidCtxErr[T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (err error),
@@ -56,6 +80,14 @@ func ApplyVoidCtxErr[T1 any](
 	}
 
 	return
+}
+
+func MonadVoidCtxErr[T1 any](
+	fn func(ctx context.Context, t1 T1) (err error),
+) func(ctx context.Context, t1 Opt[T1]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (err error) {
+		return ApplyVoidCtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply[R1, T1 any](
@@ -73,6 +105,14 @@ func Apply[R1, T1 any](
 	return
 }
 
+func Monad[R1, T1 any](
+	fn func(t1 T1) (r1 R1),
+) func(t1 Opt[T1]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1]) (r1 Opt[R1]) {
+		return Apply(t1, fn)
+	}
+}
+
 func ApplyCtx[R1, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1),
@@ -86,6 +126,14 @@ func ApplyCtx[R1, T1 any](
 	}
 
 	return
+}
+
+func MonadCtx[R1, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1]) {
+		return ApplyCtx(ctx, t1, fn)
+	}
 }
 
 func ApplyErr[R1, T1 any](
@@ -103,6 +151,14 @@ func ApplyErr[R1, T1 any](
 	return
 }
 
+func MonadErr[R1, T1 any](
+	fn func(t1 T1) (r1 R1, err error),
+) func(t1 Opt[T1]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], err error) {
+		return ApplyErr(t1, fn)
+	}
+}
+
 func ApplyCtxErr[R1, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, err error),
@@ -116,6 +172,14 @@ func ApplyCtxErr[R1, T1 any](
 	}
 
 	return
+}
+
+func MonadCtxErr[R1, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], err error) {
+		return ApplyCtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply12[R1, R2, T1 any](
@@ -133,6 +197,14 @@ func Apply12[R1, R2, T1 any](
 	return
 }
 
+func Monad12[R1, R2, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply12(t1, fn)
+	}
+}
+
 func Apply12Ctx[R1, R2, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2),
@@ -146,6 +218,14 @@ func Apply12Ctx[R1, R2, T1 any](
 	}
 
 	return
+}
+
+func Monad12Ctx[R1, R2, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply12Ctx(ctx, t1, fn)
+	}
 }
 
 func Apply12Err[R1, R2, T1 any](
@@ -163,6 +243,14 @@ func Apply12Err[R1, R2, T1 any](
 	return
 }
 
+func Monad12Err[R1, R2, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply12Err(t1, fn)
+	}
+}
+
 func Apply12CtxErr[R1, R2, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, err error),
@@ -176,6 +264,14 @@ func Apply12CtxErr[R1, R2, T1 any](
 	}
 
 	return
+}
+
+func Monad12CtxErr[R1, R2, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply12CtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply13[R1, R2, R3, T1 any](
@@ -193,6 +289,14 @@ func Apply13[R1, R2, R3, T1 any](
 	return
 }
 
+func Monad13[R1, R2, R3, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply13(t1, fn)
+	}
+}
+
 func Apply13Ctx[R1, R2, R3, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3),
@@ -206,6 +310,14 @@ func Apply13Ctx[R1, R2, R3, T1 any](
 	}
 
 	return
+}
+
+func Monad13Ctx[R1, R2, R3, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply13Ctx(ctx, t1, fn)
+	}
 }
 
 func Apply13Err[R1, R2, R3, T1 any](
@@ -223,6 +335,14 @@ func Apply13Err[R1, R2, R3, T1 any](
 	return
 }
 
+func Monad13Err[R1, R2, R3, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply13Err(t1, fn)
+	}
+}
+
 func Apply13CtxErr[R1, R2, R3, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, err error),
@@ -236,6 +356,14 @@ func Apply13CtxErr[R1, R2, R3, T1 any](
 	}
 
 	return
+}
+
+func Monad13CtxErr[R1, R2, R3, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply13CtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply14[R1, R2, R3, R4, T1 any](
@@ -253,6 +381,14 @@ func Apply14[R1, R2, R3, R4, T1 any](
 	return
 }
 
+func Monad14[R1, R2, R3, R4, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply14(t1, fn)
+	}
+}
+
 func Apply14Ctx[R1, R2, R3, R4, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -266,6 +402,14 @@ func Apply14Ctx[R1, R2, R3, R4, T1 any](
 	}
 
 	return
+}
+
+func Monad14Ctx[R1, R2, R3, R4, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply14Ctx(ctx, t1, fn)
+	}
 }
 
 func Apply14Err[R1, R2, R3, R4, T1 any](
@@ -283,6 +427,14 @@ func Apply14Err[R1, R2, R3, R4, T1 any](
 	return
 }
 
+func Monad14Err[R1, R2, R3, R4, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply14Err(t1, fn)
+	}
+}
+
 func Apply14CtxErr[R1, R2, R3, R4, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -296,6 +448,14 @@ func Apply14CtxErr[R1, R2, R3, R4, T1 any](
 	}
 
 	return
+}
+
+func Monad14CtxErr[R1, R2, R3, R4, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply14CtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply15[R1, R2, R3, R4, R5, T1 any](
@@ -313,6 +473,14 @@ func Apply15[R1, R2, R3, R4, R5, T1 any](
 	return
 }
 
+func Monad15[R1, R2, R3, R4, R5, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply15(t1, fn)
+	}
+}
+
 func Apply15Ctx[R1, R2, R3, R4, R5, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -326,6 +494,14 @@ func Apply15Ctx[R1, R2, R3, R4, R5, T1 any](
 	}
 
 	return
+}
+
+func Monad15Ctx[R1, R2, R3, R4, R5, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply15Ctx(ctx, t1, fn)
+	}
 }
 
 func Apply15Err[R1, R2, R3, R4, R5, T1 any](
@@ -343,6 +519,14 @@ func Apply15Err[R1, R2, R3, R4, R5, T1 any](
 	return
 }
 
+func Monad15Err[R1, R2, R3, R4, R5, T1 any](
+	fn func(t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply15Err(t1, fn)
+	}
+}
+
 func Apply15CtxErr[R1, R2, R3, R4, R5, T1 any](
 	ctx context.Context, t1 Opt[T1],
 	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -356,6 +540,14 @@ func Apply15CtxErr[R1, R2, R3, R4, R5, T1 any](
 	}
 
 	return
+}
+
+func Monad15CtxErr[R1, R2, R3, R4, R5, T1 any](
+	fn func(ctx context.Context, t1 T1) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply15CtxErr(ctx, t1, fn)
+	}
 }
 
 func Apply2Void[T1, T2 any](
@@ -372,6 +564,14 @@ func Apply2Void[T1, T2 any](
 	return
 }
 
+func Monad2Void[T1, T2 any](
+	fn func(t1 T1, t2 T2),
+) func(t1 Opt[T1], t2 Opt[T2]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) {
+		Apply2Void(t1, t2, fn)
+	}
+}
+
 func Apply2VoidCtx[T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2),
@@ -384,6 +584,14 @@ func Apply2VoidCtx[T1, T2 any](
 	}
 
 	return
+}
+
+func Monad2VoidCtx[T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) {
+		Apply2VoidCtx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply2VoidErr[T1, T2 any](
@@ -400,6 +608,14 @@ func Apply2VoidErr[T1, T2 any](
 	return
 }
 
+func Monad2VoidErr[T1, T2 any](
+	fn func(t1 T1, t2 T2) (err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (err error) {
+		return Apply2VoidErr(t1, t2, fn)
+	}
+}
+
 func Apply2VoidCtxErr[T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (err error),
@@ -412,6 +628,14 @@ func Apply2VoidCtxErr[T1, T2 any](
 	}
 
 	return
+}
+
+func Monad2VoidCtxErr[T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (err error) {
+		return Apply2VoidCtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply2[R1, T1, T2 any](
@@ -430,6 +654,14 @@ func Apply2[R1, T1, T2 any](
 	return
 }
 
+func Monad2[R1, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1]) {
+		return Apply2(t1, t2, fn)
+	}
+}
+
 func Apply2Ctx[R1, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1),
@@ -444,6 +676,14 @@ func Apply2Ctx[R1, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad2Ctx[R1, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1]) {
+		return Apply2Ctx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply2Err[R1, T1, T2 any](
@@ -462,6 +702,14 @@ func Apply2Err[R1, T1, T2 any](
 	return
 }
 
+func Monad2Err[R1, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], err error) {
+		return Apply2Err(t1, t2, fn)
+	}
+}
+
 func Apply2CtxErr[R1, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, err error),
@@ -476,6 +724,14 @@ func Apply2CtxErr[R1, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad2CtxErr[R1, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], err error) {
+		return Apply2CtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply22[R1, R2, T1, T2 any](
@@ -494,6 +750,14 @@ func Apply22[R1, R2, T1, T2 any](
 	return
 }
 
+func Monad22[R1, R2, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply22(t1, t2, fn)
+	}
+}
+
 func Apply22Ctx[R1, R2, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2),
@@ -508,6 +772,14 @@ func Apply22Ctx[R1, R2, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad22Ctx[R1, R2, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply22Ctx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply22Err[R1, R2, T1, T2 any](
@@ -526,6 +798,14 @@ func Apply22Err[R1, R2, T1, T2 any](
 	return
 }
 
+func Monad22Err[R1, R2, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply22Err(t1, t2, fn)
+	}
+}
+
 func Apply22CtxErr[R1, R2, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, err error),
@@ -540,6 +820,14 @@ func Apply22CtxErr[R1, R2, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad22CtxErr[R1, R2, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply22CtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply23[R1, R2, R3, T1, T2 any](
@@ -558,6 +846,14 @@ func Apply23[R1, R2, R3, T1, T2 any](
 	return
 }
 
+func Monad23[R1, R2, R3, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply23(t1, t2, fn)
+	}
+}
+
 func Apply23Ctx[R1, R2, R3, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3),
@@ -572,6 +868,14 @@ func Apply23Ctx[R1, R2, R3, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad23Ctx[R1, R2, R3, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply23Ctx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply23Err[R1, R2, R3, T1, T2 any](
@@ -590,6 +894,14 @@ func Apply23Err[R1, R2, R3, T1, T2 any](
 	return
 }
 
+func Monad23Err[R1, R2, R3, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply23Err(t1, t2, fn)
+	}
+}
+
 func Apply23CtxErr[R1, R2, R3, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, err error),
@@ -604,6 +916,14 @@ func Apply23CtxErr[R1, R2, R3, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad23CtxErr[R1, R2, R3, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply23CtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply24[R1, R2, R3, R4, T1, T2 any](
@@ -622,6 +942,14 @@ func Apply24[R1, R2, R3, R4, T1, T2 any](
 	return
 }
 
+func Monad24[R1, R2, R3, R4, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply24(t1, t2, fn)
+	}
+}
+
 func Apply24Ctx[R1, R2, R3, R4, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -636,6 +964,14 @@ func Apply24Ctx[R1, R2, R3, R4, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad24Ctx[R1, R2, R3, R4, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply24Ctx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply24Err[R1, R2, R3, R4, T1, T2 any](
@@ -654,6 +990,14 @@ func Apply24Err[R1, R2, R3, R4, T1, T2 any](
 	return
 }
 
+func Monad24Err[R1, R2, R3, R4, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply24Err(t1, t2, fn)
+	}
+}
+
 func Apply24CtxErr[R1, R2, R3, R4, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -668,6 +1012,14 @@ func Apply24CtxErr[R1, R2, R3, R4, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad24CtxErr[R1, R2, R3, R4, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply24CtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply25[R1, R2, R3, R4, R5, T1, T2 any](
@@ -686,6 +1038,14 @@ func Apply25[R1, R2, R3, R4, R5, T1, T2 any](
 	return
 }
 
+func Monad25[R1, R2, R3, R4, R5, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply25(t1, t2, fn)
+	}
+}
+
 func Apply25Ctx[R1, R2, R3, R4, R5, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -700,6 +1060,14 @@ func Apply25Ctx[R1, R2, R3, R4, R5, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad25Ctx[R1, R2, R3, R4, R5, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply25Ctx(ctx, t1, t2, fn)
+	}
 }
 
 func Apply25Err[R1, R2, R3, R4, R5, T1, T2 any](
@@ -718,6 +1086,14 @@ func Apply25Err[R1, R2, R3, R4, R5, T1, T2 any](
 	return
 }
 
+func Monad25Err[R1, R2, R3, R4, R5, T1, T2 any](
+	fn func(t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply25Err(t1, t2, fn)
+	}
+}
+
 func Apply25CtxErr[R1, R2, R3, R4, R5, T1, T2 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2],
 	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -732,6 +1108,14 @@ func Apply25CtxErr[R1, R2, R3, R4, R5, T1, T2 any](
 	}
 
 	return
+}
+
+func Monad25CtxErr[R1, R2, R3, R4, R5, T1, T2 any](
+	fn func(ctx context.Context, t1 T1, t2 T2) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply25CtxErr(ctx, t1, t2, fn)
+	}
 }
 
 func Apply3Void[T1, T2, T3 any](
@@ -749,6 +1133,14 @@ func Apply3Void[T1, T2, T3 any](
 	return
 }
 
+func Monad3Void[T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) {
+		Apply3Void(t1, t2, t3, fn)
+	}
+}
+
 func Apply3VoidCtx[T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3),
@@ -762,6 +1154,14 @@ func Apply3VoidCtx[T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad3VoidCtx[T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) {
+		Apply3VoidCtx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply3VoidErr[T1, T2, T3 any](
@@ -779,6 +1179,14 @@ func Apply3VoidErr[T1, T2, T3 any](
 	return
 }
 
+func Monad3VoidErr[T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (err error) {
+		return Apply3VoidErr(t1, t2, t3, fn)
+	}
+}
+
 func Apply3VoidCtxErr[T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (err error),
@@ -792,6 +1200,14 @@ func Apply3VoidCtxErr[T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad3VoidCtxErr[T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (err error) {
+		return Apply3VoidCtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply3[R1, T1, T2, T3 any](
@@ -811,6 +1227,14 @@ func Apply3[R1, T1, T2, T3 any](
 	return
 }
 
+func Monad3[R1, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1]) {
+		return Apply3(t1, t2, t3, fn)
+	}
+}
+
 func Apply3Ctx[R1, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1),
@@ -826,6 +1250,14 @@ func Apply3Ctx[R1, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad3Ctx[R1, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1]) {
+		return Apply3Ctx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply3Err[R1, T1, T2, T3 any](
@@ -845,6 +1277,14 @@ func Apply3Err[R1, T1, T2, T3 any](
 	return
 }
 
+func Monad3Err[R1, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], err error) {
+		return Apply3Err(t1, t2, t3, fn)
+	}
+}
+
 func Apply3CtxErr[R1, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, err error),
@@ -860,6 +1300,14 @@ func Apply3CtxErr[R1, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad3CtxErr[R1, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], err error) {
+		return Apply3CtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply32[R1, R2, T1, T2, T3 any](
@@ -879,6 +1327,14 @@ func Apply32[R1, R2, T1, T2, T3 any](
 	return
 }
 
+func Monad32[R1, R2, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply32(t1, t2, t3, fn)
+	}
+}
+
 func Apply32Ctx[R1, R2, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2),
@@ -894,6 +1350,14 @@ func Apply32Ctx[R1, R2, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad32Ctx[R1, R2, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply32Ctx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply32Err[R1, R2, T1, T2, T3 any](
@@ -913,6 +1377,14 @@ func Apply32Err[R1, R2, T1, T2, T3 any](
 	return
 }
 
+func Monad32Err[R1, R2, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply32Err(t1, t2, t3, fn)
+	}
+}
+
 func Apply32CtxErr[R1, R2, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, err error),
@@ -928,6 +1400,14 @@ func Apply32CtxErr[R1, R2, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad32CtxErr[R1, R2, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply32CtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply33[R1, R2, R3, T1, T2, T3 any](
@@ -947,6 +1427,14 @@ func Apply33[R1, R2, R3, T1, T2, T3 any](
 	return
 }
 
+func Monad33[R1, R2, R3, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply33(t1, t2, t3, fn)
+	}
+}
+
 func Apply33Ctx[R1, R2, R3, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3),
@@ -962,6 +1450,14 @@ func Apply33Ctx[R1, R2, R3, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad33Ctx[R1, R2, R3, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply33Ctx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply33Err[R1, R2, R3, T1, T2, T3 any](
@@ -981,6 +1477,14 @@ func Apply33Err[R1, R2, R3, T1, T2, T3 any](
 	return
 }
 
+func Monad33Err[R1, R2, R3, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply33Err(t1, t2, t3, fn)
+	}
+}
+
 func Apply33CtxErr[R1, R2, R3, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, err error),
@@ -996,6 +1500,14 @@ func Apply33CtxErr[R1, R2, R3, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad33CtxErr[R1, R2, R3, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply33CtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply34[R1, R2, R3, R4, T1, T2, T3 any](
@@ -1015,6 +1527,14 @@ func Apply34[R1, R2, R3, R4, T1, T2, T3 any](
 	return
 }
 
+func Monad34[R1, R2, R3, R4, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply34(t1, t2, t3, fn)
+	}
+}
+
 func Apply34Ctx[R1, R2, R3, R4, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -1030,6 +1550,14 @@ func Apply34Ctx[R1, R2, R3, R4, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad34Ctx[R1, R2, R3, R4, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply34Ctx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply34Err[R1, R2, R3, R4, T1, T2, T3 any](
@@ -1049,6 +1577,14 @@ func Apply34Err[R1, R2, R3, R4, T1, T2, T3 any](
 	return
 }
 
+func Monad34Err[R1, R2, R3, R4, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply34Err(t1, t2, t3, fn)
+	}
+}
+
 func Apply34CtxErr[R1, R2, R3, R4, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -1064,6 +1600,14 @@ func Apply34CtxErr[R1, R2, R3, R4, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad34CtxErr[R1, R2, R3, R4, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply34CtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply35[R1, R2, R3, R4, R5, T1, T2, T3 any](
@@ -1083,6 +1627,14 @@ func Apply35[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	return
 }
 
+func Monad35[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply35(t1, t2, t3, fn)
+	}
+}
+
 func Apply35Ctx[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -1098,6 +1650,14 @@ func Apply35Ctx[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad35Ctx[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply35Ctx(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply35Err[R1, R2, R3, R4, R5, T1, T2, T3 any](
@@ -1117,6 +1677,14 @@ func Apply35Err[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	return
 }
 
+func Monad35Err[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	fn func(t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply35Err(t1, t2, t3, fn)
+	}
+}
+
 func Apply35CtxErr[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -1132,6 +1700,14 @@ func Apply35CtxErr[R1, R2, R3, R4, R5, T1, T2, T3 any](
 	}
 
 	return
+}
+
+func Monad35CtxErr[R1, R2, R3, R4, R5, T1, T2, T3 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply35CtxErr(ctx, t1, t2, t3, fn)
+	}
 }
 
 func Apply4Void[T1, T2, T3, T4 any](
@@ -1150,6 +1726,14 @@ func Apply4Void[T1, T2, T3, T4 any](
 	return
 }
 
+func Monad4Void[T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) {
+		Apply4Void(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply4VoidCtx[T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4),
@@ -1164,6 +1748,14 @@ func Apply4VoidCtx[T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad4VoidCtx[T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) {
+		Apply4VoidCtx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply4VoidErr[T1, T2, T3, T4 any](
@@ -1182,6 +1774,14 @@ func Apply4VoidErr[T1, T2, T3, T4 any](
 	return
 }
 
+func Monad4VoidErr[T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (err error) {
+		return Apply4VoidErr(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply4VoidCtxErr[T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (err error),
@@ -1196,6 +1796,14 @@ func Apply4VoidCtxErr[T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad4VoidCtxErr[T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (err error) {
+		return Apply4VoidCtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply4[R1, T1, T2, T3, T4 any](
@@ -1216,6 +1824,14 @@ func Apply4[R1, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad4[R1, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1]) {
+		return Apply4(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply4Ctx[R1, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1),
@@ -1232,6 +1848,14 @@ func Apply4Ctx[R1, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad4Ctx[R1, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1]) {
+		return Apply4Ctx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply4Err[R1, T1, T2, T3, T4 any](
@@ -1252,6 +1876,14 @@ func Apply4Err[R1, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad4Err[R1, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], err error) {
+		return Apply4Err(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply4CtxErr[R1, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, err error),
@@ -1268,6 +1900,14 @@ func Apply4CtxErr[R1, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad4CtxErr[R1, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], err error) {
+		return Apply4CtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply42[R1, R2, T1, T2, T3, T4 any](
@@ -1288,6 +1928,14 @@ func Apply42[R1, R2, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad42[R1, R2, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply42(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply42Ctx[R1, R2, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2),
@@ -1304,6 +1952,14 @@ func Apply42Ctx[R1, R2, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad42Ctx[R1, R2, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply42Ctx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply42Err[R1, R2, T1, T2, T3, T4 any](
@@ -1324,6 +1980,14 @@ func Apply42Err[R1, R2, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad42Err[R1, R2, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply42Err(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply42CtxErr[R1, R2, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, err error),
@@ -1340,6 +2004,14 @@ func Apply42CtxErr[R1, R2, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad42CtxErr[R1, R2, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply42CtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply43[R1, R2, R3, T1, T2, T3, T4 any](
@@ -1360,6 +2032,14 @@ func Apply43[R1, R2, R3, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad43[R1, R2, R3, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply43(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply43Ctx[R1, R2, R3, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3),
@@ -1376,6 +2056,14 @@ func Apply43Ctx[R1, R2, R3, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad43Ctx[R1, R2, R3, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply43Ctx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply43Err[R1, R2, R3, T1, T2, T3, T4 any](
@@ -1396,6 +2084,14 @@ func Apply43Err[R1, R2, R3, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad43Err[R1, R2, R3, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply43Err(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply43CtxErr[R1, R2, R3, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, err error),
@@ -1412,6 +2108,14 @@ func Apply43CtxErr[R1, R2, R3, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad43CtxErr[R1, R2, R3, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply43CtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply44[R1, R2, R3, R4, T1, T2, T3, T4 any](
@@ -1432,6 +2136,14 @@ func Apply44[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad44[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply44(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply44Ctx[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -1448,6 +2160,14 @@ func Apply44Ctx[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad44Ctx[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply44Ctx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply44Err[R1, R2, R3, R4, T1, T2, T3, T4 any](
@@ -1468,6 +2188,14 @@ func Apply44Err[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad44Err[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply44Err(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply44CtxErr[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -1484,6 +2212,14 @@ func Apply44CtxErr[R1, R2, R3, R4, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad44CtxErr[R1, R2, R3, R4, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply44CtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply45[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
@@ -1504,6 +2240,14 @@ func Apply45[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad45[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply45(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply45Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -1520,6 +2264,14 @@ func Apply45Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad45Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply45Ctx(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply45Err[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
@@ -1540,6 +2292,14 @@ func Apply45Err[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	return
 }
 
+func Monad45Err[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply45Err(t1, t2, t3, t4, fn)
+	}
+}
+
 func Apply45CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -1556,6 +2316,14 @@ func Apply45CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
 	}
 
 	return
+}
+
+func Monad45CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply45CtxErr(ctx, t1, t2, t3, t4, fn)
+	}
 }
 
 func Apply5Void[T1, T2, T3, T4, T5 any](
@@ -1575,6 +2343,14 @@ func Apply5Void[T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad5Void[T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) {
+		Apply5Void(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply5VoidCtx[T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5),
@@ -1590,6 +2366,14 @@ func Apply5VoidCtx[T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad5VoidCtx[T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) {
+		Apply5VoidCtx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply5VoidErr[T1, T2, T3, T4, T5 any](
@@ -1609,6 +2393,14 @@ func Apply5VoidErr[T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad5VoidErr[T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (err error) {
+		return Apply5VoidErr(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply5VoidCtxErr[T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (err error),
@@ -1624,6 +2416,14 @@ func Apply5VoidCtxErr[T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad5VoidCtxErr[T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (err error) {
+		return Apply5VoidCtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply5[R1, T1, T2, T3, T4, T5 any](
@@ -1645,6 +2445,14 @@ func Apply5[R1, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad5[R1, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1]) {
+		return Apply5(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply5Ctx[R1, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1),
@@ -1662,6 +2470,14 @@ func Apply5Ctx[R1, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad5Ctx[R1, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1]) {
+		return Apply5Ctx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply5Err[R1, T1, T2, T3, T4, T5 any](
@@ -1683,6 +2499,14 @@ func Apply5Err[R1, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad5Err[R1, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], err error) {
+		return Apply5Err(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply5CtxErr[R1, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, err error),
@@ -1700,6 +2524,14 @@ func Apply5CtxErr[R1, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad5CtxErr[R1, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], err error) {
+		return Apply5CtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply52[R1, R2, T1, T2, T3, T4, T5 any](
@@ -1721,6 +2553,14 @@ func Apply52[R1, R2, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad52[R1, R2, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply52(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply52Ctx[R1, R2, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2),
@@ -1738,6 +2578,14 @@ func Apply52Ctx[R1, R2, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad52Ctx[R1, R2, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply52Ctx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply52Err[R1, R2, T1, T2, T3, T4, T5 any](
@@ -1759,6 +2607,14 @@ func Apply52Err[R1, R2, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad52Err[R1, R2, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply52Err(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply52CtxErr[R1, R2, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, err error),
@@ -1776,6 +2632,14 @@ func Apply52CtxErr[R1, R2, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad52CtxErr[R1, R2, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply52CtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply53[R1, R2, R3, T1, T2, T3, T4, T5 any](
@@ -1797,6 +2661,14 @@ func Apply53[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad53[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply53(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply53Ctx[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3),
@@ -1814,6 +2686,14 @@ func Apply53Ctx[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad53Ctx[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply53Ctx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply53Err[R1, R2, R3, T1, T2, T3, T4, T5 any](
@@ -1835,6 +2715,14 @@ func Apply53Err[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad53Err[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply53Err(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply53CtxErr[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, err error),
@@ -1852,6 +2740,14 @@ func Apply53CtxErr[R1, R2, R3, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad53CtxErr[R1, R2, R3, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply53CtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply54[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
@@ -1873,6 +2769,14 @@ func Apply54[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad54[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply54(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply54Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -1890,6 +2794,14 @@ func Apply54Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad54Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply54Ctx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply54Err[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
@@ -1911,6 +2823,14 @@ func Apply54Err[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad54Err[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply54Err(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply54CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -1928,6 +2848,14 @@ func Apply54CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad54CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply54CtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply55[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
@@ -1949,6 +2877,14 @@ func Apply55[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad55[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply55(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply55Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -1966,6 +2902,14 @@ func Apply55Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad55Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply55Ctx(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply55Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
@@ -1987,6 +2931,14 @@ func Apply55Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	return
 }
 
+func Monad55Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply55Err(t1, t2, t3, t4, t5, fn)
+	}
+}
+
 func Apply55CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -2004,6 +2956,14 @@ func Apply55CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
 	}
 
 	return
+}
+
+func Monad55CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply55CtxErr(ctx, t1, t2, t3, t4, t5, fn)
+	}
 }
 
 func Apply6Void[T1, T2, T3, T4, T5, T6 any](
@@ -2024,6 +2984,14 @@ func Apply6Void[T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad6Void[T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) {
+		Apply6Void(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply6VoidCtx[T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6),
@@ -2040,6 +3008,14 @@ func Apply6VoidCtx[T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad6VoidCtx[T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) {
+		Apply6VoidCtx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply6VoidErr[T1, T2, T3, T4, T5, T6 any](
@@ -2060,6 +3036,14 @@ func Apply6VoidErr[T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad6VoidErr[T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (err error) {
+		return Apply6VoidErr(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply6VoidCtxErr[T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (err error),
@@ -2076,6 +3060,14 @@ func Apply6VoidCtxErr[T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad6VoidCtxErr[T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (err error) {
+		return Apply6VoidCtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply6[R1, T1, T2, T3, T4, T5, T6 any](
@@ -2098,6 +3090,14 @@ func Apply6[R1, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad6[R1, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1]) {
+		return Apply6(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply6Ctx[R1, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1),
@@ -2116,6 +3116,14 @@ func Apply6Ctx[R1, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad6Ctx[R1, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1]) {
+		return Apply6Ctx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply6Err[R1, T1, T2, T3, T4, T5, T6 any](
@@ -2138,6 +3146,14 @@ func Apply6Err[R1, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad6Err[R1, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], err error) {
+		return Apply6Err(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply6CtxErr[R1, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, err error),
@@ -2156,6 +3172,14 @@ func Apply6CtxErr[R1, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad6CtxErr[R1, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], err error) {
+		return Apply6CtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply62[R1, R2, T1, T2, T3, T4, T5, T6 any](
@@ -2178,6 +3202,14 @@ func Apply62[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad62[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply62(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply62Ctx[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2),
@@ -2196,6 +3228,14 @@ func Apply62Ctx[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad62Ctx[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply62Ctx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply62Err[R1, R2, T1, T2, T3, T4, T5, T6 any](
@@ -2218,6 +3258,14 @@ func Apply62Err[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad62Err[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply62Err(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply62CtxErr[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, err error),
@@ -2236,6 +3284,14 @@ func Apply62CtxErr[R1, R2, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad62CtxErr[R1, R2, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply62CtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply63[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
@@ -2258,6 +3314,14 @@ func Apply63[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad63[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply63(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply63Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3),
@@ -2276,6 +3340,14 @@ func Apply63Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad63Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply63Ctx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply63Err[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
@@ -2298,6 +3370,14 @@ func Apply63Err[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad63Err[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply63Err(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply63CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, err error),
@@ -2316,6 +3396,14 @@ func Apply63CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad63CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply63CtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply64[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
@@ -2338,6 +3426,14 @@ func Apply64[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad64[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply64(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply64Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -2356,6 +3452,14 @@ func Apply64Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad64Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply64Ctx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply64Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
@@ -2378,6 +3482,14 @@ func Apply64Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad64Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply64Err(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply64CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -2396,6 +3508,14 @@ func Apply64CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad64CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply64CtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply65[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
@@ -2418,6 +3538,14 @@ func Apply65[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad65[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply65(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply65Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -2436,6 +3564,14 @@ func Apply65Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad65Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply65Ctx(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply65Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
@@ -2458,6 +3594,14 @@ func Apply65Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	return
 }
 
+func Monad65Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply65Err(t1, t2, t3, t4, t5, t6, fn)
+	}
+}
+
 func Apply65CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -2476,6 +3620,14 @@ func Apply65CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
 	}
 
 	return
+}
+
+func Monad65CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply65CtxErr(ctx, t1, t2, t3, t4, t5, t6, fn)
+	}
 }
 
 func Apply7Void[T1, T2, T3, T4, T5, T6, T7 any](
@@ -2497,6 +3649,14 @@ func Apply7Void[T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad7Void[T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) {
+		Apply7Void(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply7VoidCtx[T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7),
@@ -2514,6 +3674,14 @@ func Apply7VoidCtx[T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad7VoidCtx[T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) {
+		Apply7VoidCtx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply7VoidErr[T1, T2, T3, T4, T5, T6, T7 any](
@@ -2535,6 +3703,14 @@ func Apply7VoidErr[T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad7VoidErr[T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (err error) {
+		return Apply7VoidErr(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply7VoidCtxErr[T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (err error),
@@ -2552,6 +3728,14 @@ func Apply7VoidCtxErr[T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad7VoidCtxErr[T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (err error) {
+		return Apply7VoidCtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply7[R1, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2575,6 +3759,14 @@ func Apply7[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad7[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1]) {
+		return Apply7(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply7Ctx[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1),
@@ -2594,6 +3786,14 @@ func Apply7Ctx[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad7Ctx[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1]) {
+		return Apply7Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply7Err[R1, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2617,6 +3817,14 @@ func Apply7Err[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad7Err[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], err error) {
+		return Apply7Err(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply7CtxErr[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, err error),
@@ -2636,6 +3844,14 @@ func Apply7CtxErr[R1, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad7CtxErr[R1, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], err error) {
+		return Apply7CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply72[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2659,6 +3875,14 @@ func Apply72[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad72[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply72(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply72Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2),
@@ -2678,6 +3902,14 @@ func Apply72Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad72Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply72Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply72Err[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2701,6 +3933,14 @@ func Apply72Err[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad72Err[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply72Err(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply72CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, err error),
@@ -2720,6 +3960,14 @@ func Apply72CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad72CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply72CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply73[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2743,6 +3991,14 @@ func Apply73[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad73[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply73(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply73Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3),
@@ -2762,6 +4018,14 @@ func Apply73Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad73Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply73Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply73Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2785,6 +4049,14 @@ func Apply73Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad73Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply73Err(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply73CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, err error),
@@ -2804,6 +4076,14 @@ func Apply73CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad73CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply73CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply74[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2827,6 +4107,14 @@ func Apply74[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad74[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply74(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply74Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -2846,6 +4134,14 @@ func Apply74Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad74Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply74Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply74Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2869,6 +4165,14 @@ func Apply74Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad74Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply74Err(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply74CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -2888,6 +4192,14 @@ func Apply74CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad74CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply74CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply75[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2911,6 +4223,14 @@ func Apply75[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad75[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply75(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply75Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -2930,6 +4250,14 @@ func Apply75Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad75Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply75Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply75Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
@@ -2953,6 +4281,14 @@ func Apply75Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	return
 }
 
+func Monad75Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply75Err(t1, t2, t3, t4, t5, t6, t7, fn)
+	}
+}
+
 func Apply75CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -2972,6 +4308,14 @@ func Apply75CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
 	}
 
 	return
+}
+
+func Monad75CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply75CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, fn)
+	}
 }
 
 func Apply8Void[T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -2994,6 +4338,14 @@ func Apply8Void[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad8Void[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) {
+		Apply8Void(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply8VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8),
@@ -3012,6 +4364,14 @@ func Apply8VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad8VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) {
+		Apply8VoidCtx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply8VoidErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3034,6 +4394,14 @@ func Apply8VoidErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad8VoidErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (err error) {
+		return Apply8VoidErr(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply8VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (err error),
@@ -3052,6 +4420,14 @@ func Apply8VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad8VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (err error) {
+		return Apply8VoidCtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply8[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3076,6 +4452,14 @@ func Apply8[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad8[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1]) {
+		return Apply8(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply8Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1),
@@ -3096,6 +4480,14 @@ func Apply8Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad8Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1]) {
+		return Apply8Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply8Err[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3120,6 +4512,14 @@ func Apply8Err[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad8Err[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], err error) {
+		return Apply8Err(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply8CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, err error),
@@ -3140,6 +4540,14 @@ func Apply8CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad8CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], err error) {
+		return Apply8CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply82[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3164,6 +4572,14 @@ func Apply82[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad82[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply82(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply82Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2),
@@ -3184,6 +4600,14 @@ func Apply82Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad82Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply82Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply82Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3208,6 +4632,14 @@ func Apply82Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad82Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply82Err(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply82CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, err error),
@@ -3228,6 +4660,14 @@ func Apply82CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad82CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply82CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply83[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3252,6 +4692,14 @@ func Apply83[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad83[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply83(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply83Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3),
@@ -3272,6 +4720,14 @@ func Apply83Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad83Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply83Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply83Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3296,6 +4752,14 @@ func Apply83Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad83Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply83Err(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply83CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, err error),
@@ -3316,6 +4780,14 @@ func Apply83CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad83CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply83CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply84[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3340,6 +4812,14 @@ func Apply84[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad84[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply84(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply84Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -3360,6 +4840,14 @@ func Apply84Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad84Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply84Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply84Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3384,6 +4872,14 @@ func Apply84Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad84Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply84Err(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply84CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -3404,6 +4900,14 @@ func Apply84CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad84CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply84CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply85[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3428,6 +4932,14 @@ func Apply85[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad85[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply85(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply85Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -3448,6 +4960,14 @@ func Apply85Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad85Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply85Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply85Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
@@ -3472,6 +4992,14 @@ func Apply85Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	return
 }
 
+func Monad85Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply85Err(t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
+}
+
 func Apply85CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -3492,6 +5020,14 @@ func Apply85CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
 	}
 
 	return
+}
+
+func Monad85CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply85CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, fn)
+	}
 }
 
 func Apply9Void[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3515,6 +5051,14 @@ func Apply9Void[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad9Void[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) {
+		Apply9Void(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply9VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9),
@@ -3534,6 +5078,14 @@ func Apply9VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad9VoidCtx[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) {
+		Apply9VoidCtx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply9VoidErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3557,6 +5109,14 @@ func Apply9VoidErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad9VoidErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (err error) {
+		return Apply9VoidErr(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply9VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (err error),
@@ -3576,6 +5136,14 @@ func Apply9VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad9VoidCtxErr[T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (err error) {
+		return Apply9VoidCtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply9[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3601,6 +5169,14 @@ func Apply9[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad9[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1]) {
+		return Apply9(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply9Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1),
@@ -3622,6 +5198,14 @@ func Apply9Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad9Ctx[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1]) {
+		return Apply9Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply9Err[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3647,6 +5231,14 @@ func Apply9Err[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad9Err[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], err error) {
+		return Apply9Err(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply9CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, err error),
@@ -3668,6 +5260,14 @@ func Apply9CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad9CtxErr[R1, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], err error) {
+		return Apply9CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply92[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3693,6 +5293,14 @@ func Apply92[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad92[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply92(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply92Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2),
@@ -3714,6 +5322,14 @@ func Apply92Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad92Ctx[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2]) {
+		return Apply92Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply92Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3739,6 +5355,14 @@ func Apply92Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad92Err[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply92Err(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply92CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, err error),
@@ -3760,6 +5384,14 @@ func Apply92CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad92CtxErr[R1, R2, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], err error) {
+		return Apply92CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply93[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3785,6 +5417,14 @@ func Apply93[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad93[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply93(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply93Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3),
@@ -3806,6 +5446,14 @@ func Apply93Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad93Ctx[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3]) {
+		return Apply93Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply93Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3831,6 +5479,14 @@ func Apply93Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad93Err[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply93Err(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply93CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, err error),
@@ -3852,6 +5508,14 @@ func Apply93CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad93CtxErr[R1, R2, R3, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], err error) {
+		return Apply93CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply94[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3877,6 +5541,14 @@ func Apply94[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad94[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply94(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply94Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4),
@@ -3898,6 +5570,14 @@ func Apply94Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad94Ctx[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4]) {
+		return Apply94Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply94Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3923,6 +5603,14 @@ func Apply94Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad94Err[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply94Err(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply94CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
@@ -3944,6 +5632,14 @@ func Apply94CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad94CtxErr[R1, R2, R3, R4, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], err error) {
+		return Apply94CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply95[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -3969,6 +5665,14 @@ func Apply95[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad95[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply95(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply95Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
@@ -3990,6 +5694,14 @@ func Apply95Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad95Ctx[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5]) {
+		return Apply95Ctx(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
 
 func Apply95Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
@@ -4015,6 +5727,14 @@ func Apply95Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	return
 }
 
+func Monad95Err[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply95Err(t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
+}
+
 func Apply95CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9],
 	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
@@ -4036,4 +5756,12 @@ func Apply95CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
 	}
 
 	return
+}
+
+func Monad95CtxErr[R1, R2, R3, R4, R5, T1, T2, T3, T4, T5, T6, T7, T8, T9 any](
+	fn func(ctx context.Context, t1 T1, t2 T2, t3 T3, t4 T4, t5 T5, t6 T6, t7 T7, t8 T8, t9 T9) (r1 R1, r2 R2, r3 R3, r4 R4, r5 R5, err error),
+) func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+	return func(ctx context.Context, t1 Opt[T1], t2 Opt[T2], t3 Opt[T3], t4 Opt[T4], t5 Opt[T5], t6 Opt[T6], t7 Opt[T7], t8 Opt[T8], t9 Opt[T9]) (r1 Opt[R1], r2 Opt[R2], r3 Opt[R3], r4 Opt[R4], r5 Opt[R5], err error) {
+		return Apply95CtxErr(ctx, t1, t2, t3, t4, t5, t6, t7, t8, t9, fn)
+	}
 }
