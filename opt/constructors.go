@@ -1,40 +1,45 @@
 package opt
 
+// New creates a new Opt with the given value and ok status.
 func New[T any](val T, ok bool) Opt[T] {
 	return Opt[T]{val: val, ok: ok}
 }
 
+// Literal creates a new Opt with the given value and ok set to true.
 func Literal[T any](val T) Opt[T] {
 	return Opt[T]{val: val, ok: true}
 }
 
-func FromErr[T any](val T, err error) Opt[T] {
+// FromErr creates a new Opt from a value and an error.
+//   - If the error is nil, it returns an Opt with the value and ok set to true.
+//   - If the error is not nil, it returns an empty Opt.
+func FromErr[T any](val T, err error) (o Opt[T]) {
 	if err == nil {
 		return Opt[T]{val: val, ok: true}
 	}
 
-	var empty Opt[T] // zero opt is valid empty opt
-
-	return empty
+	return // zero opt is valid empty opt
 }
 
-func FromPtr[T any](ptr *T) Opt[T] {
+// FromPtr creates a new Opt from a pointer.
+//   - If the pointer is not nil, it returns an Opt with the value pointed to and ok set to true.
+//   - If the pointer is nil, it returns an empty Opt.
+func FromPtr[T any](ptr *T) (o Opt[T]) {
 	if ptr != nil {
 		return Opt[T]{val: *ptr, ok: true}
 	}
 
-	var empty Opt[T] // zero opt is valid empty opt
-
-	return empty
+	return // zero opt is valid empty opt
 }
 
-func FromZero[T comparable](v T) Opt[T] {
+// FromZero creates a new Opt from a zeroable (emptiable) value.
+//   - If the value is not equal to its zero value, it returns an Opt with the value and ok set to true.
+//   - If the value is equal to its zero value, it returns an empty Opt.
+func FromZero[T comparable](v T) (o Opt[T]) {
 	var zero T
 	if v != zero {
 		return Opt[T]{val: v, ok: true}
 	}
 
-	var empty Opt[T] // zero opt is valid empty opt
-
-	return empty
+	return // zero opt is valid empty opt
 }
