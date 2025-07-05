@@ -759,3 +759,261 @@ func TestApply9VoidCtxErr(t *testing.T) {
 		})
 	}
 }
+
+func TestApply9(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name     string
+		inputs   []*int
+		expected *int
+	}{
+		{
+			name:     "normal case",
+			inputs:   ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected: ptr.New(45), // sum of all numbers
+		},
+		{
+			name:     "one nil input",
+			inputs:   ptrsArray([]int{1, 0, 3, 4, 5, 6, 7, 8, 9}),
+			expected: nil,
+		},
+		{
+			name:     "all nil inputs",
+			inputs:   ptrsArray([]int{0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			expected: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result := ptr.Apply9(
+				tt.inputs[0], tt.inputs[1], tt.inputs[2],
+				tt.inputs[3], tt.inputs[4], tt.inputs[5],
+				tt.inputs[6], tt.inputs[7], tt.inputs[8],
+				func(num1, num2, num3, num4, num5, num6, num7, num8, num9 int) int {
+					return num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9
+				},
+			)
+
+			require.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestApply9Ctx(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name         string
+		ctxCancelled bool
+		inputs       []*int
+		expected     *int
+	}{
+		{
+			name:         "normal case",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     ptr.New(45), // sum of all numbers
+		},
+		{
+			name:         "cancelled context",
+			ctxCancelled: true,
+			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     ptr.New(0), // zero value when context cancelled
+		},
+		{
+			name:         "one nil input",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{1, 0, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     nil,
+		},
+		{
+			name:         "all nil inputs",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			expected:     nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctx := t.Context()
+			if tt.ctxCancelled {
+				ctx = cancelledCtx(t)
+			}
+
+			result := ptr.Apply9Ctx(
+				ctx,
+				tt.inputs[0], tt.inputs[1], tt.inputs[2],
+				tt.inputs[3], tt.inputs[4], tt.inputs[5],
+				tt.inputs[6], tt.inputs[7], tt.inputs[8],
+				func(ctx context.Context, num1, num2, num3, num4, num5, num6, num7, num8, num9 int) int {
+					select {
+					default:
+					case <-ctx.Done():
+						return 0
+					}
+
+					return num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9
+				},
+			)
+
+			require.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestApply9Err(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name        string
+		inputs      []*int
+		expected    *int
+		expectError error
+	}{
+		{
+			name:        "normal case",
+			inputs:      ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected:    ptr.New(45), // sum of all numbers
+			expectError: nil,
+		},
+		{
+			name:        "error case",
+			inputs:      ptrsArray([]int{1, 2, 3, 4, -5, 6, 7, 8, 9}),
+			expected:    nil,
+			expectError: errNegativeNumber,
+		},
+		{
+			name:        "one nil input",
+			inputs:      ptrsArray([]int{1, 0, 3, 4, 5, 6, 7, 8, 9}),
+			expected:    nil,
+			expectError: nil,
+		},
+		{
+			name:        "all nil inputs",
+			inputs:      ptrsArray([]int{0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			expected:    nil,
+			expectError: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			result, err := ptr.Apply9Err(
+				tt.inputs[0], tt.inputs[1], tt.inputs[2],
+				tt.inputs[3], tt.inputs[4], tt.inputs[5],
+				tt.inputs[6], tt.inputs[7], tt.inputs[8],
+				func(num1, num2, num3, num4, num5, num6, num7, num8, num9 int) (int, error) {
+					if min(num1, num2, num3, num4, num5, num6, num7, num8, num9) < 0 {
+						return 0, errNegativeNumber
+					}
+
+					return num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9, nil
+				},
+			)
+
+			if tt.expectError != nil {
+				require.ErrorIs(t, err, tt.expectError)
+			} else {
+				require.NoError(t, err)
+			}
+
+			require.Equal(t, tt.expected, result)
+		})
+	}
+}
+
+func TestApply9CtxErr(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name         string
+		ctxCancelled bool
+		inputs       []*int
+		expected     *int
+		expectError  error
+	}{
+		{
+			name:         "normal case",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     ptr.New(45), // sum of all numbers
+			expectError:  nil,
+		},
+		{
+			name:         "cancelled context",
+			ctxCancelled: true,
+			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     nil,
+			expectError:  context.Canceled,
+		},
+		{
+			name:         "error case",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{1, 2, 3, 4, -5, 6, 7, 8, 9}),
+			expected:     nil,
+			expectError:  errNegativeNumber,
+		},
+		{
+			name:         "one nil input",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{1, 0, 3, 4, 5, 6, 7, 8, 9}),
+			expected:     nil,
+			expectError:  nil,
+		},
+		{
+			name:         "all nil inputs",
+			ctxCancelled: false,
+			inputs:       ptrsArray([]int{0, 0, 0, 0, 0, 0, 0, 0, 0}),
+			expected:     nil,
+			expectError:  nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
+			ctx := t.Context()
+			if tt.ctxCancelled {
+				ctx = cancelledCtx(t)
+			}
+
+			result, err := ptr.Apply9CtxErr(
+				ctx,
+				tt.inputs[0], tt.inputs[1], tt.inputs[2],
+				tt.inputs[3], tt.inputs[4], tt.inputs[5],
+				tt.inputs[6], tt.inputs[7], tt.inputs[8],
+				func(ctx context.Context, num1, num2, num3, num4, num5, num6, num7, num8, num9 int) (int, error) {
+					select {
+					default:
+					case <-ctx.Done():
+						return 0, ctx.Err()
+					}
+
+					if min(num1, num2, num3, num4, num5, num6, num7, num8, num9) < 0 {
+						return 0, errNegativeNumber
+					}
+
+					return num1 + num2 + num3 + num4 + num5 + num6 + num7 + num8 + num9, nil
+				},
+			)
+
+			if tt.expectError != nil {
+				require.ErrorIs(t, err, tt.expectError)
+			} else {
+				require.NoError(t, err)
+			}
+
+			require.Equal(t, tt.expected, result)
+		})
+	}
+}
