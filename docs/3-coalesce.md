@@ -11,7 +11,7 @@ func sourceA() *int { ... }
 func sourceB() *int { ... }
 
 func main() {
-    res := ref.Coalesce(sourceA(), sourceB())
+    res := ptr.Coalesce(sourceA(), sourceB())
 }
 ```
 
