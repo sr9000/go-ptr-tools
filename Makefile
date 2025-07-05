@@ -1,6 +1,8 @@
 SHELL := /bin/bash
 PATH := $(GOPATH)/bin:$(PATH)
 
+.PHONY: all clean lint test cover bench
+
 lint:
 	golangci-lint run --fix
 

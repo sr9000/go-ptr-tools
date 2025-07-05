@@ -924,9 +924,8 @@ func TestApply9Err(t *testing.T) {
 				require.ErrorIs(t, err, tt.expectError)
 			} else {
 				require.NoError(t, err)
+				require.Equal(t, tt.expected, result)
 			}
-
-			require.Equal(t, tt.expected, result)
 		})
 	}
 }
@@ -1011,9 +1010,8 @@ func TestApply9CtxErr(t *testing.T) {
 				require.ErrorIs(t, err, tt.expectError)
 			} else {
 				require.NoError(t, err)
+				require.Equal(t, tt.expected, result)
 			}
-
-			require.Equal(t, tt.expected, result)
 		})
 	}
 }
