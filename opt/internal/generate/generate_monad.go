@@ -3,6 +3,8 @@
 package main
 
 import (
+	_ "embed"
+
 	"bytes"
 	"fmt"
 	"io/fs"
@@ -11,8 +13,6 @@ import (
 	"os/exec"
 	"strings"
 	"text/template"
-
-	_ "embed"
 )
 
 const (

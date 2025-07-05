@@ -72,7 +72,7 @@ formatters:
         - default # Default section: contains all imports that could not be matched to another section type.
         - alias # Alias section: contains all alias imports. This section is not present unless explicitly enabled.
         - localmodule # Local module section: contains all local packages. This section is not present unless explicitly enabled.
-    custom-order: true
+      custom-order: true
   exclusions:
     # Which dirs to exclude: style from them won't be formatted.
     generated: lax
