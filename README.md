@@ -48,11 +48,17 @@ func main() {
   // ✅ using ptr.Coalesce to prioritize proxy sources, or left with nil if none available.
   effectiveProxy := ptr.Coalesce(LoadEnvProxy(), LoadYamlProxy(), LoadSystemProxy())
 
-  // ✅ using ptr.MonadCtxErr wrap a GrabResourceWithProxy, grabWithProxy accepts a context and optional URL.
-  // ✅ ptr.MonadCtxErr guarantees that the GrabResourceWithProxy never be called with a nil URL.
-  grabWithProxy := ptr.MonadCtxErr(func(ctx context.Context, u url.URL) (ref.Ref[Document], error) {
+  // ✅ ptr.MonadVoidCtxErr pass through only non-nil URL.
+  grabWithProxy := ptr.MonadVoidCtxErr(func(ctx context.Context, u url.URL) error {
     // ✅ using ptr.Of to pass an optional timeout value in a single line.
-    return GrabResourceWithProxy(ctx, u, effectiveProxy, ptr.Of(100*time.Second))
+    doc, err := GrabResourceWithProxy(ctx, u, effectiveProxy, ptr.Of(100*time.Second))
+    if err != nil {
+      return err
+    }
+
+    // ✅ ref.Ref[Document] guarantees non-nil doc.
+    SaveResults(doc)
+    return nil
   })
 
   file, err := os.Open("urls.txt")
@@ -71,14 +77,10 @@ func main() {
       defer wg.Done()
 
       // ✅ seamless chaining parseURL and grabWithProxy
-      optDoc, err := grabWithProxy(ctx, parseURL(line))
+      err := grabWithProxy(ctx, parseURL(line))
       if err != nil {
         slog.Error("Failed to grab resource", slog.String("url", line), slog.Any("err", err))
-        return
       }
-
-      // ✅ using ptr.ApplyVoid optDoc unwrapped into ref.Ref[Document] and passed to SaveResults.
-      ptr.ApplyVoid(optDoc, SaveResults)
     }(scanner.Text()) // read line and pass into lambda
   }
 
