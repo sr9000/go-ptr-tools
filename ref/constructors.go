@@ -1,13 +1,8 @@
 package ref
 
-// New returns a new Ref based on the given pointer.
-// It returns an error if the pointer is nil.
-func New[T any](ptr *T) (Ref[T], error) {
-	if ptr == nil {
-		return Ref[T]{}, ErrPtrMustBeNotNil
-	}
-
-	return Ref[T]{ptr}, nil
+// Of returns a new Ref based on the given value.
+func Of[T any](v T) Ref[T] {
+	return Ref[T]{&v}
 }
 
 // Guaranteed returns a new Ref based on the given pointer that is guaranteed to be not nil.
@@ -16,7 +11,12 @@ func Guaranteed[T any](notNilPtr *T) Ref[T] {
 	return Ref[T]{notNilPtr}
 }
 
-// Literal returns a new Ref based on the given value.
-func Literal[T any](v T) Ref[T] {
-	return Ref[T]{&v}
+// FromPtr returns a new Ref based on the given pointer.
+// It returns an error if the pointer is nil.
+func FromPtr[T any](ptr *T) (Ref[T], error) {
+	if ptr == nil {
+		return Ref[T]{}, ErrPtrMustBeNotNil
+	}
+
+	return Ref[T]{ptr}, nil
 }
