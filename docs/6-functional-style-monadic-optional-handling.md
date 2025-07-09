@@ -173,9 +173,10 @@ Pattern is `[Apply|Monad]<N>[<M>|Void][Ctx][Err]`, where:
 | ------------------ | ------------------------------------------------------------ |
 | `Apply`            | 1 input, 1 output: `func(t1 T1) R1`                          |
 | `Monad2`           | 2 inputs, 1 output: `func(t1 T1, t2 T2) R1`                  |
-| `Monad4VoidCtxErr` | 4 inputs, no return, uses `context.Context`, returns `error` |
+| `Monad4VoidCtxErr` | 4 inputs, no outputs, uses `context.Context`, returns `error` |
 | `Apply12`          | 1 input, 2 outputs: `func(t1 T1) (R1, R2)`                   |
-| `Apply95CtxErr`    | 9 inputs, 5 outputs, accepts `context.Context`, returns `error`.<br />(Full signature provided as a separate code snippet below) |
+| `Apply95CtxErr`    | 9 inputs, 5 outputs, uses `context.Context`, returns `error`.<br />(Full signature provided as a separate code snippet below) |
+
 ```go
 // `fn` argument for Apply95CtxErr
 func(ctx context.Context,
