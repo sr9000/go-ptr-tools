@@ -16,7 +16,7 @@ jobs:
           go-version: '1.24'
 
       - name: Remove generated code
-        run: rm ptr/monad.go opt/monad.go
+        run: rm ptr/monad.go ptr/monad_test.go opt/monad.go
 
       - name: Test
         run: go test -v ./...
