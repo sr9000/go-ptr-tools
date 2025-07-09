@@ -16,7 +16,7 @@ jobs:
           go-version: '1.24'
 
       - name: Test
-        run: go test -v ./...
+        run: go test -v -coverprofile=coverage.out ./...
 
       - name: Remove generated code
         run: cat coverage.out | grep -v "monad.go" > coverage.out
