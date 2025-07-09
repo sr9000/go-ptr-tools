@@ -19,7 +19,7 @@ These operations often take multiple lines and copy-pasted idioms, reducing code
 
 This repository proposes a library for simplifying these patterns by introducing a minimal set of expressive, reusable utilities and types. It enables Go developers to work with pointers, references, and optional values using clear one-liners that preserve type safety and performance but improve code ergonomics.
 
-The library is inspired by ideas from languages like Rust (e.g., `Option<T>`, references), Kotlin (e.g., safe call, elvis operator), and functional programming (monads). But it’s written **in idiomatic Go**, using standard language features available from Go 1.18+ (i.e., generics) without runtime cost.
+The library is inspired by ideas from languages like Rust (e.g., `Option<T>`, references), Kotlin (e.g., safe call, elvis operator), and functional programming (monads). But it’s written **in idiomatic Go**, using standard language features.
 
 It is not a framework and requires no integration or adoption ceremony. You can start using selected helpers in any Go codebase immediately — especially in the parts that deal with configuration, parsing, conversions, optional values, or pointer-heavy logic.
 
