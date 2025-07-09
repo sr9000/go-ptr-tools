@@ -179,9 +179,9 @@ Pattern is `[Apply|Monad]<N>[<M>|Void][Ctx][Err]`, where:
 ```go
 // `fn` argument for Apply95CtxErr
 func(ctx context.Context,
-  t1 *T1, ..., t9 *T9,
+  t1 T1, ..., t9 T9,
 ) (
-  r1 *R1, ..., r5 *R5,
+  r1 R1, ..., r5 R5,
   err error,
 )
 ```
