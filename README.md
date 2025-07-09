@@ -31,27 +31,18 @@ import (
   // rest of imports
 )
 
-// parseURL parses a raw URL string and returns a *url.URL if valid, or nil if invalid.
-func parseURL(raw string) *url.URL {
-  u, err := url.Parse(raw)
-  if err != nil || u.Scheme == "" || u.Host == "" {
-    return nil
-  }
-
-  return u
-}
-
 func main() {
   ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
   defer stop()
 
   // ✅ using ptr.Coalesce to prioritize proxy sources, or left with nil if none available.
-  effectiveProxy := ptr.Coalesce(LoadEnvProxy(), LoadYamlProxy(), LoadSystemProxy())
+  defaultProxy := ptr.Coalesce(LoadEnvProxy(), LoadYamlProxy(), LoadSystemProxy())
 
-  // ✅ ptr.MonadVoidCtxErr pass through only non-nil URL.
-  grabWithProxy := ptr.MonadVoidCtxErr(func(ctx context.Context, u url.URL) error {
+  // ✅ ptr.Monad3VoidCtxErr pass through only when all args are not nil.
+  grabWithProxy := ptr.Monad3VoidCtxErr(
+    func(ctx context.Context, u url.URL, proxy Proxy, token string) error {
     // ✅ using ptr.Of to pass an optional timeout value in a single line.
-    doc, err := GrabResourceWithProxy(ctx, u, effectiveProxy, ptr.Of(100*time.Second))
+    doc, err := GrabResourceWithProxy(ctx, u, proxy, token, ptr.Of(100*time.Second))
     if err != nil {
       return err
     }
@@ -75,9 +66,12 @@ func main() {
     wg.Add(1)
     go func(line string) {
       defer wg.Done()
+      
+      record := ParseRecord(line)
+      proxy := ptr.Coalesce(rec.Proxy, defaultProxy)
 
-      // ✅ seamless chaining parseURL and grabWithProxy
-      err := grabWithProxy(ctx, parseURL(line))
+      // ✅ seamless chaining record and grabWithProxy
+      err := grabWithProxy(ctx, record.Url, proxy, record.Token)
       if err != nil {
         slog.Error("Failed to grab resource", slog.String("url", line), slog.Any("err", err))
       }
@@ -105,6 +99,22 @@ type Document struct {
   // Lots of additional fields for metadata, content, etc.
 }
 
+type Record struct {
+  Url   *url.URL `json:"url"`
+  Token *string  `json:"token"`
+  Proxy *Proxy   `json:"proxy"`
+}
+
+// ParseRecord parses a record from a string.
+func ParseRecord(raw string) (r Record) {
+  err := json.Unmarshal([]byte(raw), &r)
+  if err != nil {
+    return Record{}
+  }
+
+  return
+}
+
 // LoadEnvProxy loads proxy configuration from environment variables.
 func LoadEnvProxy() *Proxy
 
@@ -114,12 +124,11 @@ func LoadYamlProxy() *Proxy
 // LoadSystemProxy returns system-wide configured proxy settings.
 func LoadSystemProxy() *Proxy
 
-// GrabResourceWithProxy downloads a resource at the given URL using the provided proxy (or without if nil).
+// GrabResourceWithProxy downloads a resource at the given URL using the provided proxy and token.
 // Accepts a timeout value (if nil set to 30 seconds) and returns a ref.Ref[Document] on success.
 func GrabResourceWithProxy(
   ctx context.Context,
-  u url.URL,
-  proxy *Proxy,
+  u url.URL, proxy Proxy, token string,
   timeout *time.Duration,
 ) (ref.Ref[Document], error) // ✅ ref.Ref[Document] improves API contract by guaranteeing non-nil pointer.
 
