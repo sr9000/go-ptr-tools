@@ -77,7 +77,7 @@ func main() {
         return
       }
 
-      // ✅ Save the results using a guaranteed non-nil ref.Ref[LinksNode]
+      // ✅ Save the results using a guaranteed non-nil ref.Ref[Document]
       // ✅ No need to check for nil after err were checked (in contrast with pointers).
       SaveResults(doc)
     }(scanner.Text()) // read line and pass into lambda
