@@ -18,5 +18,8 @@ jobs:
       - name: Test
         run: go test -v ./...
 
+      - name: Remove generated code
+        run: cat coverage.out | grep -v "monad.go" > coverage.out
+
       - name: Update coverage report
         uses: crowdriff/go-coverage-gha@v0.0.4
