@@ -71,15 +71,14 @@ func main() {
       defer wg.Done()
 
       // ✅ seamless chaining parseURL and grabWithProxy
-      doc, err := grabWithProxy(ctx, parseURL(line))
+      optDoc, err := grabWithProxy(ctx, parseURL(line))
       if err != nil {
-        slog.Error("Failed to grab resource", slog.String("url", u.String()), slog.Any("err", err))
+        slog.Error("Failed to grab resource", slog.String("url", line), slog.Any("err", err))
         return
       }
 
-      // ✅ Save the results using a guaranteed non-nil ref.Ref[Document]
-      // ✅ No need to check for nil after err were checked (in contrast with pointers).
-      SaveResults(doc)
+      // ✅ using ptr.ApplyVoid optDoc unwrapped into ref.Ref[Document] and passed to SaveResults.
+      ptr.ApplyVoid(optDoc, SaveResults)
     }(scanner.Text()) // read line and pass into lambda
   }
 
