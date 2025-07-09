@@ -1,13 +1,13 @@
 package opt
 
-// New creates a new Opt with the given value and ok status.
-func New[T any](val T, ok bool) Opt[T] {
-	return Opt[T]{val: val, ok: ok}
+// Of creates a new Opt with the given value and ok set to true.
+func Of[T any](val T) Opt[T] {
+	return Opt[T]{val: val, ok: true}
 }
 
-// Literal creates a new Opt with the given value and ok set to true.
-func Literal[T any](val T) Opt[T] {
-	return Opt[T]{val: val, ok: true}
+// FromOk creates a new Opt with the given value and ok status.
+func FromOk[T any](val T, ok bool) Opt[T] {
+	return Opt[T]{val: val, ok: ok}
 }
 
 // FromErr creates a new Opt from a value and an error.

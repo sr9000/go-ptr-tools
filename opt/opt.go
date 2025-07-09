@@ -13,8 +13,8 @@ func (o Opt[T]) IsPresent() bool {
 	return o.ok
 }
 
-// IsEmpty returns true if the Opt does not contain a value.
-func (o Opt[T]) IsEmpty() bool {
+// IsMissing returns true if the Opt does not contain a value.
+func (o Opt[T]) IsMissing() bool {
 	return !o.ok
 }
 

@@ -68,8 +68,8 @@ func TestApply(t *testing.T) {
 	}{
 		{
 			name:     "normal case",
-			input:    ptr.New(5),
-			expected: ptr.New(6),
+			input:    ptr.Of(5),
+			expected: ptr.Of(6),
 		},
 		{
 			name:     "nil input",
@@ -100,14 +100,14 @@ func TestApplyCtx(t *testing.T) {
 		{
 			name:         "normal case",
 			ctxCancelled: false,
-			input:        ptr.New(5),
-			expected:     ptr.New(6),
+			input:        ptr.Of(5),
+			expected:     ptr.Of(6),
 		},
 		{
 			name:         "cancelled context",
 			ctxCancelled: true,
-			input:        ptr.New(5),
-			expected:     ptr.New(0), // zero value when context cancelled
+			input:        ptr.Of(5),
+			expected:     ptr.Of(0), // zero value when context cancelled
 		},
 		{
 			name:         "nil input",
@@ -143,13 +143,13 @@ func TestApplyErr(t *testing.T) {
 	}{
 		{
 			name:        "normal case",
-			input:       ptr.New(5),
-			expected:    ptr.New(6),
+			input:       ptr.Of(5),
+			expected:    ptr.Of(6),
 			expectError: nil,
 		},
 		{
 			name:        "error case",
-			input:       ptr.New(-1),
+			input:       ptr.Of(-1),
 			expected:    nil,
 			expectError: errNegativeNumber,
 		},
@@ -189,21 +189,21 @@ func TestApplyCtxErr(t *testing.T) {
 		{
 			name:         "normal case",
 			ctxCancelled: false,
-			input:        ptr.New(5),
-			expected:     ptr.New(6),
+			input:        ptr.Of(5),
+			expected:     ptr.Of(6),
 			expectError:  nil,
 		},
 		{
 			name:         "cancelled context",
 			ctxCancelled: true,
-			input:        ptr.New(5),
+			input:        ptr.Of(5),
 			expected:     nil,
 			expectError:  context.Canceled,
 		},
 		{
 			name:         "error case",
 			ctxCancelled: false,
-			input:        ptr.New(-1),
+			input:        ptr.Of(-1),
 			expected:     nil,
 			expectError:  errNegativeNumber,
 		},
@@ -247,7 +247,7 @@ func TestApplyVoid(t *testing.T) {
 	}{
 		{
 			name:     "normal case",
-			input:    ptr.New(5),
+			input:    ptr.Of(5),
 			expected: true,
 		},
 		{
@@ -285,7 +285,7 @@ func TestApplyVoidCtx(t *testing.T) {
 	}{
 		{
 			name:        "normal case",
-			input:       ptr.New(5),
+			input:       ptr.Of(5),
 			expCalled:   true,
 			expAnalyzed: true,
 		},
@@ -335,13 +335,13 @@ func TestApplyVoidErr(t *testing.T) {
 	}{
 		{
 			name:        "normal case",
-			input:       ptr.New(5),
+			input:       ptr.Of(5),
 			expectError: nil,
 			expected:    true,
 		},
 		{
 			name:        "error case",
-			input:       ptr.New(-1),
+			input:       ptr.Of(-1),
 			expectError: errNegativeNumber,
 			expected:    true,
 		},
@@ -394,14 +394,14 @@ func TestApplyVoidCtxErr(t *testing.T) {
 	}{
 		{
 			name:        "normal case",
-			input:       ptr.New(5),
+			input:       ptr.Of(5),
 			expectError: nil,
 			expCalled:   true,
 			expAnalyzed: true,
 		},
 		{
 			name:        "error case",
-			input:       ptr.New(-1),
+			input:       ptr.Of(-1),
 			expectError: errNegativeNumber,
 			expCalled:   true,
 			expAnalyzed: true,
@@ -771,7 +771,7 @@ func TestApply9(t *testing.T) {
 		{
 			name:     "normal case",
 			inputs:   ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
-			expected: ptr.New(45), // sum of all numbers
+			expected: ptr.Of(45), // sum of all numbers
 		},
 		{
 			name:     "one nil input",
@@ -815,13 +815,13 @@ func TestApply9Ctx(t *testing.T) {
 			name:         "normal case",
 			ctxCancelled: false,
 			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
-			expected:     ptr.New(45), // sum of all numbers
+			expected:     ptr.Of(45), // sum of all numbers
 		},
 		{
 			name:         "cancelled context",
 			ctxCancelled: true,
 			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
-			expected:     ptr.New(0), // zero value when context cancelled
+			expected:     ptr.Of(0), // zero value when context cancelled
 		},
 		{
 			name:         "one nil input",
@@ -878,7 +878,7 @@ func TestApply9Err(t *testing.T) {
 		{
 			name:        "normal case",
 			inputs:      ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
-			expected:    ptr.New(45), // sum of all numbers
+			expected:    ptr.Of(45), // sum of all numbers
 			expectError: nil,
 		},
 		{
@@ -941,7 +941,7 @@ func TestApply9CtxErr(t *testing.T) {
 			name:         "normal case",
 			ctxCancelled: false,
 			inputs:       ptrsArray([]int{1, 2, 3, 4, 5, 6, 7, 8, 9}),
-			expected:     ptr.New(45), // sum of all numbers
+			expected:     ptr.Of(45), // sum of all numbers
 			expectError:  nil,
 		},
 		{

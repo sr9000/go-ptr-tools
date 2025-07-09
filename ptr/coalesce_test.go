@@ -12,9 +12,9 @@ import (
 func TestCoalesce(t *testing.T) {
 	t.Parallel()
 
-	one := ptr.New(1)
-	two := ptr.New(2)
-	three := ptr.New(3)
+	one := ptr.Of(1)
+	two := ptr.Of(2)
+	three := ptr.Of(3)
 
 	tests := []struct {
 		name     string
@@ -68,10 +68,10 @@ func TestCoalesce(t *testing.T) {
 func TestFinalize(t *testing.T) {
 	t.Parallel()
 
-	one := ptr.New(1)
-	two := ptr.New(2)
-	three := ptr.New(3)
-	final := ref.Guaranteed(ptr.New(42))
+	one := ptr.Of(1)
+	two := ptr.Of(2)
+	three := ptr.Of(3)
+	final := ref.Guaranteed(ptr.Of(42))
 
 	tests := []struct {
 		name     string

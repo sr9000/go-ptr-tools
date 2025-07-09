@@ -20,32 +20,32 @@ func TestOptCoalesce(t *testing.T) {
 		expected opt.Opt[int]
 		opts     []opt.Opt[int]
 	}{
-		{"single valid", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one)}},
+		{"single valid", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one)}},
 
 		{"single nil", opt.Opt[int]{},
 			[]opt.Opt[int]{{}}},
 
-		{"two valid", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one), opt.Literal(two)}},
+		{"two valid", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one), opt.Of(two)}},
 
-		{"three valid", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one), opt.Literal(two), opt.Literal(three)}},
+		{"three valid", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one), opt.Of(two), opt.Of(three)}},
 
-		{"first nil two valid", opt.Literal(two),
-			[]opt.Opt[int]{{}, opt.Literal(two), opt.Literal(three)}},
+		{"first nil two valid", opt.Of(two),
+			[]opt.Opt[int]{{}, opt.Of(two), opt.Of(three)}},
 
-		{"second nil two valid", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one), {}, opt.Literal(three)}},
+		{"second nil two valid", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one), {}, opt.Of(three)}},
 
-		{"third nil two valid", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one), opt.Literal(two), {}}},
+		{"third nil two valid", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one), opt.Of(two), {}}},
 
-		{"first valid two nil", opt.Literal(one),
-			[]opt.Opt[int]{opt.Literal(one), {}, {}}},
+		{"first valid two nil", opt.Of(one),
+			[]opt.Opt[int]{opt.Of(one), {}, {}}},
 
-		{"last valid two nil", opt.Literal(three),
-			[]opt.Opt[int]{{}, {}, opt.Literal(three)}},
+		{"last valid two nil", opt.Of(three),
+			[]opt.Opt[int]{{}, {}, opt.Of(three)}},
 
 		{"three nil", opt.Opt[int]{},
 			[]opt.Opt[int]{{}, {}, {}}},
@@ -70,9 +70,9 @@ func TestOptCoalesce(t *testing.T) {
 func TestFinalize(t *testing.T) {
 	t.Parallel()
 
-	one := opt.Literal(1)
-	two := opt.Literal(2)
-	three := opt.Literal(3)
+	one := opt.Of(1)
+	two := opt.Of(2)
+	three := opt.Of(3)
 	final := 42
 
 	tests := []struct {

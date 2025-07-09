@@ -31,7 +31,7 @@ func parsePrimeOpt(number int) (res opt.Opt[int]) {
 		}
 	}
 
-	return opt.Literal(number)
+	return opt.Of(number)
 }
 
 func parsePrimePtr(number int) *int {

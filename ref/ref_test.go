@@ -33,7 +33,7 @@ func TestFromPtr(t *testing.T) {
 		t.Parallel()
 
 		x := 42
-		rx, err := ref.New(&x)
+		rx, err := ref.FromPtr(&x)
 		require.NoError(t, err)
 		require.NotNil(t, rx.Ptr())
 		require.Same(t, &x, rx.Ptr())
@@ -43,7 +43,7 @@ func TestFromPtr(t *testing.T) {
 	t.Run("nil cause err", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := ref.New[int](nil)
+		_, err := ref.FromPtr[int](nil)
 		require.ErrorIs(t, err, ref.ErrPtrMustBeNotNil)
 	})
 }
@@ -71,13 +71,13 @@ func TestGuaranteed(t *testing.T) {
 	})
 }
 
-func TestLiteral(t *testing.T) {
+func TestOf(t *testing.T) {
 	t.Parallel()
 
 	t.Run("literal", func(t *testing.T) {
 		t.Parallel()
 
-		rx := ref.Literal(42)
+		rx := ref.Of(42)
 		require.NotNil(t, rx.Ptr())
 		require.Equal(t, 42, rx.Val())
 	})
@@ -86,7 +86,7 @@ func TestLiteral(t *testing.T) {
 		t.Parallel()
 
 		x := 42
-		rx := ref.Literal(x)
+		rx := ref.Of(x)
 		require.NotNil(t, rx.Ptr())
 		require.NotSame(t, &x, rx.Ptr())
 		require.Equal(t, x, rx.Val())
