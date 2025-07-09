@@ -1,7 +1,5 @@
 # Ptr-Tools: `*T` vs `PT *T` meaning and difference
 
-> Fully working code example provided at [tpt_test.go](../examples/tpt_test.go).
-
 ⚠️ _This document created using LLM!_ ⚠️
 
 Provided code example demonstrates the difference between directly using `*T` in a generic function and using `PT` as a
