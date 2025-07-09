@@ -31,7 +31,7 @@ jobs:
         env:
           REPO_NAME: ${{ env.REPOSITORY_NAME }}
         run: |
-          create-coverage-report.sh
+          bash create-coverage-report.sh
           mv coverage.svg ./.github/wiki/
           test ! -f coverage.html || mv coverage.html ./.github/wiki/
           cat coverage.log >> ./.github/wiki/coverage.log
