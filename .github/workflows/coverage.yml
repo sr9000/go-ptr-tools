@@ -16,10 +16,10 @@ jobs:
           go-version: '1.24'
 
       - name: Test
-        run: go test -v -coverprofile=coverage.out ./...
+        run: go test -v -coverprofile=coverage.tmp.out ./...
 
       - name: Remove generated code
-        run: cat coverage.out | grep -v "monad.go" > coverage.out
+        run: cat coverage.tmp.out | grep -v "monad.go" > coverage.out
 
       - name: Update coverage report
         uses: crowdriff/go-coverage-gha@v0.0.4
