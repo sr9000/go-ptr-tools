@@ -19,6 +19,114 @@ These operations often take multiple lines and copy-pasted idioms, reducing code
 
 This repository proposes a library for simplifying these patterns by introducing a minimal set of expressive, reusable utilities and types. It enables Go developers to work with pointers, references, and optional values using clear one-liners that preserve type safety and performance but improve code ergonomics.
 
+**Example:**
+
+```go
+package main
+
+import (
+  "github.com/sr9000/go-ptr-tools/ptr"
+  "github.com/sr9000/go-ptr-tools/ref"
+
+  // rest of imports
+)
+
+// parseURL parses a raw URL string and returns a *url.URL if valid, or nil if invalid.
+func parseURL(raw string) *url.URL {
+  u, err := url.Parse(raw)
+  if err != nil || u.Scheme == "" || u.Host == "" {
+    return nil
+  }
+
+  return u
+}
+
+func main() {
+  ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+  defer stop()
+
+  // ✅ using ptr.Coalesce to prioritize proxy sources, or left with nil if none available.
+  effectiveProxy := ptr.Coalesce(LoadEnvProxy(), LoadYamlProxy(), LoadSystemProxy())
+
+  // ✅ using ptr.MonadCtxErr wrap a GrabResourceWithProxy, grabWithProxy accepts a context and optional URL.
+  // ✅ ptr.MonadCtxErr guarantees that the GrabResourceWithProxy never be called with a nil URL.
+  grabWithProxy := ptr.MonadCtxErr(func(ctx context.Context, u url.URL) (ref.Ref[Document], error) {
+    // ✅ using ptr.Of to pass an optional timeout value in a single line.
+    return GrabResourceWithProxy(ctx, u, effectiveProxy, ptr.Of(100*time.Second))
+  })
+
+  file, err := os.Open("urls.txt")
+  if err != nil {
+    log.Fatalf("Failed to open file: %v", err)
+  }
+  defer file.Close()
+
+  scanner := bufio.NewScanner(file)
+
+  var wg sync.WaitGroup
+
+  for scanner.Scan() {
+    wg.Add(1)
+    go func(line string) {
+      defer wg.Done()
+
+      // ✅ seamless chaining parseURL and grabWithProxy
+      doc, err := grabWithProxy(ctx, parseURL(line))
+      if err != nil {
+        slog.Error("Failed to grab resource", slog.String("url", u.String()), slog.Any("err", err))
+        return
+      }
+
+      // ✅ Save the results using a guaranteed non-nil ref.Ref[LinksNode]
+      // ✅ No need to check for nil after err were checked (in contrast with pointers).
+      SaveResults(doc)
+    }(scanner.Text()) // read line and pass into lambda
+  }
+
+  if err := scanner.Err(); err != nil {
+    slog.Error("Error reading file", slog.Any("err", err))
+  }
+
+  wg.Wait()
+  slog.Info("Done")
+}
+
+// Proxy represents proxy configuration.
+type Proxy struct {
+  Host string
+  Port int
+}
+
+// Document represents a parsed resource, too heavy to pass by value.
+type Document struct {
+  Address url.URL
+  
+  // Lots of additional fields for metadata, content, etc.
+}
+
+// LoadEnvProxy loads proxy configuration from environment variables.
+func LoadEnvProxy() *Proxy
+
+// LoadYamlProxy loads proxy configuration from a YAML config file.
+func LoadYamlProxy() *Proxy
+
+// LoadSystemProxy returns system-wide configured proxy settings.
+func LoadSystemProxy() *Proxy
+
+// GrabResourceWithProxy downloads a resource at the given URL using the provided proxy (or without if nil).
+// Accepts a timeout value (if nil set to 30 seconds) and returns a ref.Ref[Document] on success.
+func GrabResourceWithProxy(
+  ctx context.Context,
+  u url.URL,
+  proxy *Proxy,
+  timeout *time.Duration,
+) (ref.Ref[Document], error) // ✅ ref.Ref[Document] improves API contract by guaranteeing non-nil pointer.
+
+// SaveResults persists or processes a completed Document.
+// ✅ It accepts a ref.Ref[Document], light as pointer but guaranteed to be non-nil.
+func SaveResults(ref.Ref[Document])
+```
+
 The library is inspired by ideas from languages like Rust (e.g., `Option<T>`, references), Kotlin (e.g., safe call, elvis operator), and functional programming (monads). But it’s written **in idiomatic Go**, using standard language features.
 
 It is not a framework and requires no integration or adoption ceremony. You can start using selected helpers in any Go codebase immediately — especially in the parts that deal with configuration, parsing, conversions, optional values, or pointer-heavy logic.
