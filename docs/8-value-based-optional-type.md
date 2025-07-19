@@ -13,7 +13,7 @@ type Opt[T any] struct {
 }
 ```
 
-This is effectively just a `[T, bool]` tuple with helper methods attached. No magic, no allocation, and no special contract beyond what `if ok` already expresses. The type exists **only** to simplify certain awkward Go patterns — particularly where `(T, bool)` is produced but not immediately consumed.
+This is effectively just a `(T, bool)` tuple with helper methods attached. No magic, no allocation, and no special contract beyond what `if ok` already expresses. The type exists **only** to simplify certain awkward Go patterns — particularly where `(T, bool)` is produced but not immediately consumed.
 
 ## Reasoning about `Opt[T]`
 
@@ -404,4 +404,3 @@ for _, f := range fields {
 ```
 
 No boxing/unboxing. It’s already the right type.
-

@@ -159,7 +159,7 @@ But working with `*T` has drawbacks:
 - Pointers to literals like `42` or `"hello"` cannot be written directly (need temp vars)
 - There's no built-in mechanism to “validate” or “guarantee” non-nil pointers
 
-This library provides helpers that address those without introducing runtime overhead — such as `ptr.New`, `ptr.FromOk`, `ptr.Coalesce`, and more.
+This library provides helpers that address those without introducing runtime overhead — such as `ptr.Of`, `ptr.FromOk`, `ptr.Coalesce`, and more.
 
 ### Always-Valid Pointer Wrapper: `Ref[T]`
 
@@ -171,7 +171,7 @@ type Ref[T any] struct {
 }
 ```
 
-A `Ref[T]` is validated during construction (see `ref.New`) to ensure it always holds a valid pointer. It can be used:
+A `Ref[T]` is validated during construction (see `ref.FromPtr`) to ensure it always holds a valid pointer. It can be used:
 
 - Safely, without repetitive `nil` checks
 - As a lightweight replacement for passing `*T` when `nil` is not allowed

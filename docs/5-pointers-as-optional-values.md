@@ -44,11 +44,11 @@ The idiomatic way to represent optional values is using `*T` pointers. When `nil
   result := ptr.Coalesce(optA, optB, optC)
   ```
 
-- **Fallback with Literal (Non-Nil Guarantee):** use `ptr.Else(...)` combined with `ref.Literal(...)` to safely convert an uncertain chain into a guaranteed `Ref[T]`. This allows you to treat optional inputs declaratively, while guaranteeing that the result is always safe to use.
+- **Fallback with Literal (Non-Nil Guarantee):** use `ptr.Else(...)` combined with `ref.Of(...)` to safely convert an uncertain chain into a guaranteed `Ref[T]`. This allows you to treat optional inputs declaratively, while guaranteeing that the result is always safe to use.
 
   ```go
   f := ptr.Else(
-      ref.Literal("default"),
+      ref.Of("default"),
       optA, optB, optC,
   )
   ```

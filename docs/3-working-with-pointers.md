@@ -106,12 +106,10 @@ if env.Proxy != nil {
   return cfg.Proxy
 }
 // ...
-return defaultProxy
 ```
 
 Use `ptr.Coalesce` that finds and returns the **first non-nil pointer** in the provided list. It returns nil if all provided pointers are nil. This makes fallback chains clear and expressive.
 
 ```go
-effectiveProxy := ptr.Coalesce(env.Proxy, cfg.Proxy, sys.Proxy)
+effectiveProxy := ptr.Coalesce(env.Proxy, cfg.Proxy, ...)
 ```
-

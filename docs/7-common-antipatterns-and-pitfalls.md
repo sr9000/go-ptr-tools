@@ -114,7 +114,7 @@ r2 := r1
 effectivePortPtr := ptr.Coalesce(
   envPort,
   filePort,
-  ptr.New(8080),
+  ptr.Of(8080),
 )
 ```
 
@@ -215,4 +215,3 @@ r := ref.Of(42)
 json.Marshal(r.Ptr()) // ok, marshaling called on a pointer to a value
 json.Marshal(r.Val()) // also ok, a copy of a value are made beffore serialization
 ```
-

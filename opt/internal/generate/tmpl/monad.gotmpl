@@ -61,7 +61,7 @@ func Apply{{ template "name-suffix" . }}[{{ template "types" . }} any](
 		{{- template "call-res" . }}fn({{ template "call-args-v" . }})
 
 		return
-			{{- range $i := .M }} Literal(x{{ add $i 1 }}){{ if ne $M (add $i 1) }},{{ end }}{{ end -}}
+			{{- range $i := .M }} Of(x{{ add $i 1 }}){{ if ne $M (add $i 1) }},{{ end }}{{ end -}}
 			{{- if .Err }}{{ if .M }}, {{ end }}err{{ end }}
 		{{- else if .Err }}
 		return fn({{ template "call-args-v" . -}})
