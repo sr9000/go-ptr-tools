@@ -38,3 +38,20 @@ func FromZero[T comparable](v T) *T {
 
 	return nil
 }
+
+// OrVal returns the value pointed to by ptr if it is not nil, otherwise it returns the provided value.
+func OrVal[T any](value T, ptrs ...*T) T {
+	for _, p := range ptrs {
+		if p != nil {
+			return *p
+		}
+	}
+
+	return value
+}
+
+// OrZero returns the value pointed to by ptr if it is not nil, otherwise it returns the zero value of T.
+func OrZero[T any](ptrs ...*T) T {
+	var zero T
+	return OrVal(zero, ptrs...)
+}

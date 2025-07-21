@@ -31,3 +31,23 @@ func (o Opt[T]) Ptr() *T {
 
 	return &o.val
 }
+
+// Or returns the value if it is present, otherwise it returns the provided fallback value.
+func (o Opt[T]) Or(fallback T) T {
+	if o.ok {
+		return o.val
+	}
+
+	return fallback
+}
+
+// OrZero returns the value if it is present, otherwise it returns the zero value of T.
+func (o Opt[T]) OrZero() T {
+	if o.ok {
+		return o.val
+	}
+
+	var zero T
+
+	return zero
+}
