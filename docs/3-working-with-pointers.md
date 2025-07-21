@@ -95,6 +95,36 @@ ptr.FromZero(42)      // *int
 
 ## Pointer Coalescing and Fallbacks
 
+### Pointer Fallback
+
+> [!TIP]
+>
+> `ptr.OrVal` and `ptr.OrZero` may accept multiple pointers, allowing you to provide a fallback chain in a single call.
+
+When you have multiple pointers and want to use the first non-nil pointer, the `ptr` package provides a clean way to handle this with `ptr.OrVal` and `ptr.OrZero`.
+These functions allow you to extract a value from a pointer in a functional style, providing a default when needed:
+
+```go
+limit := ptr.OrVal(99, env.Limit)  // defaults to 99 if env.Limit is not provided
+timeout := ptr.OrZero(env.Timeout) // assumes 0 timeout means no timeout
+```
+
+Also useful when structures are created:
+
+```go
+type Config struct {
+  Proxy *string
+  Limit *int
+}
+
+cfg := Config{
+  Proxy:   ptr.OrVal("http://default.proxy", env.Proxy, cfg.Proxy),
+  Timeout: ptr.OrZero(env.Timeout, cfg.Timeout),
+}
+```
+
+### Coalescing Pointers
+
 When dealing with multiple sources that might yield `nil` pointers (such as config overrides or fallback data), it is common to need the **first non-nil pointer** available.
 
 Instead of verbose condition chains:
